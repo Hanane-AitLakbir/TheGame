@@ -19,9 +19,9 @@ import sound.SoundPlayer;
 
 
 /**
- * Game est la classe qui gere l'ensemble du jeu. Elle cree un fenetre et un canvas qui sera mis � 
- * jour par les differents acteurs du jeu (le(s) joueur(s), les monstres , et le d�cor).
- * Elle est construite comme un Thread (pourra �tre modifi�)
+ * Game est la classe qui gere l'ensemble du jeu. Elle cree un fenetre et un canvas qui sera mis a 
+ * jour par les differents acteurs du jeu (le(s) joueur(s), les monstres , et le decor).
+ * Elle est construite comme un Thread (pourra etre modifie)
  * 
  * @author hanane
  *
@@ -41,11 +41,11 @@ public class Game extends Canvas implements Runnable {
 	private int numRoom = 0;
 
 	/**
-	 * Initialise tous les acteurs (joueurs, monstres, et d�cor) du jeu
+	 * Initialise tous les acteurs (joueurs, monstres, et decor) du jeu
 	 */
 	public void init(){
 		player = new Hero(50*4, 50*4,"Link");
-		monster = new Monster(80*4,80*4,"Monster1",1);
+		monster = new Monster(80*4,80*4,"Monster1",1, currentRoom);
 		sound = new SoundPlayer("Adventure_Title");
 		monster.start();
 		sound.playSound();
@@ -122,7 +122,7 @@ public class Game extends Canvas implements Runnable {
 				sound = currentRoom.getSound();
 				sound.playSound();
 				player.setXY(18*2*Game.SCALE, 67*2*Game.SCALE); 
-				// placer le player selon la porte par laquelle il est sorti � la pr�c�dente salle
+				// placer le player selon la porte par laquelle il est sorti a la precedente salle
 				numRoom +=1;
 			}
 			
@@ -134,13 +134,13 @@ public class Game extends Canvas implements Runnable {
 				sound = currentRoom.getSound();
 				sound.playSound();
 				player.setXY(18*2*Game.SCALE, 67*2*Game.SCALE); 
-				// placer le player selon la porte par laquelle il est sorti � la pr�c�dente salle
+				// placer le player selon la porte par laquelle il est sorti a la precedente salle
 				numRoom +=1;
 			}
 
 			while(!currentRoom.playerIsOut()){
-				//			// (code trouv� sur Internet ^^) -> permet d'avoir plus de fluidit� dans les animations mais parfois on dirait que Link 
-				//			// fait une petite glissade (excellent ... si c'�tait voulu ^^)
+				//			// (code trouve sur Internet ^^) -> permet d'avoir plus de fluidite dans les animations mais parfois on dirait que Link 
+				//			// fait une petite glissade (excellent ... si c'etait voulu ^^)
 				//			long now = System.nanoTime();
 				//			delta += (now - lastTime / ns);
 				//			lastTime = now;
@@ -154,7 +154,7 @@ public class Game extends Canvas implements Runnable {
 				System.out.println(numRoom);
 				System.out.println("\t\t" + currentRoom.playerIsOut());
 
-				// un timer buggue � donf !! comprends pas pourquoi
+				// un timer buggue a donf !! comprends pas pourquoi
 				try {
 					Thread.sleep(14);
 				} catch (InterruptedException e) {
@@ -167,7 +167,7 @@ public class Game extends Canvas implements Runnable {
 	}
 
 	/**
-	 * G�re les actions des joueurs et des monstres
+	 * Gere les actions des joueurs et des monstres
 	 */
 	private void move() {
 		// updates all game's objects
@@ -176,9 +176,9 @@ public class Game extends Canvas implements Runnable {
 	}
 
 	/**
-	 * G�re la mise � jour du Graphics contenu dans le canvas Game. Cette m�thode doit lancer la m�thode updateGraphics de tous
-	 * les acteurs du jeu . La classe Game utilise un objet BufferStrategy qui permet d'�viter tous les lags lors des animations
-	 * (et en plus g�re mieux le plein �cran ^^)
+	 * Gere la mise a jour du Graphics contenu dans le canvas Game. Cette methode doit lancer la methode updateGraphics de tous
+	 * les acteurs du jeu . La classe Game utilise un objet BufferStrategy qui permet d'eviter tous les lags lors des animations
+	 * (et en plus gere mieux le plein ecran ^^)
 	 */
 	private void updateGraphic() {
 		// draws all game's objects
@@ -191,7 +191,7 @@ public class Game extends Canvas implements Runnable {
 		Graphics g = bs.getDrawGraphics();
 
 		g.fillRect(0, 0, WIDTH * SCALE, HEIGHT * SCALE); // fond noir
-		//ajouter tous les mises � jour graphiques (faire gaffe � l'ordre)
+		//ajouter tous les mises a jour graphiques (faire gaffe a l'ordre)
 		bg.updateGraphic(g);
 		monster.updateGraphics(g);
 		player.updateGraphic(g);
@@ -211,11 +211,11 @@ public class Game extends Canvas implements Runnable {
 
 		JFrame frame = new JFrame("Tile RPG");
 		frame.setSize(WIDTH * SCALE, HEIGHT*SCALE);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // permet de fermer la fen�tre 
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // permet de fermer la fenetre 
 		frame.setResizable(false); // pour ne pas redim la fenetre 
 		frame.add(game);
-		frame.setVisible(true); // sinon on ne voit pas la fen�tre (je l'avais vraiment oubli� au d�but  ^^)
-		frame.setLocationRelativeTo(null); // fenetre au centre de l'�cran
+		frame.setVisible(true); // sinon on ne voit pas la fenetre (je l'avais vraiment oublie au debut  ^^)
+		frame.setLocationRelativeTo(null); // fenetre au centre de l'ecran
 		game.start();
 
 	}

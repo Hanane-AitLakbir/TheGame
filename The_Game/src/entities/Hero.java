@@ -160,8 +160,7 @@ public class Hero {
 	}
 
 	public void attack() {
-		Monster.getDamaged(); //probl�me si plusieurs monstres
-
+		Monster.getDamaged(); //probleme si plusieurs monstres
 	}
 
 	public void updateGraphic(Graphics g){
@@ -200,6 +199,13 @@ public class Hero {
 	public int getY()
 	{
 		return y;
+	}
+	
+	public boolean isDead(){
+		if(life.get()==0){
+			return true;
+		}
+		else return false;
 	}
 
 }

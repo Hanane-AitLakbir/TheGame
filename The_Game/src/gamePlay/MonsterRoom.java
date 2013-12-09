@@ -13,7 +13,7 @@ public class MonsterRoom extends Room {
 		super(player, difficulty);
 		monsters = new Monster[difficulty];
 		for(int i = 0 ; i<difficulty;i++){
-			monsters[i] = new Monster(80*4,80*4,"Monster1",difficulty);
+			monsters[i] = new Monster(80*4,80*4,"Monster1",difficulty,this);
 			monsters[i].start();
 		}
 	}

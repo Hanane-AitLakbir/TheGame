@@ -6,6 +6,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicInteger;
 import main.Game;
+import gamePlay.Room;
 import graphics.AnimatedSprite;
 
 
@@ -14,6 +15,7 @@ public class Monster extends Thread{
 	AnimatedSprite back,front,right,left;
 	private BufferedImage currentSprite;
 
+	Room currentRoom;
 	Hero target; //necessaire pour declencher l'attaque-> cf Pacman
 	int upStep,downStep,leftStep,rightStep; // pour la methode patrol
 
@@ -21,10 +23,11 @@ public class Monster extends Thread{
 	private int speed = 1; //a modifier selon difficulte
 	private final int ANIMATIONSPEED = 2;
 
-	public Monster(int x,int y, String name,int difficulty){
+	public Monster(int x,int y, String name,int difficulty, Room room){
 		this.x=x;
 		this.y=y;
 		this.target=Game.player;
+		currentRoom = room;
 
 		life = new AtomicInteger(difficulty*10);
 
@@ -36,9 +39,9 @@ public class Monster extends Thread{
 
 	public void run(){
 		/*
-		 * -> � mettre dans le run du timer ??
+		 * -> a mettre dans le run du timer ??
 		 * Tant qu'on est dans sa salle
-		 *                 si distance entre target et this < rayon (peut-�tre dimension d'un sprite)
+		 *                 si distance entre target et this < rayon (peut-etre dimension d'un sprite)
 		 *                         attack()
 		 *                         updateGraphics()
 		 *                 sinon
@@ -134,19 +137,23 @@ public class Monster extends Thread{
 	}
 
 	public void attack(){
+		
 		Hero.getDamaged();
 	}
 
 	public static synchronized void getDamaged(){
-		life.getAndAdd(-10); // � modifier selon xp du Hero
+		life.getAndAdd(-10); // a modifier selon xp du Hero
 	}
 
-	public void die(){
+	/*
+	 * Tells whether the Hero is Dead or Alive
+	 */
+	public boolean isDead(){
 		if(life.get()==0){
-			/*
-			 * Faire appara�tre un item
-			 */
+		return true;
+		// TODO Faire apparaitre un item
 		}
+		else return false;
 	}
 
 	private void patrol() {
@@ -174,5 +181,12 @@ public class Monster extends Thread{
 			downStep=0;
 			upStep=0;
 		}
+	}
+	
+	private boolean isInHitbox(){
+		
+		//TODO faire cette methode qui dit si le héros est dans la zone d'attaque du monstre.
+		return false;
+		
 	}
 }
