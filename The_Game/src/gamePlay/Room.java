@@ -25,10 +25,6 @@ public abstract class Room {
 		return sound;
 	}
 
-	public boolean playerIsOut(){
-		return player.isOutOfRoom();
-	}
-
 	public void createNeighbours(int size){
 		if(size>0)
 		{

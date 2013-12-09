@@ -16,14 +16,15 @@ public class Hero {
 	// faire une interface (actor)
 	
 
-
 	private int x,y;
 	public StatePlayer state = StatePlayer.NONE;
+	public HeroPosition position = HeroPosition.ROOM;
+	
 	
 	public boolean attack =false;
 	public boolean protect = false;
-	private boolean isOut = false;
 	private final int SPEED = 2;
+	
 	private final int ANIMATIONSPEED = 2;
 	private AnimatedSprite front, back, left, right, attack_left, attack_right, attack_front, attack_back;
 	private BufferedImage currentSprite;
@@ -39,7 +40,7 @@ public class Hero {
 
 		life = new AtomicInteger(100);
 
-		front = new AnimatedSprite(("/"+name+"_front.png"), 7, 40, 35, ANIMATIONSPEED);
+		front = new AnimatedSprite(("/"+name+"_front.png"), 7, 40, 35,ANIMATIONSPEED);
 		back = new AnimatedSprite(("/"+name+"_back.png"), 7, 40,35, ANIMATIONSPEED); //20 30
 		left = new AnimatedSprite(("/"+name+"_left.png"), 7, 40, 35, ANIMATIONSPEED);
 		right = new AnimatedSprite(("/"+name+"_right.png"), 7, 40, 35, ANIMATIONSPEED);
@@ -166,7 +167,7 @@ public class Hero {
 	public void updateGraphic(Graphics g){
 		// x,y -> coordinates of the player
 		// 20/30*Game.SCALE -> makes the img larger
-		if(!isOut) g.drawImage(currentSprite, x,y,deltaX*Game.SCALE, deltaY*Game.SCALE,null);
+		if(position == HeroPosition.ROOM) g.drawImage(currentSprite, x,y,deltaX*Game.SCALE, deltaY*Game.SCALE,null);
 		//System.out.println(isOut + " " + x);
 	}
 
@@ -180,15 +181,29 @@ public class Hero {
 		 */
 	}
 
-	public boolean isOutOfRoom(){
-		if((x>80*Game.SCALE*2 && x<95*2*Game.SCALE && y<16*2*Game.SCALE) //porte nord
-				|| (x>64*Game.SCALE*2 && x<79*2*Game.SCALE && y>138*2*Game.SCALE) //porte sud
-				|| (y>60*Game.SCALE*2 && y<75*2*Game.SCALE && x<16*2*Game.SCALE) //porte ouest
-				|| (y>80*Game.SCALE*2 && y<95*2*Game.SCALE && x>140*2*Game.SCALE) // porte est
-				){
-			isOut = true;
-		}else{isOut=false;}
-		return isOut;
+	public void isOutOfRoom(){
+		if (x>80*Game.SCALE*2 && x<95*2*Game.SCALE && y<16*2*Game.SCALE) position = HeroPosition.UPEXIT; //porte nord
+		if (x>64*Game.SCALE*2 && x<79*2*Game.SCALE && y>138*2*Game.SCALE) position = HeroPosition.DOWNEXIT; //porte sud
+		if (y>60*Game.SCALE*2 && y<75*2*Game.SCALE && x<16*2*Game.SCALE) position = HeroPosition.LEFTEXIT; //porte ouest
+		if (y>80*Game.SCALE*2 && y<95*2*Game.SCALE && x>140*2*Game.SCALE){
+			position = HeroPosition.RIGHTEXIT ; // porte est
+		}
+		else{
+			position = HeroPosition.ROOM;
+		}
+	}
+	
+	public HeroPosition getPosition(){
+		if (x>80*Game.SCALE*2 && x<95*2*Game.SCALE && y<16*2*Game.SCALE){ position = HeroPosition.UPEXIT;} //porte nord
+		if (x>64*Game.SCALE*2 && x<79*2*Game.SCALE && y>138*2*Game.SCALE){ position = HeroPosition.DOWNEXIT;} //porte sud
+		if (y>60*Game.SCALE*2 && y<75*2*Game.SCALE && x<16*2*Game.SCALE){ position = HeroPosition.LEFTEXIT;} //porte ouest
+		if (y>80*Game.SCALE*2 && y<95*2*Game.SCALE && x>140*2*Game.SCALE){
+			position = HeroPosition.RIGHTEXIT ; // porte est
+		}
+		else{
+			position = HeroPosition.ROOM;
+		}
+		return position;	
 	}
 	
 	public int getX()
