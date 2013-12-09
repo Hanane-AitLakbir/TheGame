@@ -1,6 +1,7 @@
 package main;
 
 import entities.Hero;
+import entities.HeroPosition;
 import entities.Monster;
 import gamePlay.MonsterRoom;
 import gamePlay.Room;
@@ -9,10 +10,8 @@ import graphics.Background;
 import java.awt.Canvas;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
 
-import javax.sound.midi.SoundbankResource;
 import javax.swing.JFrame;
 
 import sound.SoundPlayer;
@@ -114,10 +113,10 @@ public class Game extends Canvas implements Runnable {
 				numRoom +=1;
 				}
 
-			if(numRoom==1 && currentRoom.playerIsOut()){
+			if(numRoom==1 && player.getPosition()!=HeroPosition.ROOM){
 				sound.stopSound();
 				currentRoom = new MonsterRoom(player, 2);
-				System.out.println(currentRoom.playerIsOut());
+				System.out.println(player.getPosition());
 				bg = currentRoom.getBackground();
 				sound = currentRoom.getSound();
 				sound.playSound();
@@ -126,10 +125,10 @@ public class Game extends Canvas implements Runnable {
 				numRoom +=1;
 			}
 			
-			if(numRoom==2 && currentRoom.playerIsOut()){
+			if(numRoom==2 && player.getPosition()!=HeroPosition.ROOM){
 				sound.stopSound();
 				currentRoom = new MonsterRoom(player, 3);
-				System.out.println(currentRoom.playerIsOut());
+				System.out.println(player.getPosition());
 				bg = currentRoom.getBackground();
 				sound = currentRoom.getSound();
 				sound.playSound();
@@ -138,7 +137,7 @@ public class Game extends Canvas implements Runnable {
 				numRoom +=1;
 			}
 
-			while(!currentRoom.playerIsOut()){
+			while(player.getPosition()==HeroPosition.ROOM){
 				//			// (code trouv� sur Internet ^^) -> permet d'avoir plus de fluidit� dans les animations mais parfois on dirait que Link 
 				//			// fait une petite glissade (excellent ... si c'�tait voulu ^^)
 				//			long now = System.nanoTime();
@@ -152,7 +151,7 @@ public class Game extends Canvas implements Runnable {
 				updateGraphic();
 				move(); 
 				System.out.println(numRoom);
-				System.out.println("\t\t" + currentRoom.playerIsOut());
+				System.out.println("\t\t" + player.getPosition());
 
 				// un timer buggue � donf !! comprends pas pourquoi
 				try {

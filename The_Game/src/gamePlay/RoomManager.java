@@ -26,11 +26,13 @@ public class RoomManager {
 	}
 
 	public void changeRoom(){
-		if(player.getY()>80*Game.SCALE*2 && player.getY()<95*2*Game.SCALE && player.getX()>140*2*Game.SCALE)
-		{
-			current = current.right;
-			player.setXY(18*2*Game.SCALE, 67*2*Game.SCALE);
-		}
+//		if(player.getY()>80*Game.SCALE*2 && player.getY()<95*2*Game.SCALE && player.getX()>140*2*Game.SCALE)
+//		{
+//			current = current.right;
+//			player.setXY(18*2*Game.SCALE, 67*2*Game.SCALE);
+//		}
+		
+		
 		
 		
 	}
