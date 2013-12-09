@@ -14,11 +14,12 @@ public class Monster extends Thread{
 	AnimatedSprite back,front,right,left;
 	private BufferedImage currentSprite;
 
-	Hero target; //necessaire pour déclencher l'attaque-> cf Pacman
+	Hero target; //necessaire pour declencher l'attaque-> cf Pacman
 	int upStep,downStep,leftStep,rightStep; // pour la methode patrol
 
-	public static  AtomicInteger life;
-	private int speed = 1; //à modifier selon difficulté
+	public static AtomicInteger life;
+	private int speed = 1; //a modifier selon difficulte
+	private final int ANIMATIONSPEED = 2;
 
 	public Monster(int x,int y, String name,int difficulty){
 		this.x=x;
@@ -27,29 +28,29 @@ public class Monster extends Thread{
 
 		life = new AtomicInteger(difficulty*10);
 
-		front = new AnimatedSprite(("/"+name+"_front.png"), 7, 40,40);
-		back = new AnimatedSprite(("/"+name+"_back.png"), 7, 40,40);
-		left = new AnimatedSprite(("/"+name+"_left.png"), 7, 40,40);
-		right = new AnimatedSprite(("/"+name+"_right.png"), 7, 40,40);
+		front = new AnimatedSprite(("/"+name+"_front.png"), 7, 40,40, ANIMATIONSPEED);
+		back = new AnimatedSprite(("/"+name+"_back.png"), 7, 40,40, ANIMATIONSPEED);
+		left = new AnimatedSprite(("/"+name+"_left.png"), 7, 40,40, ANIMATIONSPEED);
+		right = new AnimatedSprite(("/"+name+"_right.png"), 7, 40,40, ANIMATIONSPEED);
 	}
 
 	public void run(){
 		/*
-		 * -> à mettre dans le run du timer ??
+		 * -> ï¿½ mettre dans le run du timer ??
 		 * Tant qu'on est dans sa salle
-		 * 		si distance entre target et this < rayon (peut-être dimension d'un sprite)
-		 * 			attack()
-		 * 			updateGraphics()
-		 * 		sinon 
-		 * 			move() -> le monstre erre en fait
-		 * 			updateGraphics();
+		 *                 si distance entre target et this < rayon (peut-ï¿½tre dimension d'un sprite)
+		 *                         attack()
+		 *                         updateGraphics()
+		 *                 sinon
+		 *                         move() -> le monstre erre en fait
+		 *                         updateGraphics();
 		 */
 		long delay = 150; // en ms
 		long startTime = 0;
-		
+
 		Timer timer = new Timer();
 		TimerTask task = new TimerTask() {
-			
+
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
@@ -57,28 +58,28 @@ public class Monster extends Thread{
 				move();
 			}
 
-			
+
 		};
 		timer.scheduleAtFixedRate(task,startTime,delay);
 	}
 	private void move(){
 		/*
-		 * Serait pas mal d'avoir mouvement aléatoire
+		 * Serait pas mal d'avoir mouvement aleatoire
 		 */
 		double random = Math.floor(4*Math.random());
-		
+
 		if(random==0){
 			for(int i=0;i<20;i++) up();
 		}
-		
+
 		if(random==1){
 			for(int i=0;i<20;i++) down();
 		}
-		
+
 		if(random==2){
 			for(int i=0;i<20;i++) left();
 		}
-		
+
 		if(random==3){
 			for(int i=0;i<20;i++) right();
 		}
@@ -129,7 +130,7 @@ public class Monster extends Thread{
 		/*
 		 * Changer les entiers avant Game.SCALE
 		 */
-		g.drawImage(currentSprite, x,y,40*Game.SCALE, 40*Game.SCALE,null);
+		 g.drawImage(currentSprite, x,y,40*Game.SCALE, 40*Game.SCALE,null);
 	}
 
 	public void attack(){
@@ -137,13 +138,13 @@ public class Monster extends Thread{
 	}
 
 	public static synchronized void getDamaged(){
-		life.getAndAdd(-10); // à modifier selon xp du Hero
+		life.getAndAdd(-10); // ï¿½ modifier selon xp du Hero
 	}
 
 	public void die(){
 		if(life.get()==0){
 			/*
-			 * Faire apparaître un item
+			 * Faire apparaï¿½tre un item
 			 */
 		}
 	}
@@ -158,7 +159,7 @@ public class Monster extends Thread{
 			down();
 			downStep++;
 		}
-		
+
 		if(downStep==200 && leftStep<200){
 			left();
 			leftStep++;

@@ -10,11 +10,11 @@ import main.Game;
 
 public class Hero {
 
-	// FAIT ajouter un booleen pour les sorties de salle 
+	// FAIT ajouter un booleen pour les sorties de salle
 	// ajouter le mode protected
 	// FAIT refaire les sprites attack
-	// faire une interface 
-	// (pour un code plus beau) à faire des tableaux d'AS front, back, ... avec indice 0 -> marche normale, 1 -> attacking, 3 -> protected
+	// faire une interface
+	// (pour un code plus beau) ï¿½ faire des tableaux d'AS front, back, ... avec indice 0 -> marche normale, 1 -> attacking, 3 -> protected
 	// FAIT (pur un code plus beau 2) virer les booleen up,rt, ...
 
 
@@ -23,8 +23,8 @@ public class Hero {
 	public boolean attack =false;
 	public boolean protect = false;
 	private boolean isOut = false;
-	private final int SPEED = 1;
-
+	private final int SPEED = 2;
+	private final int ANIMATIONSPEED = 2;
 	private AnimatedSprite front, back, left, right, attack_left, attack_right, attack_front, attack_back;
 	private BufferedImage currentSprite;
 
@@ -39,15 +39,15 @@ public class Hero {
 
 		life = new AtomicInteger(100);
 
-		front = new AnimatedSprite(("/"+name+"_front.png"), 7, 40, 35);
-		back = new AnimatedSprite(("/"+name+"_back.png"), 7, 40,35); //20 30 
-		left = new AnimatedSprite(("/"+name+"_left.png"), 7, 40, 35);
-		right = new AnimatedSprite(("/"+name+"_right.png"), 7, 40, 35);
+		front = new AnimatedSprite(("/"+name+"_front.png"), 7, 40, 35, ANIMATIONSPEED);
+		back = new AnimatedSprite(("/"+name+"_back.png"), 7, 40,35, ANIMATIONSPEED); //20 30
+		left = new AnimatedSprite(("/"+name+"_left.png"), 7, 40, 35, ANIMATIONSPEED);
+		right = new AnimatedSprite(("/"+name+"_right.png"), 7, 40, 35, ANIMATIONSPEED);
 
-		attack_front = new AnimatedSprite(("/"+name+"_front_attack.png"), 6, 40, 35);
-		attack_back = new AnimatedSprite(("/"+name+"_back_attack.png"), 6, 40, 35);
-		attack_left = new AnimatedSprite(("/"+name+"_left_attack.png"), 6, 40, 35);
-		attack_right = new AnimatedSprite(("/"+name+"_right_attack.png"), 6, 40, 35);
+		attack_front = new AnimatedSprite(("/"+name+"_front_attack.png"), 6, 40, 35, ANIMATIONSPEED);
+		attack_back = new AnimatedSprite(("/"+name+"_back_attack.png"), 6, 40, 35, ANIMATIONSPEED);
+		attack_left = new AnimatedSprite(("/"+name+"_left_attack.png"), 6, 40, 35, ANIMATIONSPEED);
+		attack_right = new AnimatedSprite(("/"+name+"_right_attack.png"), 6, 40, 35, ANIMATIONSPEED);
 
 	}
 
@@ -63,7 +63,7 @@ public class Hero {
 			attack_back.reset();
 
 			switch(state){
-			case UP : 
+			case UP :
 				lastAction=8;
 				front.reset();
 				left.reset();
@@ -156,19 +156,19 @@ public class Hero {
 
 		}
 
-		
+
 	}
 
 	public void attack() {
-		Monster.getDamaged(); //problème si plusieurs monstres
+		Monster.getDamaged(); //problï¿½me si plusieurs monstres
 
 	}
 
 	public void updateGraphic(Graphics g){
 		// x,y -> coordinates of the player
-		// 20/30*Game.SCALE -> makes the img larger 
+		// 20/30*Game.SCALE -> makes the img larger
 		if(!isOut) g.drawImage(currentSprite, x,y,deltaX*Game.SCALE, deltaY*Game.SCALE,null);
-		//System.out.println(isOut + "  " + x);
+		//System.out.println(isOut + " " + x);
 	}
 
 	public static synchronized void getDamaged(){
@@ -191,4 +191,15 @@ public class Hero {
 		}else{isOut=false;}
 		return isOut;
 	}
+	
+	public int getX()
+	{
+		return x;
+	}
+	
+	public int getY()
+	{
+		return y;
+	}
+
 }
