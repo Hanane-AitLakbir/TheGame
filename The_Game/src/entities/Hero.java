@@ -10,16 +10,16 @@ import main.Game;
 
 public class Hero {
 
-	// FAIT ajouter un booleen pour les sorties de salle
 	// ajouter le mode protected
-	// FAIT refaire les sprites attack
-	// faire une interface
-	// (pour un code plus beau) � faire des tableaux d'AS front, back, ... avec indice 0 -> marche normale, 1 -> attacking, 3 -> protected
-	// FAIT (pur un code plus beau 2) virer les booleen up,rt, ...
+	// mettre les interactions Monter/Hero
+	// Mettre en static les zones 
+	// faire une interface (actor)
+	
 
 
 	private int x,y;
 	public StatePlayer state = StatePlayer.NONE;
+	
 	public boolean attack =false;
 	public boolean protect = false;
 	private boolean isOut = false;

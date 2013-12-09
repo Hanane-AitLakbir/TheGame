@@ -31,5 +31,7 @@ public class RoomManager {
 			current = current.right;
 			player.setXY(18*2*Game.SCALE, 67*2*Game.SCALE);
 		}
+		
+		
 	}
 }

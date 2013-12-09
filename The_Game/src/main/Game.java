@@ -19,7 +19,7 @@ import sound.SoundPlayer;
 
 
 /**
- * Game est la classe qui g�re l'ensemble du jeu. Elle cr�e un fenetre et un canvas qui sera mis � 
+ * Game est la classe qui gere l'ensemble du jeu. Elle cree un fenetre et un canvas qui sera mis � 
  * jour par les differents acteurs du jeu (le(s) joueur(s), les monstres , et le d�cor).
  * Elle est construite comme un Thread (pourra �tre modifi�)
  * 

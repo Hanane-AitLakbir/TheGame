@@ -40,6 +40,7 @@ public abstract class Room {
 			if(down == null){
 				down = new MonsterRoom(player, 1);
 				down.up = this;
+				//down.createNeighbours(size-1);
 			}
 			if(left == null){
 				left = new MonsterRoom(player, 1);
@@ -49,11 +50,12 @@ public abstract class Room {
 			if(right == null){
 				right = new MonsterRoom(player, 1);
 				right.left = this;
+				//right.createNeighbours(size-1);
 			}
 		}
 		else
 		{
-		
+			
 		}
 	}
 
