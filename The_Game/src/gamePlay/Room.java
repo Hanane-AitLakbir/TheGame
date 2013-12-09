@@ -55,12 +55,12 @@ public abstract class Room {
 		}
 		else
 		{
-			
+			int i = 0;
 		}
 	}
 
 	public void updateGraphics(Graphics g){
-
+		
 	}
 
 
