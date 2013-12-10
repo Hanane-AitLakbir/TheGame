@@ -217,7 +217,7 @@ public class Hero {
 	}
 	
 	public boolean isDead(){
-		if(life.get()==0){
+		if(life.get()==0){ 
 			return true;
 		}
 		else return false;
