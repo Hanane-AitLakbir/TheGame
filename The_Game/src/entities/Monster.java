@@ -10,7 +10,7 @@ import gamePlay.Room;
 import graphics.AnimatedSprite;
 
 
-public class Monster extends Thread{
+public class Monster extends Thread {
 	int x,y;
 	AnimatedSprite back,front,right,left;
 	private BufferedImage currentSprite;

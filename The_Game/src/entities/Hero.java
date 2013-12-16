@@ -14,17 +14,17 @@ public class Hero {
 	// mettre les interactions Monter/Hero
 	// Mettre en static les zones 
 	// faire une interface (actor)
-	
+
 
 	private int x,y;
 	public StatePlayer state = StatePlayer.NONE;
 	public HeroPosition position = HeroPosition.ROOM;
-	
-	
+
+
 	public boolean attack =false;
 	public boolean protect = false;
 	private final int SPEED = 2;
-	
+
 	private final int ANIMATIONSPEED = 2;
 	private AnimatedSprite front, back, left, right, attack_left, attack_right, attack_front, attack_back;
 	private BufferedImage currentSprite;
@@ -158,6 +158,8 @@ public class Hero {
 		}
 
 
+
+
 	}
 
 	public void attack() {
@@ -181,36 +183,30 @@ public class Hero {
 		 */
 	}
 
-	public void isOutOfRoom(){
-		if (x>80*Game.SCALE*2 && x<95*2*Game.SCALE && y<16*2*Game.SCALE) position = HeroPosition.UPEXIT; //porte nord
-		if (x>64*Game.SCALE*2 && x<79*2*Game.SCALE && y>138*2*Game.SCALE) position = HeroPosition.DOWNEXIT; //porte sud
-		if (y>60*Game.SCALE*2 && y<75*2*Game.SCALE && x<16*2*Game.SCALE) position = HeroPosition.LEFTEXIT; //porte ouest
-		if (y>80*Game.SCALE*2 && y<95*2*Game.SCALE && x>140*2*Game.SCALE){
+	public boolean isOut(){
+		if (x>80*Game.SCALE*2 && x<95*2*Game.SCALE && y<16*2*Game.SCALE){
+			position = HeroPosition.UPEXIT;
+		} //porte nord
+		else if (x>64*Game.SCALE*2 && x<79*2*Game.SCALE && y>138*2*Game.SCALE){
+			position = HeroPosition.DOWNEXIT;
+		} //porte sud
+		else if (y>60*Game.SCALE*2 && y<75*2*Game.SCALE && x<16*2*Game.SCALE){
+			position = HeroPosition.LEFTEXIT;
+		} //porte ouest
+		else if (y>80*Game.SCALE*2 && y<95*2*Game.SCALE && x>140*2*Game.SCALE){
 			position = HeroPosition.RIGHTEXIT ; // porte est
 		}
 		else{
 			position = HeroPosition.ROOM;
 		}
+		return !position.equals(HeroPosition.ROOM);	
 	}
-	
-	public HeroPosition getPosition(){
-		if (x>80*Game.SCALE*2 && x<95*2*Game.SCALE && y<16*2*Game.SCALE){ position = HeroPosition.UPEXIT;} //porte nord
-		if (x>64*Game.SCALE*2 && x<79*2*Game.SCALE && y>138*2*Game.SCALE){ position = HeroPosition.DOWNEXIT;} //porte sud
-		if (y>60*Game.SCALE*2 && y<75*2*Game.SCALE && x<16*2*Game.SCALE){ position = HeroPosition.LEFTEXIT;} //porte ouest
-		if (y>80*Game.SCALE*2 && y<95*2*Game.SCALE && x>140*2*Game.SCALE){
-			position = HeroPosition.RIGHTEXIT ; // porte est
-		}
-		else{
-			position = HeroPosition.ROOM;
-		}
-		return position;	
-	}
-	
+
 	public int getX()
 	{
 		return x;
 	}
-	
+
 	public int getY()
 	{
 		return y;

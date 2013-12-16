@@ -18,6 +18,10 @@ import sound.SoundPlayer;
 
 
 /**
+ * Game est la classe qui gere l'ensemble du jeu. Elle cree un fenetre et un canvas qui sera mis � 
+ * jour par les differents acteurs du jeu (le(s) joueur(s), les monstres , et le d�cor).
+ * Elle est construite comme un Thread (pourra etre modifie)
+=======
  * Game est la classe qui gere l'ensemble du jeu. Elle cree un fenetre et un canvas qui sera mis a 
  * jour par les differents acteurs du jeu (le(s) joueur(s), les monstres , et le decor).
  * Elle est construite comme un Thread (pourra etre modifie)
@@ -113,10 +117,10 @@ public class Game extends Canvas implements Runnable {
 				numRoom +=1;
 				}
 
-			if(numRoom==1 && player.getPosition()!=HeroPosition.ROOM){
+			if(numRoom==1 && player.isOut()){
 				sound.stopSound();
 				currentRoom = new MonsterRoom(player, 2);
-				System.out.println(player.getPosition());
+				System.out.println(player.isOut());
 				bg = currentRoom.getBackground();
 				sound = currentRoom.getSound();
 				sound.playSound();
@@ -125,10 +129,10 @@ public class Game extends Canvas implements Runnable {
 				numRoom +=1;
 			}
 			
-			if(numRoom==2 && player.getPosition()!=HeroPosition.ROOM){
+			if(numRoom==2 && player.isOut()){
 				sound.stopSound();
 				currentRoom = new MonsterRoom(player, 3);
-				System.out.println(player.getPosition());
+				System.out.println(player.isOut());
 				bg = currentRoom.getBackground();
 				sound = currentRoom.getSound();
 				sound.playSound();
@@ -137,8 +141,8 @@ public class Game extends Canvas implements Runnable {
 				numRoom +=1;
 			}
 
-			while(player.getPosition()==HeroPosition.ROOM){
-				//			// (code trouve sur Internet ^^) -> permet d'avoir plus de fluidit� dans les animations mais parfois on dirait que Link 
+			while(!player.isOut()){
+				//			// (code trouv� sur Internet ^^) -> permet d'avoir plus de fluidit� dans les animations mais parfois on dirait que Link 
 				//			// fait une petite glissade (excellent ... si c'�tait voulu ^^)
 				//			long now = System.nanoTime();
 				//			delta += (now - lastTime / ns);
@@ -151,7 +155,7 @@ public class Game extends Canvas implements Runnable {
 				updateGraphic();
 				move(); 
 				System.out.println(numRoom);
-				System.out.println("\t\t" + player.getPosition());
+				System.out.println("\t\t" + player.isOut());
 
 				// un timer buggue a donf !! comprends pas pourquoi
 				try {
