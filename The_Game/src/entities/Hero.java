@@ -8,7 +8,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import main.Game;
 
-public class Hero {
+public class Hero extends Thread {
 
 	// ajouter le mode protected
 	// mettre les interactions Monter/Hero
@@ -56,6 +56,7 @@ public class Hero {
 		this.x = x;
 		this.y = y;
 	}
+	
 	public void move(){
 		if(!attack){
 			attack_front.reset();
