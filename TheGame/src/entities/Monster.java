@@ -5,40 +5,44 @@ import java.awt.image.BufferedImage;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import display.Position;
 import main.Game;
+import gameplay.GameManager;
 import graphics.AnimatedSprite;
 
 
 public class Monster extends Thread {
-	int x,y;
-	AnimatedSprite back,front,right,left;
+
+	private Position position;
+	private final int deltaX = 40, deltaY = 40;
+	private AnimatedSprite sprite;
 	private BufferedImage currentSprite;
 
 	Hero target; //necessaire pour declencher l'attaque-> cf Pacman
+	String name;
 	int upStep,downStep,leftStep,rightStep; // pour la methode patrol
 
 	public static AtomicInteger life;
 	private int speed = 1; //a modifier selon difficulte
 	private final int ANIMATIONSPEED = 2;
 
-	public Monster(int x,int y, String name,int difficulty){
-		this.x=x;
-		this.y=y;
-		this.target=Game.player;
+	public Monster(AtomicInteger x, AtomicInteger y, String name,int difficulty){
+
+		position = new Position(x, y);
+		this.name = name;
+		this.target=GameManager.getPlayer();
 
 		life = new AtomicInteger(difficulty*10);
 
-		front = new AnimatedSprite(("/"+name+"_front.png"), 7, 40,40, ANIMATIONSPEED);
-		back = new AnimatedSprite(("/"+name+"_back.png"), 7, 40,40, ANIMATIONSPEED);
-		left = new AnimatedSprite(("/"+name+"_left.png"), 7, 40,40, ANIMATIONSPEED);
-		right = new AnimatedSprite(("/"+name+"_right.png"), 7, 40,40, ANIMATIONSPEED);
+		sprite = new AnimatedSprite(name, ANIMATIONSPEED);
 	}
 
 	public void run(){
-		/*
-		 * -> � mettre dans le run du timer ??
+		/* TODO
+		 * -> a mettre dans le run du timer ??
 		 * Tant qu'on est dans sa salle
-		 *                 si distance entre target et this < rayon (peut-�tre dimension d'un sprite)
+		 *                 si distance entre target et this < rayon (peut-etre dimension d'un sprite)
 		 *                         attack()
 		 *                         updateGraphics()
 		 *                 sinon
@@ -53,8 +57,6 @@ public class Monster extends Thread {
 
 			@Override
 			public void run() {
-				// TODO Auto-generated method stub
-				//step();
 				move();
 			}
 
@@ -62,117 +64,105 @@ public class Monster extends Thread {
 		};
 		timer.scheduleAtFixedRate(task,startTime,delay);
 	}
+
+	public void action(){
+
+		move();
+		attack();
+
+	}
+
 	private void move(){
-		/*
+		/*TODO
 		 * Serait pas mal d'avoir mouvement aleatoire
 		 */
 		double random = Math.floor(4*Math.random());
+		int x = position.getX();
+		int y = position.getY();
 
 		if(random==0){
-			for(int i=0;i<20;i++) up();
+			for(int i=0;i<20;i++){
+				currentSprite = sprite.next();
+				if((y-1>31*GameManager.SCALE*2)){
+					position.setXY(x, y-speed);
+				}
+			}
 		}
 
 		if(random==1){
-			for(int i=0;i<20;i++) down();
+			for(int i=0;i<20;i++){
+				currentSprite = sprite.next();
+				if(y+1<122*2*GameManager.SCALE )
+					position.setXY(x, y+speed);
+			}
 		}
 
 		if(random==2){
-			for(int i=0;i<20;i++) left();
+			for(int i=0;i<20;i++){
+				currentSprite = sprite.next();
+				if( x-1>32*2*GameManager.SCALE )
+					position.setXY(x-speed, y);
+			}
 		}
 
 		if(random==3){
-			for(int i=0;i<20;i++) right();
+			for(int i=0;i<20;i++){
+				currentSprite = sprite.next();
+				if(x+1<128*2*GameManager.SCALE )
+					position.setXY(x+speed, y);
+			}
 		}
 	}
 
-	private void up() {
-		front.reset();
-		left.reset();
-		right.reset();
 
-		currentSprite = back.next();
-		if((y-1>31*Game.SCALE*2)){
-			y-=speed;
-		}
-	}
 
-	private void right() {
-		front.reset();
-		back.reset();
-		left.reset();
-
-		currentSprite = right.next();
-		if(x+1<128*2*Game.SCALE )
-			x+=speed;
-	}
-
-	private void down() {
-		back.reset();
-		right.reset();
-		left.reset();
-
-		currentSprite = front.next();
-		if(y+1<122*2*Game.SCALE )
-			y+=speed;
-	}
-
-	private void left() {
-		front.reset();
-		back.reset();
-		right.reset();
-
-		currentSprite = left.next();
-		if( x-1>32*2*Game.SCALE )
-			x-=speed;
-	}
 
 	public void updateGraphics(Graphics g){
 		/*
 		 * Changer les entiers avant Game.SCALE
 		 */
-		 g.drawImage(currentSprite, x,y,40*Game.SCALE, 40*Game.SCALE,null);
+		g.drawImage(currentSprite, position.getX(), position.getY(), deltaX*GameManager.SCALE, deltaY*GameManager.SCALE,null);
 	}
+	
 
 	public void attack(){
-		Hero.getDamaged();
+		//TODO
 	}
+	
 
-	public static synchronized void getDamaged(){
-		life.getAndAdd(-10); // � modifier selon xp du Hero
-	}
-
-	public void die(){
+	public boolean isDead(){
 		if(life.get()==0){
-			/*
-			 * Faire appara�tre un item
-			 */
+			 // TODO Faire apparaitre un item 
+			return true;
 		}
+		return false;
 	}
+	
 
-	private void patrol() {
-		// TODO Auto-generated method stub
-		if(rightStep<200){
-			right();
-			rightStep++;
-		}
-		if(rightStep==200 && downStep<200){
-			down();
-			downStep++;
-		}
-
-		if(downStep==200 && leftStep<200){
-			left();
-			leftStep++;
-		}
-		if(leftStep==200 && upStep<200){
-			up();
-			upStep++;
-		}
-		if(upStep==200){
-			rightStep=0;
-			leftStep=0;
-			downStep=0;
-			upStep=0;
-		}
-	}
+//	private void patrol() {
+//		if(rightStep<200){
+//			right();
+//			rightStep++;
+//		}
+//		if(rightStep==200 && downStep<200){
+//			down();
+//			downStep++;
+//		}
+//
+//		if(downStep==200 && leftStep<200){
+//			left();
+//			leftStep++;
+//		}
+//		if(leftStep==200 && upStep<200){
+//			up();
+//			upStep++;
+//		}
+//		if(upStep==200){
+//			rightStep=0;
+//			leftStep=0;
+//			downStep=0;
+//			upStep=0;
+//		}
+//	}
+	
 }

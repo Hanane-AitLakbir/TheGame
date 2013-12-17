@@ -62,7 +62,7 @@ public class AnimatedSprite {
 			attackingRight[i] = new ImageLoader().load("/"+name+"_right_attack.png").getSubimage(i*WIDTH,0,WIDTH,HEIGHT);
 		}
 
-		currentSprite = left;
+		currentSprite = right;
 	}
 
 	public BufferedImage next(){
@@ -79,9 +79,9 @@ public class AnimatedSprite {
 		return currentSprite[current];
 	}
 
-	public void changeSprite(StatePlayer state){
+	public void changeAnimation(StatePlayer state){
 
-		this.reset();
+		this.reset(); //METTRE LE RESET DANS LE CONTROLLER ?
 		switch (state){
 		
 		case UP : 
@@ -108,11 +108,17 @@ public class AnimatedSprite {
 		case ATTACKINGRIGHT : 
 			currentSprite = attackingRight;
 			break;
+		default:
+			break;
 		}
 	}
 
 	public void reset(){
 		current = 0;
+	}
+	
+	public BufferedImage getCurrentSprite(){
+		return currentSprite[current];
 	}
 
 	public void setSpeed(int speed){

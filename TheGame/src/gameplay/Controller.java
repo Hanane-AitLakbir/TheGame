@@ -8,7 +8,7 @@ import entities.StatePlayer;
 
 public class Controller implements KeyListener{
 	public static int action = -1;
-	
+
 	@Override
 	public void keyPressed(KeyEvent event) {
 		if(event.getKeyCode()== KeyEvent.VK_UP){
@@ -28,52 +28,61 @@ public class Controller implements KeyListener{
 			action = 4;
 		}
 		if(event.getKeyCode()== KeyEvent.VK_SPACE){
-			//Game.getPlayer().state = StatePlayer.ATTACKING;
-			GameManager.getPlayer().attack = true;
+			switch(GameManager.getPlayer().getHeroState()){
+
+			case UP : 
+				GameManager.getPlayer().setState(StatePlayer.ATTACKINGUP);
+				break;
+			case DOWN : 
+				GameManager.getPlayer().setState(StatePlayer.ATTACKINGDOWN);
+				break;
+			case LEFT : 
+				GameManager.getPlayer().setState(StatePlayer.ATTACKINGLEFT);
+				break;
+			case RIGHT :
+				GameManager.getPlayer().setState(StatePlayer.ATTACKINGRIGHT);
+				break;
+
+			}
+			//GameManager.getPlayer().attack = true;
 			action = 10;
 		}
 		if(event.getKeyCode()== KeyEvent.VK_P){
 			GameManager.getPlayer().setState(StatePlayer.PROTECTED);
 			action = 100;
 		}
-		
-	
+
+
 	}
 
 	@Override
 	public void keyReleased(KeyEvent event) {
 		if(event.getKeyCode()== KeyEvent.VK_UP){
-			Game.getPlayer().state = StatePlayer.NONE;
-			//Game.getPlayer().up = false;
+			GameManager.getPlayer().setState(StatePlayer.NONE);
 		}		
 		if(event.getKeyCode()== KeyEvent.VK_DOWN){
-			Game.getPlayer().state = StatePlayer.NONE;
-			//Game.getPlayer().dw = false;
+			GameManager.getPlayer().setState(StatePlayer.NONE);
 		}		
 		if(event.getKeyCode()== KeyEvent.VK_RIGHT){
-			Game.getPlayer().state = StatePlayer.NONE;
-			//Game.getPlayer().rt = false;
+			GameManager.getPlayer().setState(StatePlayer.NONE);
 		}		
 		if(event.getKeyCode()== KeyEvent.VK_LEFT){
-			Game.getPlayer().state = StatePlayer.NONE;
-			//Game.getPlayer().lt = false;
+			GameManager.getPlayer().setState(StatePlayer.NONE);
 		}
 		if(event.getKeyCode()== KeyEvent.VK_SPACE){
-			Game.getPlayer().state = StatePlayer.NONE;
-			Game.getPlayer().attack = false;
+			GameManager.getPlayer().setState(StatePlayer.NONE);
 		}
 		if(event.getKeyCode()== KeyEvent.VK_P){
-			Game.getPlayer().state = StatePlayer.NONE;
-			Game.getPlayer().protect = false;
+			GameManager.getPlayer().setState(StatePlayer.NONE);
 		}
-		
+
 		action = -1;
 	}
 
 	@Override
 	public void keyTyped(KeyEvent event) {
-		Game.endIntro = true; // pour la fin de l'intro
+		//GameManager.endIntro = true; // pour la fin de l'intro
 
 	}
-	
+
 }

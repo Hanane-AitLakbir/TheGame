@@ -32,33 +32,32 @@ public abstract class Room {
 		if(size>0)
 		{
 			if(up == null){
-				up = new MonsterRoom(player, 1);
-				up.down = this;
-				up.createNeighbours(size-1);
+				up = new MonsterRoom(player, 1); //Creates the north room.
+				up.down = this; //Tells the north room that this one is southward.
+				up.createNeighbours(size-1); //Tells the created room to create its neighbours.
 			}
 			if(down == null){
-				down = new MonsterRoom(player, 1);
-				down.up = this;
-				down.createNeighbours(size-1);
+				down = new MonsterRoom(player, 1); 
+				down.up = this; 
+				down.createNeighbours(size-1); 
 			}
 			if(left == null){
 				left = new MonsterRoom(player, 1);
-				left.right = this;
-				left.createNeighbours(size-1);
+				left.right = this; 
+				left.createNeighbours(size-1); 
 			}
 			if(right == null){
-				right = new MonsterRoom(player, 1);
-				right.left = this;
-				right.createNeighbours(size-1);
+				right = new MonsterRoom(player, 1); 
+				right.left = this; 
+				right.createNeighbours(size-1); 
 			}
 		}
 	}
-	
-	
+
 
 	public void updateGraphics(Graphics g){
-
+		//TODO room graphical update.
+		player.updateGraphic(g);
 	}
-
 
 }

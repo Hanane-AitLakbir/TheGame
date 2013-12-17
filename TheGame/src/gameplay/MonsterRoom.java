@@ -1,6 +1,7 @@
 package gameplay;
 
 import java.awt.Graphics;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import entities.Hero;
 import entities.Monster;
@@ -13,7 +14,7 @@ public class MonsterRoom extends Room {
 		super(player, difficulty);
 		monsters = new Monster[difficulty];
 		for(int i = 0 ; i<difficulty;i++){
-			monsters[i] = new Monster(80*4,80*4,"Monster1",difficulty);
+			monsters[i] = new Monster(new AtomicInteger(80*4),new AtomicInteger(80*4),"Monster1",difficulty);
 			monsters[i].start();
 		}
 	}
@@ -23,6 +24,7 @@ public class MonsterRoom extends Room {
 		{
 			m.updateGraphics(g);
 		}
+		player.updateGraphic(g);
 	}
 
 }
