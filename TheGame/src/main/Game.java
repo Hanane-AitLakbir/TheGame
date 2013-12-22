@@ -32,8 +32,7 @@ public class Game {
 	
 	public static void main(String[] args){
 		
-		canvas = new CanvasGame();
-		manager = new GameManager(canvas);
+		manager = new GameManager();
 		manager.start();
 		
 	}
