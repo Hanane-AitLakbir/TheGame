@@ -1,11 +1,11 @@
 package gameplay;
 
 import java.awt.Graphics;
+import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import display.Position;
-
 import main.Game;
-
 import entities.Hero;
 
 /**
@@ -20,12 +20,51 @@ public class RoomManager {
 	private int size;
 	private Hero player;
 
-	public RoomManager(Hero player, int size){
+	public RoomManager(Hero player, int _size){
 		this.player = player;
-		this.size = size;
+		this.size = _size;
 
-		start = new MonsterRoom(player, 0);
-		start.createNeighbours(size);
+		ArrayList<Room> rooms = new ArrayList<Room>();
+		
+		for(int i = 0;i<size*size;i++){
+			rooms.add(new MonsterRoom(player,0));
+		}
+
+		int r,q;
+		for(int k = 0; k<rooms.size();k++){
+			r = k % size;
+			q = k/size; // attention division d'entier = quotient de la division euclidienne
+
+			if(k-size>0){
+				rooms.get(k).up = rooms.get(k-size);
+			}else{
+				rooms.get(k).up = rooms.get(size*(size-1)+r);
+			}
+			
+			
+			if(k+size<size*size){
+				rooms.get(k).down = rooms.get(k+size);
+			}else{
+				rooms.get(k).down = rooms.get(r);}
+
+			
+			if(k+1<(q+1)*size -1){
+				rooms.get(k).right = rooms.get(k+1);
+			}else{
+				rooms.get(k).right = rooms.get(q*size);
+			}
+			
+			if(k-1>q*size){
+				rooms.get(k).left = rooms.get(k-1);
+			}else{
+				rooms.get(k).left = rooms.get((q+1)*size-1);
+			}
+
+		}
+		//start = new MonsterRoom(player, 0);
+		//start.createNeighbours(size);
+		start = rooms.get((size/2)*(size/2)); // commence au milieu de la grille
+		current = start;
 	}
 
 	public void updateGraphics(Graphics g){
@@ -53,4 +92,8 @@ public class RoomManager {
 		return null;	
 	}
 
+	//main de test : outOfMemory
+	public static void main(String[] args){
+		RoomManager manager = new RoomManager(new Hero(new AtomicInteger(0),new AtomicInteger(0),"Link"), 7);
+	}
 }
