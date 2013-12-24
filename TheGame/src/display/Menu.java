@@ -118,7 +118,7 @@ public class Menu {
 		gameMode.setFont(new Font("Dialog", Font.BOLD, 12));
 		gameMode.setBackground(Color.WHITE);
 		layeredPane.setLayer(gameMode, 1);
-		gameMode.setBounds(119, 135, 100, 21);
+		gameMode.setBounds(119, 135, 111, 21);
 		layeredPane.add(gameMode);
 
 
@@ -145,7 +145,7 @@ public class Menu {
 		difficulty.addItemListener(new ItemListener() {
 
 			//ItemListener config
-			// TODO Ajouter un attribut difficulty à GameManager + paramètre String difficulty ou int size en fct de difficulty à RoomManager
+			// TODO Ajouter un attribut difficulty ï¿½ GameManager + paramï¿½tre String difficulty ou int size en fct de difficulty ï¿½ RoomManager
 			// TODO Ajouter un param string difficulty aux constructors de Hero et de Monster
 			@Override
 			public void itemStateChanged(ItemEvent arg0) {
