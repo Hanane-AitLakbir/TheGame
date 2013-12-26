@@ -1,42 +1,27 @@
 package display;
 
 import gameplay.GameManager;
+import sound.SoundPlayer;
 
-import java.awt.EventQueue;
+import java.awt.*;
+import javax.swing.*;
+import java.awt.event.*;
 
-import javax.swing.JFrame;
 
-import java.awt.BorderLayout;
-import java.awt.Choice;
-
-import javax.swing.JTextPane;
-import javax.swing.JLabel;
-import javax.swing.ImageIcon;
-import javax.swing.SwingConstants;
-import javax.swing.JLayeredPane;
-import javax.swing.UIManager;
-
-import java.awt.Cursor;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.Button;
-
-import javax.swing.JTextField;
-import javax.swing.DropMode;
-
-import java.awt.Color;
-import java.awt.Toolkit;
-import java.awt.Dimension;
-import java.awt.Font;
-
+/**
+ * This class displays a menu to choice the game mode (solo or multiplayer) and the game difficulty,
+ * and creates the appropriate GameManager object. 
+ * There is a background sound which is played. 
+ * 
+ * @author hanane
+ *
+ */
 public class Menu {
 
 	private JFrame frame;
 	private JTextField serverName;
 	private JTextField serverPort;
-
+	private SoundPlayer sound;
 	/**
 	 * Launch the application.
 	 */
@@ -74,6 +59,8 @@ public class Menu {
 		JLayeredPane layeredPane = new JLayeredPane();
 		frame.getContentPane().add(layeredPane, BorderLayout.CENTER);
 
+		sound = new SoundPlayer("Adventure_Title");
+		sound.playSound();
 		//Display the background 
 		JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -100,6 +87,7 @@ public class Menu {
 		final Choice gameMode = new Choice();
 		gameMode.setForeground(Color.BLACK);
 		gameMode.addItemListener(new ItemListener() {
+			//ItemListener game Mode config 
 			public void itemStateChanged(ItemEvent e) {
 				switch(gameMode.getSelectedItem()){
 				case "Solo" : 
@@ -118,7 +106,7 @@ public class Menu {
 		gameMode.setFont(new Font("Dialog", Font.BOLD, 12));
 		gameMode.setBackground(Color.WHITE);
 		layeredPane.setLayer(gameMode, 1);
-		gameMode.setBounds(119, 135, 100, 21);
+		gameMode.setBounds(119, 135, 111, 21);
 		layeredPane.add(gameMode);
 
 
@@ -144,25 +132,24 @@ public class Menu {
 		difficulty.setBackground(Color.WHITE);
 		difficulty.addItemListener(new ItemListener() {
 
-			//ItemListener config
-			// TODO Ajouter un attribut difficulty à GameManager + paramètre String difficulty ou int size en fct de difficulty à RoomManager
-			// TODO Ajouter un param string difficulty aux constructors de Hero et de Monster
+			//ItemListener difficulty config
 			@Override
 			public void itemStateChanged(ItemEvent arg0) {
 				switch(difficulty.getSelectedItem()){
 				case "Novice" :
-					GameManager.difficulty = "Novice";
-					System.out.println("Difficulty : Novice"); // Ligne de test
+					GameManager.difficulty = 1;
+//					System.out.println("Difficulty : Novice"); // Ligne de test
 					break;
 				case "Normal" : 
-					GameManager.difficulty = "Normal";
-					System.out.println("Difficulty : Normal"); // Ligne de test
+					GameManager.difficulty = 2;
+//					System.out.println("Difficulty : Normal"); // Ligne de test
 					break;
 				case "Expert" : 
-					GameManager.difficulty = "Expert";
-					System.out.println("Difficulty : Expert"); // Ligne de test
+					GameManager.difficulty = 3;
+//					System.out.println("Difficulty : Expert"); // Ligne de test
 					break;
 				}
+				System.out.println("difficulty " + GameManager.difficulty);
 			}
 		});
 		difficulty.add("Novice");
@@ -220,9 +207,10 @@ public class Menu {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				// TODO A decommenter dans le code final
-				//new GameManager().start();
 				frame.setVisible(false); // close the menu window
+				sound.stopSound();
+				new GameManager().start();
+				
 			}
 		});
 		layeredPane.setLayer(startGame, 1);
@@ -236,6 +224,7 @@ public class Menu {
 				// TODO A decommenter dans le code final
 				//new GameManager(serverName.getText(), Integer.parseInt(serverPort.getText())).start();
 				frame.setVisible(false); // close the menu window
+				sound.stopSound();
 			}
 		});
 		layeredPane.setLayer(joinGame, 1);

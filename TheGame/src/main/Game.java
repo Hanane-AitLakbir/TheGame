@@ -9,6 +9,9 @@ import networking.Server;
 import gameplay.GameManager;
 import display.CanvasGame;
 
+/*
+ * Ne sert à plus rien maintenant
+ */
 public class Game {
 	private static CanvasGame canvas;
 	private static GameManager manager;

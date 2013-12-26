@@ -20,6 +20,7 @@ public class MonsterRoom extends Room {
 	}
 
 	public void updateGraphics(Graphics g){
+		bg.updateGraphic(g);
 		for(Monster m : monsters)
 		{
 			m.updateGraphics(g);
