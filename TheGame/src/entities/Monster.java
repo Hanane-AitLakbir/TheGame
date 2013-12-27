@@ -7,7 +7,6 @@ import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import display.Position;
-import main.Game;
 import gameplay.GameManager;
 import graphics.AnimatedSprite;
 
@@ -19,8 +18,10 @@ public class Monster extends Thread {
 	private AnimatedSprite sprite;
 	private BufferedImage currentSprite;
 
-	Hero target; //necessaire pour declencher l'attaque-> cf Pacman
+	Hero target;
 	String name;
+	private StateActor state = StateActor.RIGHT;
+	private int moveCounter=0;
 	int upStep,downStep,leftStep,rightStep; // pour la methode patrol
 
 	public static AtomicInteger life;
@@ -57,7 +58,7 @@ public class Monster extends Thread {
 
 			@Override
 			public void run() {
-				move();
+				action();
 			}
 
 
@@ -65,104 +66,147 @@ public class Monster extends Thread {
 		timer.scheduleAtFixedRate(task,startTime,delay);
 	}
 
+
+	//TODO change random by evade ? 
 	public void action(){
 
-		move();
-		attack();
+		//target = closerHero();  //IF MORE THAN ONE PLAYER !
+
+		if(isMoving()){ //If the monster must move (UP DOWN LEFT or RIGHT)
+			if(moveCounter>=4000){moveCounter = 0;}
+			while(moveCounter<2000){ //for about 2s
+				random(); //He evades the target by walking randomly
+				moveCounter += 20;
+			}
+			while(moveCounter>=2000 && moveCounter<4000){ //for about 2s
+				chase(); //He chases the target
+				moveCounter += 20;
+			}
+		}
+		if(canAttack()){
+			switch (state){
+			case UP : setState(StateActor.ATTACKINGUP); break;
+			case DOWN : setState(StateActor.ATTACKINGDOWN); break;
+			case LEFT : setState(StateActor.ATTACKINGLEFT); break;
+			case RIGHT : setState(StateActor.ATTACKINGRIGHT); break;
+			}
+		}
+		
+		//ADD else if attacking blabla (I have it on a paper)
+		// + SPRITE + verify else if or if !!! (can attack on the same call of action() or not)
 
 	}
 
-	private void move(){
-		/*TODO
-		 * Serait pas mal d'avoir mouvement aleatoire
-		 */
+	private boolean isMoving(){
+
+		if(state == StateActor.UP || state == StateActor.DOWN || state == StateActor.LEFT || state == StateActor.RIGHT){
+			return true;
+		}
+		else return false;
+	}
+
+	private void random(){
 		double random = Math.floor(4*Math.random());
 		int x = position.getX();
 		int y = position.getY();
 
 		if(random==0){
-			for(int i=0;i<20;i++){
-				currentSprite = sprite.next();
-				if((y-1>31*GameManager.SCALE*2)){
-					position.setXY(x, y-speed);
-				}
+			currentSprite = sprite.next();
+			if( y-1>31*GameManager.SCALE*2 ){
+				position.setXY(x, y-speed);
 			}
 		}
 
 		if(random==1){
-			for(int i=0;i<20;i++){
-				currentSprite = sprite.next();
-				if(y+1<122*2*GameManager.SCALE )
-					position.setXY(x, y+speed);
+			currentSprite = sprite.next();
+			if( y+1<122*2*GameManager.SCALE ){
+				position.setXY(x, y+speed);
 			}
 		}
 
 		if(random==2){
-			for(int i=0;i<20;i++){
-				currentSprite = sprite.next();
-				if( x-1>32*2*GameManager.SCALE )
-					position.setXY(x-speed, y);
+			currentSprite = sprite.next();
+			if( x-1>32*2*GameManager.SCALE ){
+				position.setXY(x-speed, y);
 			}
 		}
 
 		if(random==3){
-			for(int i=0;i<20;i++){
-				currentSprite = sprite.next();
-				if(x+1<128*2*GameManager.SCALE )
-					position.setXY(x+speed, y);
+			currentSprite = sprite.next();
+			if( x+1<128*2*GameManager.SCALE ){
+				position.setXY(x+speed, y);
 			}
 		}
 	}
 
+	//TODO condense the moving parts into moveUp(), ...
+	public void chase(){
+		int x = target.getPosition().getX();
+		int y = target.getPosition().getY();
 
+		int dx = position.getX() - x;
+		int dy = position.getY() - y;
 
+		//Do the Math : try all the different cases (8) and summarize into this.
+		//The monster will try to chase the hero by covering the biggest horizontal/vertical distance first.
+		if(Math.abs(dx)<Math.abs(dy)){ 
+			if(dy>0){
+				currentSprite = sprite.next();
+				if( y-1>31*GameManager.SCALE*2 ){
+					position.setXY(x, y-speed);
+				}
+			}
+			else if(dy<0){
+				currentSprite = sprite.next();
+				if( y+1<122*2*GameManager.SCALE ){
+					position.setXY(x, y+speed);
+				}				
+			}
+		}
+		else if(Math.abs(dx)>=Math.abs(dy)){
+			if(dx>0){
+				currentSprite = sprite.next();
+				if( x-1>32*2*GameManager.SCALE ){
+					position.setXY(x-speed, y);
+				}
+			}
+			else if(dx<0){
+				currentSprite = sprite.next();
+				if( x+1<128*2*GameManager.SCALE ){
+					position.setXY(x+speed, y);
+				}
+			}
+		}
+	}
+
+	private boolean canAttack(){
+
+		int dx = Math.abs(position.getX() - target.getPosition().getX());
+		int dy = Math.abs(position.getY() - target.getPosition().getY());
+
+		//TODO Create a parameter RANGE
+		//TODO Make a more accurate box ! (more height than width ?) [ ]<- and not []<-
+		if(dx<20 && dy<20) return true; //change to set the attacking range !
+		else return false;
+	}
 
 	public void updateGraphics(Graphics g){
 		/*
 		 * Changer les entiers avant Game.SCALE
 		 */
 		g.drawImage(currentSprite, position.getX(), position.getY(), deltaX*GameManager.SCALE, deltaY*GameManager.SCALE,null);
-	}
-	
+	}	
 
-	public void attack(){
-		//TODO
+	public void setState(StateActor state){
+		this.state = state;
 	}
-	
 
 	public boolean isDead(){
 		if(life.get()==0){
-			 // TODO Faire apparaitre un item 
+			// TODO Faire apparaitre un item 
 			return true;
 		}
 		return false;
 	}
-	
 
-//	private void patrol() {
-//		if(rightStep<200){
-//			right();
-//			rightStep++;
-//		}
-//		if(rightStep==200 && downStep<200){
-//			down();
-//			downStep++;
-//		}
-//
-//		if(downStep==200 && leftStep<200){
-//			left();
-//			leftStep++;
-//		}
-//		if(leftStep==200 && upStep<200){
-//			up();
-//			upStep++;
-//		}
-//		if(upStep==200){
-//			rightStep=0;
-//			leftStep=0;
-//			downStep=0;
-//			upStep=0;
-//		}
-//	}
-	
 }
