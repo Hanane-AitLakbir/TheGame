@@ -57,8 +57,8 @@ public abstract class Room {
 
 	public void updateGraphics(Graphics g){
 		//TODO room graphical update.
-//		bg.updateGraphic(g);
-//		player.updateGraphic(g);
+		bg.updateGraphic(g);
+		player.updateGraphic(g);
 	}
 
 }

@@ -18,6 +18,7 @@ public class RoomManager {
 	private Room current;
 	private int size;
 	private Hero player;
+	private ArrayList<Room> rooms;
 
 	public RoomManager(Hero player, int difficulty){
 		this.player = player;
@@ -32,7 +33,7 @@ public class RoomManager {
 			size = 7;
 			break;
 		}
-		ArrayList<Room> rooms = new ArrayList<Room>();
+		rooms = new ArrayList<Room>();
 		
 		for(int i = 0;i<size*size;i++){
 			rooms.add(new MonsterRoom(player,difficulty));
