@@ -16,7 +16,7 @@ public class Hero extends Thread{
 	private final int ANIMATIONSPEED = 2;
 	private int speed = 2;
 
-	private StatePlayer state = StatePlayer.NONE;
+	private StateActor state = StateActor.RIGHT;
 	private AnimatedSprite sprite;
 	//private BufferedImage currentSprite;
 
@@ -40,7 +40,7 @@ public class Hero extends Thread{
 		}
 	}
 	
-	public StatePlayer action(){
+	public StateActor action(){
 
 		move();
 		attack();
@@ -50,17 +50,17 @@ public class Hero extends Thread{
 
 	}
 
-	public void setState(StatePlayer state){
+	public void setState(StateActor state){
 		this.state = state;
 	}
 	
-	public StatePlayer getHeroState(){
+	public StateActor getHeroState(){
 		return state;
 	}
 
 	private boolean isMoving(){
 
-		if(state == StatePlayer.UP || state == StatePlayer.DOWN || state == StatePlayer.LEFT || state == StatePlayer.RIGHT){
+		if(state == StateActor.UP || state == StateActor.DOWN || state == StateActor.LEFT || state == StateActor.RIGHT){
 			return true;
 		}
 		else return false;
@@ -107,7 +107,7 @@ public class Hero extends Thread{
 
 	private boolean isAttacking(){
 
-		if(state == StatePlayer.ATTACKINGUP || state == StatePlayer.ATTACKINGDOWN || state == StatePlayer.ATTACKINGLEFT || state == StatePlayer.ATTACKINGRIGHT){
+		if(state == StateActor.ATTACKINGUP || state == StateActor.ATTACKINGDOWN || state == StateActor.ATTACKINGLEFT || state == StateActor.ATTACKINGRIGHT){
 			return true;
 		}
 		else return false;

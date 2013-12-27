@@ -6,7 +6,7 @@ import networking.*;
 import display.CanvasGame;
 import display.Window;
 import entities.Hero;
-import entities.StatePlayer;
+import entities.StateActor;
 
 /**
  * GameManager creates the display objects (a JPanel object and a CanvasGame), the Heroes, a RoomManager and
@@ -83,7 +83,7 @@ public class GameManager extends Thread{
 	 */
 	public static void updateOtherPlayers(int action){
 
-		StatePlayer state = StatePlayer.convertToState(action);
+		StateActor state = StateActor.convertToState(action);
 		otherPlayer.setState(state);
 		otherPlayer.action();
 
@@ -96,7 +96,7 @@ public class GameManager extends Thread{
 	 */
 	public static int playerAction(){
 
-		int action = StatePlayer.convertToInt(player.getHeroState());
+		int action = StateActor.convertToInt(player.getHeroState());
 		return action;
 
 	}

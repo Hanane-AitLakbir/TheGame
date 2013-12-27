@@ -2,7 +2,7 @@ package graphics;
 
 import java.awt.image.BufferedImage;
 
-import entities.StatePlayer;
+import entities.StateActor;
 
 public class AnimatedSprite {
 
@@ -79,7 +79,7 @@ public class AnimatedSprite {
 		return currentSprite[current];
 	}
 
-	public void changeAnimation(StatePlayer state){
+	public void changeAnimation(StateActor state){
 
 		this.reset(); //METTRE LE RESET DANS LE CONTROLLER ?
 		switch (state){

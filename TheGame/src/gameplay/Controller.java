@@ -3,7 +3,7 @@ package gameplay;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-import entities.StatePlayer;
+import entities.StateActor;
 
 
 public class Controller implements KeyListener{
@@ -12,35 +12,35 @@ public class Controller implements KeyListener{
 	@Override
 	public void keyPressed(KeyEvent event) {
 		if(event.getKeyCode()== KeyEvent.VK_UP){
-			GameManager.getPlayer().setState(StatePlayer.UP);
+			GameManager.getPlayer().setState(StateActor.UP);
 			action = 8;
 		}		
 		if(event.getKeyCode()== KeyEvent.VK_DOWN){
-			GameManager.getPlayer().setState(StatePlayer.DOWN);
+			GameManager.getPlayer().setState(StateActor.DOWN);
 			action = 2;
 		}		
 		if(event.getKeyCode()== KeyEvent.VK_RIGHT){
-			GameManager.getPlayer().setState(StatePlayer.RIGHT);
+			GameManager.getPlayer().setState(StateActor.RIGHT);
 			action = 6;
 		}		
 		if(event.getKeyCode()== KeyEvent.VK_LEFT){
-			GameManager.getPlayer().setState(StatePlayer.LEFT);
+			GameManager.getPlayer().setState(StateActor.LEFT);
 			action = 4;
 		}
 		if(event.getKeyCode()== KeyEvent.VK_SPACE){
 			switch(GameManager.getPlayer().getHeroState()){
 
 			case UP : 
-				GameManager.getPlayer().setState(StatePlayer.ATTACKINGUP);
+				GameManager.getPlayer().setState(StateActor.ATTACKINGUP);
 				break;
 			case DOWN : 
-				GameManager.getPlayer().setState(StatePlayer.ATTACKINGDOWN);
+				GameManager.getPlayer().setState(StateActor.ATTACKINGDOWN);
 				break;
 			case LEFT : 
-				GameManager.getPlayer().setState(StatePlayer.ATTACKINGLEFT);
+				GameManager.getPlayer().setState(StateActor.ATTACKINGLEFT);
 				break;
 			case RIGHT :
-				GameManager.getPlayer().setState(StatePlayer.ATTACKINGRIGHT);
+				GameManager.getPlayer().setState(StateActor.ATTACKINGRIGHT);
 				break;
 
 			}
@@ -48,7 +48,7 @@ public class Controller implements KeyListener{
 			action = 10;
 		}
 		if(event.getKeyCode()== KeyEvent.VK_P){
-			GameManager.getPlayer().setState(StatePlayer.PROTECTED);
+			GameManager.getPlayer().setState(StateActor.PROTECTED);
 			action = 100;
 		}
 
@@ -58,22 +58,22 @@ public class Controller implements KeyListener{
 	@Override
 	public void keyReleased(KeyEvent event) {
 		if(event.getKeyCode()== KeyEvent.VK_UP){
-			GameManager.getPlayer().setState(StatePlayer.NONE);
+			GameManager.getPlayer().setState(StateActor.NONE);
 		}		
 		if(event.getKeyCode()== KeyEvent.VK_DOWN){
-			GameManager.getPlayer().setState(StatePlayer.NONE);
+			GameManager.getPlayer().setState(StateActor.NONE);
 		}		
 		if(event.getKeyCode()== KeyEvent.VK_RIGHT){
-			GameManager.getPlayer().setState(StatePlayer.NONE);
+			GameManager.getPlayer().setState(StateActor.NONE);
 		}		
 		if(event.getKeyCode()== KeyEvent.VK_LEFT){
-			GameManager.getPlayer().setState(StatePlayer.NONE);
+			GameManager.getPlayer().setState(StateActor.NONE);
 		}
 		if(event.getKeyCode()== KeyEvent.VK_SPACE){
-			GameManager.getPlayer().setState(StatePlayer.NONE);
+			GameManager.getPlayer().setState(StateActor.NONE);
 		}
 		if(event.getKeyCode()== KeyEvent.VK_P){
-			GameManager.getPlayer().setState(StatePlayer.NONE);
+			GameManager.getPlayer().setState(StateActor.NONE);
 		}
 
 		action = -1;
