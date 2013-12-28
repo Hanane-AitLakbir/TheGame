@@ -16,7 +16,7 @@ public class Monster extends Thread {
 	private final int deltaX = 40, deltaY = 40;
 	private AnimatedSprite sprite;
 	Hero target;
-	String name;
+	String name; 
 	private int power = 10; //Power of the monster (damage dealt when attacking a hero)
 	private StateActor state = StateActor.RIGHT;
 
