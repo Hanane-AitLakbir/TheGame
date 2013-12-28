@@ -6,6 +6,8 @@ import graphics.AnimatedSprite;
 
 import java.awt.Graphics;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import display.Position;
@@ -36,10 +38,29 @@ public class Hero extends Thread{
 	}
 
 	public void run(){
-		while(!isDead()){
-			action();
-			grabItem();
-		}
+		
+		long delay = 50; // en ms
+		long startTime = 0;
+
+		Timer timer = new Timer();
+		TimerTask task = new TimerTask() {
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				//step();
+				action();
+				grabItem();
+			}
+
+
+		};
+		timer.scheduleAtFixedRate(task,startTime,delay);
+		
+//		while(!isDead()){
+//			action();
+//			grabItem();
+//		}
 	}
 	
 	public StateActor action(){

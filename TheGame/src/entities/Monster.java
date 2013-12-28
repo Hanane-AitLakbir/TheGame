@@ -31,6 +31,8 @@ public class Monster extends Thread {
 		this.target=GameManager.getPlayer();
 
 		life = new AtomicInteger(difficulty*10);
+		moveCounter = new AtomicInteger(0);
+		pauseCounter = new AtomicInteger(0);
 
 		sprite = new AnimatedSprite(name, ANIMATIONSPEED);
 	}
@@ -46,7 +48,7 @@ public class Monster extends Thread {
 		 *                         move() -> le monstre erre en fait
 		 *                         updateGraphics();
 		 */
-		long delay = 150; // en ms
+		long delay = 50; // en ms
 		long startTime = 0;
 
 		Timer timer = new Timer();
