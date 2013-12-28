@@ -1,19 +1,19 @@
-package networking;
-
-import gameplay.GameManager;
+package test_networking;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.Socket;
 
-public class Client implements Communicator {
+import networking.Communicator;
+
+public class ClientMock implements Communicator {
 
 	private Socket socket;
 
-	public Client(String serverName, int port) throws IOException{
-		socket = new Socket(serverName, port);
+	public ClientMock(String address, int port) throws IOException{
+		socket = new Socket(address, port);
+		System.out.println("client created");
 	}
 
 	public void run(){
@@ -26,10 +26,12 @@ public class Client implements Communicator {
 				
 				while(true){
 					if(input.readInt()==28792){
-						output.writeInt(GameManager.playerAction()); //sends the performed action by the player
+						output.writeInt(GameManagerMock.playerAction()); //sends the performed action by the player
+						System.out.println("client says : My turn !!");
 					}
 					else{
-						GameManager.updateOtherPlayers(input.readInt());
+						GameManagerMock.updateOtherPlayers(input.readInt());
+						System.out.println("client says :  I don't play");
 					}
 				}
 				

@@ -1,5 +1,7 @@
 package networking;
 
+import gameplay.GameManager;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -20,7 +22,7 @@ public class Server implements Communicator {
 		try {
 
 			while(true){
-				new TaskThread(serverSocket.accept(), turnManager);
+				new TaskThread(serverSocket.accept(), turnManager).start();
 			}
 
 		} catch (IOException e) {
@@ -39,23 +41,21 @@ class TaskThread extends Thread{
 	TaskThread(Socket connexion, TurnManager turnManager) throws IOException{
 		output = new DataOutputStream(connexion.getOutputStream());
 		input = new DataInputStream(connexion.getInputStream());
+		this.turnManager = turnManager;
 	}
 
 	public void run(){
 		while(true){
-			if(turnManager.getTurn()){
-				// TODO A decommenter
-//				try {
-//					output.writeInt(GameManager.playerAction()); // sends performed action by the player
-//				} catch (IOException e) {
-//					e.printStackTrace();
-//				} 
-			}
-			else{
-				// TODO A decommenter
-				//output.writeInt(28792);
-				//GameManager.updateOtherPlayer(input.writeInt());
-
+			try {
+				if(turnManager.getTurn()){
+					output.writeInt(GameManager.playerAction()); // sends performed action by the player
+				}
+				else{
+					output.writeInt(28792);
+					GameManager.updateOtherPlayers(input.readInt());
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 		}
 	}

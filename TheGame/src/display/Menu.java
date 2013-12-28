@@ -224,8 +224,7 @@ public class Menu {
 		joinGame.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				// TODO A decommenter dans le code final
-				//new GameManager(serverName.getText(), Integer.parseInt(serverPort.getText())).start();
+				new GameManager(serverName.getText(), Integer.parseInt(serverPort.getText())).start();
 				frame.setVisible(false); // close the menu window
 				sound.stopSound();
 			}
