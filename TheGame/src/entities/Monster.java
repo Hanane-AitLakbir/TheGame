@@ -59,7 +59,6 @@ public class Monster extends Thread {
 				action();
 			}
 
-
 		};
 		timer.scheduleAtFixedRate(task,startTime,delay);
 	}

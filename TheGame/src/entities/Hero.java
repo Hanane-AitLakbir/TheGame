@@ -53,21 +53,15 @@ public class Hero extends Thread{
 				grabItem();
 			}
 
-
 		};
 		timer.scheduleAtFixedRate(task,startTime,delay);
 		
-//		while(!isDead()){
-//			action();
-//			grabItem();
-//		}
 	}
 	
 	public StateActor action(){
 
 		move();
 		attack();
-		//defend();
 
 		return state;
 

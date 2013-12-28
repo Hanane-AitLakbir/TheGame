@@ -12,35 +12,52 @@ public class Controller implements KeyListener{
 	@Override
 	public void keyPressed(KeyEvent event) {
 		if(event.getKeyCode()== KeyEvent.VK_UP){
-			GameManager.getPlayer().setState(StateActor.UP);
-			action = 8;
+			if(GameManager.getPlayer().getHeroState() != StateActor.UP){
+				GameManager.getPlayer().setState(StateActor.UP);
+				action = 8;
+			}
 		}		
 		if(event.getKeyCode()== KeyEvent.VK_DOWN){
-			GameManager.getPlayer().setState(StateActor.DOWN);
-			action = 2;
+			if(GameManager.getPlayer().getHeroState() != StateActor.DOWN){
+				GameManager.getPlayer().setState(StateActor.DOWN);
+				action = 2;
+			}
 		}		
 		if(event.getKeyCode()== KeyEvent.VK_RIGHT){
-			GameManager.getPlayer().setState(StateActor.RIGHT);
-			action = 6;
+			if(GameManager.getPlayer().getHeroState() != StateActor.RIGHT){
+				GameManager.getPlayer().setState(StateActor.RIGHT);
+				action = 6;
+			}
 		}		
 		if(event.getKeyCode()== KeyEvent.VK_LEFT){
-			GameManager.getPlayer().setState(StateActor.LEFT);
-			action = 4;
+			if(GameManager.getPlayer().getHeroState() != StateActor.LEFT){
+				GameManager.getPlayer().setState(StateActor.LEFT);
+				action = 4;
+			}
 		}
 		if(event.getKeyCode()== KeyEvent.VK_SPACE){
+
 			switch(GameManager.getPlayer().getHeroState()){
 
 			case UP : 
-				GameManager.getPlayer().setState(StateActor.ATTACKINGUP);
+				if(GameManager.getPlayer().getHeroState() != StateActor.ATTACKINGUP){
+					GameManager.getPlayer().setState(StateActor.ATTACKINGUP);
+				}
 				break;
 			case DOWN : 
-				GameManager.getPlayer().setState(StateActor.ATTACKINGDOWN);
+				if(GameManager.getPlayer().getHeroState() != StateActor.ATTACKINGDOWN){
+					GameManager.getPlayer().setState(StateActor.ATTACKINGDOWN);
+				}
 				break;
-			case LEFT : 
-				GameManager.getPlayer().setState(StateActor.ATTACKINGLEFT);
+			case LEFT :
+				if(GameManager.getPlayer().getHeroState() != StateActor.ATTACKINGLEFT){
+					GameManager.getPlayer().setState(StateActor.ATTACKINGLEFT);
+				}
 				break;
 			case RIGHT :
-				GameManager.getPlayer().setState(StateActor.ATTACKINGRIGHT);
+				if(GameManager.getPlayer().getHeroState() != StateActor.ATTACKINGRIGHT){
+					GameManager.getPlayer().setState(StateActor.ATTACKINGRIGHT);
+				}
 				break;
 
 			}
