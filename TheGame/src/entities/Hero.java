@@ -20,7 +20,7 @@ public class Hero extends Thread{
 	private final int ANIMATIONSPEED = 2;
 	private int speed = 2; 
 
-	private StateActor state = StateActor.RIGHT;
+	private StateActor state = StateActor.RIGHT, previousState = StateActor.NONE;
 	private AnimatedSprite sprite;
 	//private BufferedImage currentSprite;
 
@@ -68,6 +68,7 @@ public class Hero extends Thread{
 	}
 
 	public void setState(StateActor state){
+		previousState = this.state;
 		this.state = state;
 	}
 	
@@ -90,7 +91,7 @@ public class Hero extends Thread{
 			int y = position.getY();
 			
 			//METTRE LE RESET DANS LE CONTROLLER ?
-			sprite.changeAnimation(state);
+			if(previousState != state){sprite.changeAnimation(state);}
 			
 			switch(state){
 			case UP :
@@ -151,7 +152,7 @@ public class Hero extends Thread{
 
 		if(isAttacking()){
 			
-			sprite.changeAnimation(state);
+			if(previousState!=state){sprite.changeAnimation(state);}
 			for(Monster m : canAttack()) {m.getAttacked(power);}
 			sprite.next();
 			

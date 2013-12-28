@@ -15,10 +15,10 @@ public class Monster extends Thread {
 	private Position position;
 	private final int deltaX = 40, deltaY = 40;
 	private AnimatedSprite sprite;
-	Hero target;
-	String name; 
+	private Hero target;
+	private String name; 
 	private int power = 10; //Power of the monster (damage dealt when attacking a hero)
-	private StateActor state = StateActor.RIGHT;
+	private StateActor state = StateActor.RIGHT, previousState = StateActor.NONE;
 
 	private AtomicInteger life, moveCounter, pauseCounter;
 	private int speed = 1; //a modifier selon difficulte
@@ -80,7 +80,7 @@ public class Monster extends Thread {
 				moveCounter.getAndAdd(20);
 			}
 			
-			sprite.changeAnimation(state);
+			if(previousState!=state){sprite.changeAnimation(state);}
 			sprite.next();
 			
 			if(canAttack()){
@@ -97,7 +97,7 @@ public class Monster extends Thread {
 		else if(isAttacking()){
 			
 			target.getAttacked(power); //Deals damage
-			sprite.changeAnimation(state);
+			if(previousState!=state){sprite.changeAnimation(state);}
 			sprite.next();
 			setState(StateActor.NONE); //Wait a bit.
 		
