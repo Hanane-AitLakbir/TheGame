@@ -101,6 +101,7 @@ public class Menu {
 				}
 			}
 		});
+		gameMode.add("");
 		gameMode.add("Solo");
 		gameMode.add("Multiplayer");
 		gameMode.setFont(new Font("Dialog", Font.BOLD, 12));
@@ -153,6 +154,7 @@ public class Menu {
 				System.out.println("difficulty " + GameManager.difficulty);
 			}
 		});
+		difficulty.add("");
 		difficulty.add("Novice");
 		difficulty.add("Normal");
 		difficulty.add("Expert");
