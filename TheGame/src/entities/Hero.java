@@ -145,6 +145,10 @@ public class Hero extends Thread{
 	private void grabItem(){
 
 	}
+	
+	public void getAttacked(int power){
+		life.getAndAdd(-power);
+	}
 
 	private boolean isDead(){
 		if(life.get()==0){ 

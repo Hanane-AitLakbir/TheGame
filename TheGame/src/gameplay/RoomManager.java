@@ -24,13 +24,16 @@ public class RoomManager {
 		this.player = player;
 		switch(difficulty){
 		case 1: 
-			size=5;
+			size = 5;
 			break;
 		case 2:
 			size = 6;
 			break;
 		case 3:
 			size = 7;
+			break;
+		default:
+			size = 8;
 			break;
 		}
 		rooms = new ArrayList<Room>();

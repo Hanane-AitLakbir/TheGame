@@ -20,9 +20,9 @@ public class Monster extends Thread {
 
 	Hero target;
 	String name;
+	private int power = 10; //Power of the monster (damage dealt when attacking a hero)
 	private StateActor state = StateActor.RIGHT;
 	private int moveCounter=0;
-	int upStep,downStep,leftStep,rightStep; // pour la methode patrol
 
 	public static AtomicInteger life;
 	private int speed = 1; //a modifier selon difficulte
@@ -82,16 +82,30 @@ public class Monster extends Thread {
 				chase(); //He chases the target
 				moveCounter += 20;
 			}
-		}
-		if(canAttack()){
-			switch (state){
-			case UP : setState(StateActor.ATTACKINGUP); break;
-			case DOWN : setState(StateActor.ATTACKINGDOWN); break;
-			case LEFT : setState(StateActor.ATTACKINGLEFT); break;
-			case RIGHT : setState(StateActor.ATTACKINGRIGHT); break;
+
+			if(canAttack()){
+				switch (state){
+				case UP : setState(StateActor.ATTACKINGUP); break;
+				case DOWN : setState(StateActor.ATTACKINGDOWN); break;
+				case LEFT : setState(StateActor.ATTACKINGLEFT); break;
+				case RIGHT : setState(StateActor.ATTACKINGRIGHT); break;
+				}
 			}
 		}
-		
+		else if(isAttacking()){
+			target.getAttacked(power); //Deals damage
+			setState(StateActor.NONE); //Wait a bit.
+		}
+		else if(state == StateActor.NONE){
+			try {
+				sleep(500); //If it just attacked, wait for 0.5s
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
+			setState(StateActor.RIGHT);
+		}
+
 		//ADD else if attacking blabla (I have it on a paper)
 		// + SPRITE + verify else if or if !!! (can attack on the same call of action() or not)
 
@@ -177,6 +191,14 @@ public class Monster extends Thread {
 				}
 			}
 		}
+	}
+	
+	private boolean isAttacking(){
+
+		if(state == StateActor.ATTACKINGUP || state == StateActor.ATTACKINGDOWN || state == StateActor.ATTACKINGLEFT || state == StateActor.ATTACKINGRIGHT){
+			return true;
+		}
+		else return false;
 	}
 
 	private boolean canAttack(){
