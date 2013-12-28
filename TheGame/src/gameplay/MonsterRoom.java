@@ -19,6 +19,10 @@ public class MonsterRoom extends Room {
 		}
 	}
 
+	public Monster[] getMonsters(){
+		return monsters;
+	}
+	
 	public void updateGraphics(Graphics g){
 		bg.updateGraphic(g);
 		for(Monster m : monsters)
