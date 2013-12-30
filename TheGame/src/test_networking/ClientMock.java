@@ -25,13 +25,14 @@ public class ClientMock implements Communicator {
 				input = new DataInputStream(socket.getInputStream());
 				
 				while(true){
-					if(input.readInt()==28792){
-						output.writeInt(GameManagerMock.playerAction()); //sends the performed action by the player
-						System.out.println("client says : My turn !!");
-					}
-					else{
+					
+					 if(input.readInt()!=28792){
 						GameManagerMock.updateOtherPlayers(input.readInt());
 						System.out.println("client says :  I don't play");
+					}
+					else {
+						output.writeInt(GameManagerMock.playerAction()); //sends the performed action by the player
+						System.out.println("client says : My turn !!");
 					}
 				}
 				

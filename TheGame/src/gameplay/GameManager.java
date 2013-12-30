@@ -41,6 +41,7 @@ public class GameManager extends Thread{
 		player.start();
 		roomManager = new RoomManager(player, difficulty);
 		if(multiplayer){
+			otherPlayer = new Hero(new AtomicInteger(50*4), new AtomicInteger(50*4),"Link2");
 			try {
 				communicator = new Server(3956);
 				new Thread(communicator).start();
@@ -61,6 +62,12 @@ public class GameManager extends Thread{
 		window.add(canvas);
 		player = new Hero(new AtomicInteger(50*4),new AtomicInteger(50*4),"Link");
 		player.start();
+		otherPlayer = new Hero(new AtomicInteger(50*4), new AtomicInteger(50*4),"Link2");
+		try {
+			communicator = new Client(nameServer,serverPort);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		roomManager = new RoomManager(player, difficulty);
 	}
 
@@ -68,7 +75,9 @@ public class GameManager extends Thread{
 
 		while(true){
 			try {
+				roomManager.goingOut();
 				roomManager.updateGraphics(canvas.getGraphics());
+				if(otherPlayer!=null) otherPlayer.updateGraphic(canvas.getGraphics());
 				sleep(14);
 			} catch (InterruptedException e) {
 				e.printStackTrace();

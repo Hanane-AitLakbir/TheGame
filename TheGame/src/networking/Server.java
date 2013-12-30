@@ -19,17 +19,47 @@ public class Server implements Communicator {
 	}
 
 	public void run(){
+		//NOT WORKING
+		//		try {
+		//
+		//			while(true){
+		//				new TaskThread(serverSocket.accept(), turnManager).start();
+		//			}
+		//
+		//		} catch (IOException e) {
+		//			e.printStackTrace();
+		//		}
+
 		try {
+			Socket connexion = serverSocket.accept();
+			System.out.println("server accepted a connexion");
+			DataOutputStream output = new DataOutputStream(connexion.getOutputStream());
+			DataInputStream input = new DataInputStream(connexion.getInputStream());
 
 			while(true){
-				new TaskThread(serverSocket.accept(), turnManager).start();
+				if(turnManager.getTurn()){
+					output.writeInt(GameManager.playerAction()); // sends performed action by the player
+				} 			
+				else{
+					output.writeInt(28792);
+					GameManager.updateOtherPlayers(input.readInt());
+				}
+				try {
+					Thread.sleep(20);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+
+					e.printStackTrace();
+				}
 			}
 
 		} catch (IOException e) {
+
 			e.printStackTrace();
 		}
-
 	}
+
+
 
 }
 
@@ -49,6 +79,7 @@ class TaskThread extends Thread{
 			try {
 				if(turnManager.getTurn()){
 					output.writeInt(GameManager.playerAction()); // sends performed action by the player
+					System.out.println("\t\t\t server says : My turn !!");
 				}
 				else{
 					output.writeInt(28792);

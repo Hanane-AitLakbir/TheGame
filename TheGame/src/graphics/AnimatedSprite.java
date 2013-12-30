@@ -23,12 +23,12 @@ public class AnimatedSprite {
 		nbSprites = 7;
 		up = new BufferedImage[nbSprites];
 		for(int i = 0; i<nbSprites;i++){
-			up[i] = new ImageLoader().load("/"+name+"_front.png").getSubimage(i*WIDTH,0,WIDTH,HEIGHT);
+			up[i] = new ImageLoader().load("/"+name+"_back.png").getSubimage(i*WIDTH,0,WIDTH,HEIGHT);
 		}
 		//down
 		down = new BufferedImage[nbSprites];
 		for(int i = 0; i<nbSprites;i++){
-			down[i] = new ImageLoader().load("/"+name+"_back.png").getSubimage(i*WIDTH,0,WIDTH,HEIGHT);
+			down[i] = new ImageLoader().load("/"+name+"_front.png").getSubimage(i*WIDTH,0,WIDTH,HEIGHT);
 		}
 		//left
 		left = new BufferedImage[nbSprites];
@@ -44,12 +44,12 @@ public class AnimatedSprite {
 		nbSprites = 6;
 		attackingUp = new BufferedImage[nbSprites];
 		for(int i = 0; i<nbSprites;i++){
-			attackingUp[i] = new ImageLoader().load("/"+name+"_front_attack.png").getSubimage(i*WIDTH,0,WIDTH,HEIGHT);
+			attackingUp[i] = new ImageLoader().load("/"+name+"_back_attack.png").getSubimage(i*WIDTH,0,WIDTH,HEIGHT);
 		}
 		//attackingDown
 		attackingDown = new BufferedImage[nbSprites];
 		for(int i = 0; i<nbSprites;i++){
-			attackingDown[i] = new ImageLoader().load("/"+name+"_back_attack.png").getSubimage(i*WIDTH,0,WIDTH,HEIGHT);
+			attackingDown[i] = new ImageLoader().load("/"+name+"_front_attack.png").getSubimage(i*WIDTH,0,WIDTH,HEIGHT);
 		}
 		//attackingLeft
 		attackingLeft = new BufferedImage[nbSprites];

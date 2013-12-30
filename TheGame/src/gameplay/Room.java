@@ -17,14 +17,20 @@ public abstract class Room {
 		sound = new SoundPlayer("room"+difficulty);
 	}
 
-	public Background getBackground(){
-		return bg;
-	}
+	// TODO USELESS
+	//	public Background getBackground(){
+	//		return bg;
+	//	}
 
 	public void playSound(){
 		sound.playSound();
 	}
 
+public void stopSound(){
+		sound.stopSound();
+	}
+
+	// TODO USELESS
 	/*
 	 * Creates the Labyrinth, the up room of a room, and down room of that up room IS NOT THE SAME !
 	 */
@@ -56,7 +62,6 @@ public abstract class Room {
 
 
 	public void updateGraphics(Graphics g){
-		//TODO room graphical update.
 		bg.updateGraphic(g);
 		player.updateGraphic(g);
 	}

@@ -15,18 +15,18 @@ import display.Position;
 public class Hero extends Thread{
 
 	private Position position;
-	private MonsterRoom currentRoom;
+	private MonsterRoom currentRoom; //instancier où ???
 	private final int deltaX = 40, deltaY = 40;
 	private final int ANIMATIONSPEED = 2;
 	private int speed = 2; 
 
-	private StateActor state = StateActor.RIGHT, previousState = StateActor.NONE;
+	private StateActor state = StateActor.NONE, previousState = StateActor.NONE;
 	private AnimatedSprite sprite;
 	//private BufferedImage currentSprite;
 
 	private static AtomicInteger life;
 	private int power = 10;
-	private String name;
+	//private String name;
 
 	public Hero(AtomicInteger x, AtomicInteger y, String name){
 

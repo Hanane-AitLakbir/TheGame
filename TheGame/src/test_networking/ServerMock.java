@@ -13,7 +13,7 @@ public class ServerMock implements Communicator {
 
 	private ServerSocket serverSocket;
 	private TurnManager turnManager;
-	//private Socket connexion;
+	private Socket connexion;
 	DataOutputStream output;
 	DataInputStream input; 
 
@@ -24,35 +24,35 @@ public class ServerMock implements Communicator {
 	}
 
 	public void run(){
-		try {
-			while(true){
-				new TaskThread(serverSocket.accept(),turnManager).start();
-			}
+//		try {
+//			while(true){
+//				new TaskThread(serverSocket.accept(),turnManager).start();
+//			}
+//
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		//		try {
-		//			connexion = serverSocket.accept();
-		//			System.out.println("server accepted a connexion");
-		//			output = new DataOutputStream(connexion.getOutputStream());
-		//			input = new DataInputStream(connexion.getInputStream());
-		//
-		//			while(true){
-		//				if(turnManager.getTurn()){
-		//					output.writeInt(GameManagerMock.playerAction()); // sends performed action by the player
-		//					System.out.println("\t\t\t server says : My turn !!");
-		//				} 			
-		//				else{
-		//					output.writeInt(28792);
-		//					GameManagerMock.updateOtherPlayers(input.readInt());
-		//					System.out.println("\t\t\t server says : I don't play");
-		//				}
-		//			}
-		//		} catch (IOException e) {
-		//			e.printStackTrace();
-		//		}
+						try {
+							connexion = serverSocket.accept();
+							System.out.println("server accepted a connexion");
+							output = new DataOutputStream(connexion.getOutputStream());
+							input = new DataInputStream(connexion.getInputStream());
+				
+							while(true){
+								if(turnManager.getTurn()){
+									output.writeInt(GameManagerMock.playerAction()); // sends performed action by the player
+									System.out.println("\t\t\t server says : My turn !!");
+								} 			
+								else{
+									output.writeInt(28792);
+									GameManagerMock.updateOtherPlayers(input.readInt());
+									System.out.println("\t\t\t server says : I don't play");
+								}
+							}
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
 	}
 }
 
@@ -71,17 +71,17 @@ class TaskThread extends Thread{
 	public void run(){
 		while(true){
 			try {
-			if(turnManager.getTurn()){
-				
+				if(turnManager.getTurn()){
+
 					output.writeInt(GameManagerMock.playerAction());
-				 // sends performed action by the player
-				System.out.println("\t\t\t server says : My turn !!");
-			} 			
-			else{
-				output.writeInt(28792);
-				GameManagerMock.updateOtherPlayers(input.readInt());
-				System.out.println("\t\t\t server says : I don't play");
-			}
+					// sends performed action by the player
+					System.out.println("\t\t\t server says : My turn !!");
+				} 			
+				else{
+					output.writeInt(28792);
+					GameManagerMock.updateOtherPlayers(input.readInt());
+					System.out.println("\t\t\t server says : I don't play");
+				}
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
