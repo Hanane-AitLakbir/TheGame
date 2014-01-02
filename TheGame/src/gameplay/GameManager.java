@@ -65,6 +65,7 @@ public class GameManager extends Thread{
 		otherPlayer = new Hero(new AtomicInteger(50*4), new AtomicInteger(50*4),"Link2");
 		try {
 			communicator = new Client(nameServer,serverPort);
+			new Thread(communicator).start();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

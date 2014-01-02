@@ -13,6 +13,7 @@ public class Client implements Communicator {
 
 	public Client(String serverName, int port) throws IOException{
 		socket = new Socket(serverName, port);
+		System.out.println("client connected");
 	}
 
 	public void run(){
