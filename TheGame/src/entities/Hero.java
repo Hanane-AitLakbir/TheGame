@@ -19,7 +19,7 @@ public class Hero extends Thread{
 	//private MonsterRoom currentRoom; //instancier o� ???
 	private final int deltaX = 40, deltaY = 40;
 	private final int ANIMATIONSPEED = 2;
-	private int speed = 5; 
+	private int speed = 3; 
 
 	private StateActor state = StateActor.NONE, previousState = StateActor.NONE;
 	private AnimatedSprite sprite;
