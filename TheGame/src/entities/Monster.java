@@ -149,28 +149,28 @@ public class Monster extends Thread {
 
 		if(random==0){
 			setState(StateActor.UP);
-			if( y-1>31*GameManager.SCALE*2 ){
+			if( y-speed>31*GameManager.SCALE*2 ){
 				position.setXY(x, y-speed);
 			}
 		}
 
 		if(random==1){
 			setState(StateActor.DOWN);
-			if( y+1<122*2*GameManager.SCALE ){
+			if( y+speed<122*2*GameManager.SCALE ){
 				position.setXY(x, y+speed);
 			}
 		}
 
 		if(random==2){
 			setState(StateActor.LEFT);
-			if( x-1>32*2*GameManager.SCALE ){
+			if( x-speed>32*2*GameManager.SCALE ){
 				position.setXY(x-speed, y);
 			}
 		}
 
 		if(random==3){
 			setState(StateActor.RIGHT);
-			if( x+1<128*2*GameManager.SCALE ){
+			if( x+speed<128*2*GameManager.SCALE ){
 				position.setXY(x+speed, y);
 			}
 		}

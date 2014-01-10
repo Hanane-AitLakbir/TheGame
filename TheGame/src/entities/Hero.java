@@ -97,19 +97,19 @@ public class Hero extends Thread{
 			
 			switch(state){
 			case UP :
-				if(y-1>31*2*GameManager.SCALE || (x>80*GameManager.SCALE*2 && x<95*2*GameManager.SCALE))
+				if(y-speed>31*2*GameManager.SCALE || (x>80*GameManager.SCALE*2 && x<95*2*GameManager.SCALE))
 					position.setXY(x, y-speed);
 				break;
 			case DOWN :
-				if(y+1<122*2*GameManager.SCALE || (x>64*GameManager.SCALE*2 && x<79*2*GameManager.SCALE))
+				if(y+speed<122*2*GameManager.SCALE || (x>64*GameManager.SCALE*2 && x<79*2*GameManager.SCALE))
 					position.setXY(x, y+speed);
 				break;
 			case LEFT :
-				if(x-1>32*2*GameManager.SCALE || (y>60*GameManager.SCALE*2 && y<75*2*GameManager.SCALE) )
+				if(x-speed>32*2*GameManager.SCALE || (y>60*GameManager.SCALE*2 && y<75*2*GameManager.SCALE) )
 					position.setXY(x-speed, y);
 				break;
 			case RIGHT :
-				if(x+1<128*2*GameManager.SCALE || (y>80*GameManager.SCALE*2 && y<95*2*GameManager.SCALE) )
+				if(x+speed<128*2*GameManager.SCALE || (y>80*GameManager.SCALE*2 && y<95*2*GameManager.SCALE) )
 					position.setXY(x+speed, y);
 				break;
 			default:
