@@ -48,7 +48,6 @@ public class Hero extends Thread{
 
 			@Override
 			public void run() {
-				//step();
 				action();
 				grabItem();
 				GameManager.updateGraphics(currentSprite, position);
@@ -152,12 +151,11 @@ public class Hero extends Thread{
 
 	private void attack(){
 		if(isAttacking()){
-
-//			
-//			if(previousState!=state){sprite.changeAnimation(state);}
+	
+		if(previousState!=state){sprite.changeAnimation(state);}
 //			for(Monster m : canAttack()) {m.getAttacked(power);}
 		currentSprite = sprite.next();
-//			
+	
 		}
 		
 	}

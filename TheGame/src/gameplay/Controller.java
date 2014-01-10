@@ -59,17 +59,6 @@ public class Controller implements KeyListener{
 					GameManager.getPlayer().setState(StateActor.ATTACKINGRIGHT);
 				}
 				break;
-			case ATTACKINGDOWN:
-				
-				break;
-			case ATTACKINGLEFT:
-				break;
-			case ATTACKINGRIGHT:
-				break;
-			case ATTACKINGUP:
-				break;
-			case NONE:
-				break;
 			default:
 				break;
 
