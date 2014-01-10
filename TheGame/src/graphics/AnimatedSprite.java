@@ -11,7 +11,7 @@ public class AnimatedSprite {
 	private final int WIDTH = 40, HEIGHT = 35;
 	private int current = 0;
 	private int counter = 0;
-	private int speed = 0;
+	private int speed = 1;
 	private int nbSprites;
 
 	public AnimatedSprite(String name, int speed){
