@@ -61,7 +61,7 @@ public class Monster extends Thread {
 		 *                         move() -> le monstre erre en fait
 		 *                         updateGraphics();
 		 */
-		long delay = 50; // en ms
+		long delay = 30; // en ms
 		long startTime = 0;
 
 		Timer timer = new Timer();
@@ -89,11 +89,11 @@ public class Monster extends Thread {
 
 		if(isMoving()){ //If the monster must move (UP DOWN LEFT or RIGHT)
 			if(moveCounter.get()>=4000){moveCounter.set(0);}
-			while(moveCounter.get()<2000){ //for about 2s
+			if(moveCounter.get()<2000){ //for about 2s
 				random(); //He evades the target by walking randomly
 				moveCounter.getAndAdd(20);
 			}
-			while(moveCounter.get()>=2000 && moveCounter.get()<4000){ //for about 2s
+			if(moveCounter.get()>=2000 && moveCounter.get()<4000){ //for about 2s
 				chase(); //He chases the target
 				moveCounter.getAndAdd(20);
 			}
@@ -179,11 +179,11 @@ public class Monster extends Thread {
 
 	//TODO condense the moving parts into moveUp(), ...
 	private void chase(){
-		int x = target.getPosition().getX();
-		int y = target.getPosition().getY();
+		int x = position.getX();
+		int y = position.getY();
 
-		int dx = position.getX() - x;
-		int dy = position.getY() - y;
+		int dx = x - target.getPosition().getX();
+		int dy = y - target.getPosition().getY();
 
 		//Do the Math : try all the different cases (8) and summarize into this.
 		//The monster will try to chase the hero by covering the biggest horizontal/vertical distance first.
@@ -232,7 +232,7 @@ public class Monster extends Thread {
 
 		//TODO Create a parameter RANGE
 		//TODO Make a more accurate box ! (more height than width ?) [ ]<- and not []<-
-		if(dx<20 && dy<20) return true; //change to set the attacking range !
+		if(dx<5 && dy<5) return true; //change to set the attacking range !
 		else return false;
 	}
 

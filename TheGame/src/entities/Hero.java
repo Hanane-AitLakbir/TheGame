@@ -16,10 +16,10 @@ import display.Position;
 public class Hero extends Thread{
 
 	private Position position;
-	//private MonsterRoom currentRoom; //instancier où ???
+	//private MonsterRoom currentRoom; //instancier oï¿½ ???
 	private final int deltaX = 40, deltaY = 40;
 	private final int ANIMATIONSPEED = 2;
-	private int speed = 2; 
+	private int speed = 5; 
 
 	private StateActor state = StateActor.NONE, previousState = StateActor.NONE;
 	private AnimatedSprite sprite;
