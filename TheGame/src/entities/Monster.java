@@ -14,13 +14,15 @@ public class Monster extends Thread {
 
 	private Position position;
 	private final int deltaX = 40, deltaY = 40;
+	private final int STEP = 20;
+	private double random = 0, randomTime = 0;
 	private AnimatedSprite sprite;
 	private Hero target;
 	private boolean display = false;
-	
+
 	//USELESS
 	//private String name; 
-	
+
 	private int power = 10; //Power of the monster (damage dealt when attacking a hero)
 	private StateActor state = StateActor.RIGHT, previousState = StateActor.NONE;
 
@@ -35,7 +37,7 @@ public class Monster extends Thread {
 		this.target=GameManager.getPlayer();
 
 		life = new AtomicInteger(50);
-		
+
 		//
 		if(difficulty==1){
 			power = 5;
@@ -43,7 +45,7 @@ public class Monster extends Thread {
 		else{
 			power = 10;
 		}
-		
+
 		moveCounter = new AtomicInteger(0);
 		pauseCounter = new AtomicInteger(0);
 
@@ -81,7 +83,7 @@ public class Monster extends Thread {
 	public void setDisplay(boolean display){
 		this.display = display;
 	}
-	
+
 	//TODO change random by evade ? 
 	private void action(){
 
@@ -91,11 +93,11 @@ public class Monster extends Thread {
 			if(moveCounter.get()>=4000){moveCounter.set(0);}
 			if(moveCounter.get()<2000){ //for about 2s
 				random(); //He evades the target by walking randomly
-				moveCounter.getAndAdd(20);
+				moveCounter.getAndAdd(STEP);
 			}
 			if(moveCounter.get()>=2000 && moveCounter.get()<4000){ //for about 2s
 				chase(); //He chases the target
-				moveCounter.getAndAdd(20);
+				moveCounter.getAndAdd(STEP);
 			}
 
 			if(previousState!=state){sprite.changeAnimation(state);}
@@ -142,11 +144,17 @@ public class Monster extends Thread {
 	}
 
 	private void random(){
-		double random = Math.floor(4*Math.random());
+		
 		int x = position.getX();
 		int y = position.getY();
 
+		if(randomTime<=STEP){
+			random = Math.floor(4*Math.random());
+		}
+		
+		if(randomTime<=STEP){randomTime = Math.floor(1000*Math.random()) + STEP+1;}
 
+		System.out.println(random + " + " + randomTime);
 		if(random==0){
 			setState(StateActor.UP);
 			if( y-speed>31*GameManager.SCALE*2 ){
@@ -174,6 +182,8 @@ public class Monster extends Thread {
 				position.setXY(x+speed, y);
 			}
 		}
+
+		randomTime-=STEP;
 
 	}
 
@@ -236,12 +246,12 @@ public class Monster extends Thread {
 		else return false;
 	}
 
-//	public void updateGraphics(Graphics g){
-//		/*
-//		 * Changer les entiers avant Game.SCALE
-//		 */
-//		g.drawImage(sprite.getCurrentSprite(), position.getX(), position.getY(), deltaX*GameManager.SCALE, deltaY*GameManager.SCALE,null);
-//	}	
+	//	public void updateGraphics(Graphics g){
+	//		/*
+	//		 * Changer les entiers avant Game.SCALE
+	//		 */
+	//		g.drawImage(sprite.getCurrentSprite(), position.getX(), position.getY(), deltaX*GameManager.SCALE, deltaY*GameManager.SCALE,null);
+	//	}	
 
 	private void setState(StateActor state){
 		this.state = state;
