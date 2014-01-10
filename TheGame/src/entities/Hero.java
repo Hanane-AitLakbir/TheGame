@@ -162,7 +162,7 @@ public class Hero extends Thread{
 			currentSprite = sprite.next();
 			pauseCounter++; //Adjust !!!
 			if(pauseCounter >= 7) {
-				setState(StateActor.NONE);
+				setState(StateActor.PROTECTED);
 				pauseCounter=0;
 
 				//if(previousState!=state){sprite.changeAnimation(state);}
