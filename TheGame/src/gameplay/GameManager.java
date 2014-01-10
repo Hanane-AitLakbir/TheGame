@@ -1,9 +1,13 @@
 package gameplay;
 
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
+
 import networking.*;
 import display.CanvasGame;
+import display.Position;
 import display.Window;
 import entities.Hero;
 import entities.StateActor;
@@ -17,31 +21,37 @@ import entities.StateActor;
  *
  */
 public class GameManager extends Thread{
-	
+
 	private RoomManager roomManager;
 	private CanvasGame canvas;
 	private Communicator communicator;
-	
+
 	private static Hero player = null; 
 	private static Hero otherPlayer = null;
-	
+
 	public static boolean multiplayer; // multiplayer or solo mode : instanced in Menu (choice gameMode listener)
 	public static int difficulty; // game difficulty : instanced in Menu (choice difficulty listener)
 	public static final int WIDTH = 340, HEIGHT = 340, SCALE = 2;
-	
-	
+
+	private static Graphics graphics;
+
+
 	/**
 	 * Constructor for a server or in solo mode
 	 */
 	public GameManager(){
-		this.canvas = new CanvasGame();
+		canvas = new CanvasGame();
 		Window window = new Window();
 		window.add(canvas);
-		player = new Hero(new AtomicInteger(50*4),new AtomicInteger(50*4),"Link");
+		graphics = canvas.getGraphics();
+
+		player = new Hero(new AtomicInteger(75*4),new AtomicInteger(75*4),"Link");
 		player.start();
+
 		roomManager = new RoomManager(player, difficulty);
+
 		if(multiplayer){
-			otherPlayer = new Hero(new AtomicInteger(50*4), new AtomicInteger(50*4),"Link2");
+			otherPlayer = new Hero(new AtomicInteger(75*4), new AtomicInteger(75*4),"Link2");
 			try {
 				communicator = new Server(3956);
 				new Thread(communicator).start();
@@ -50,7 +60,7 @@ public class GameManager extends Thread{
 			}
 		}
 	}
-	
+
 	/**
 	 * Constructor for client in multiplayer mode to Join a game
 	 * @param nameServer 
@@ -60,16 +70,19 @@ public class GameManager extends Thread{
 		this.canvas = new CanvasGame();
 		Window window = new Window();
 		window.add(canvas);
+
 		player = new Hero(new AtomicInteger(50*4),new AtomicInteger(50*4),"Link");
 		player.start();
 		otherPlayer = new Hero(new AtomicInteger(50*4), new AtomicInteger(50*4),"Link2");
+
+		roomManager = new RoomManager(player, difficulty);
+
 		try {
 			communicator = new Client(nameServer,serverPort);
 			new Thread(communicator).start();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		roomManager = new RoomManager(player, difficulty);
 	}
 
 	public void run(){
@@ -79,12 +92,11 @@ public class GameManager extends Thread{
 				roomManager.goingOut();
 				roomManager.updateGraphics(canvas.getGraphics());
 				if(otherPlayer!=null) otherPlayer.updateGraphic(canvas.getGraphics());
-				sleep(14);
+				sleep(100);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
-
 	}
 
 	/**
@@ -92,7 +104,6 @@ public class GameManager extends Thread{
 	 * @param action the action received by the communicator
 	 */
 	public static void updateOtherPlayers(int action){
-
 		StateActor state = StateActor.convertToState(action);
 		otherPlayer.setState(state);
 		otherPlayer.action();
@@ -111,12 +122,17 @@ public class GameManager extends Thread{
 
 	}
 
-	public static void setOtherPlayer(Hero otherPlayer){
-		otherPlayer = new Hero(new AtomicInteger(50*4),new AtomicInteger(50*4),"");
-	}
+	//USELESS
+	//	public static void setOtherPlayer(Hero otherPlayer){
+	//		otherPlayer = new Hero(new AtomicInteger(50*4),new AtomicInteger(50*4),"");
+	//	}
 
 	public static Hero getPlayer(){
 		return player;
+	}
+
+	public static synchronized void updateGraphics(BufferedImage image, Position position){
+		graphics.drawImage(image, position.getX(), position.getY(), 40*GameManager.SCALE, 40*GameManager.SCALE,null);
 	}
 
 	//main de test : affichage

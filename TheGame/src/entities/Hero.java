@@ -5,6 +5,7 @@ import gameplay.MonsterRoom;
 import graphics.AnimatedSprite;
 
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -15,14 +16,14 @@ import display.Position;
 public class Hero extends Thread{
 
 	private Position position;
-	private MonsterRoom currentRoom; //instancier où ???
+	//private MonsterRoom currentRoom; //instancier où ???
 	private final int deltaX = 40, deltaY = 40;
 	private final int ANIMATIONSPEED = 2;
 	private int speed = 2; 
 
 	private StateActor state = StateActor.NONE, previousState = StateActor.NONE;
 	private AnimatedSprite sprite;
-	//private BufferedImage currentSprite;
+	private BufferedImage currentSprite;
 
 	private static AtomicInteger life;
 	private int power = 10;
@@ -39,7 +40,7 @@ public class Hero extends Thread{
 
 	public void run(){
 		
-		long delay = 50; // en ms
+		long delay = 30; // en ms
 		long startTime = 0;
 
 		Timer timer = new Timer();
@@ -47,14 +48,15 @@ public class Hero extends Thread{
 
 			@Override
 			public void run() {
-				// TODO Auto-generated method stub
 				//step();
 				action();
 				grabItem();
+				GameManager.updateGraphics(currentSprite, position);
 			}
 
 		};
 		timer.scheduleAtFixedRate(task,startTime,delay);
+		
 		
 	}
 	
@@ -113,7 +115,7 @@ public class Hero extends Thread{
 			default:
 				break;
 			}
-			sprite.next();
+			currentSprite = sprite.next();
 			
 		}
 
@@ -136,12 +138,12 @@ public class Hero extends Thread{
 
 		ArrayList<Monster> monsterList = new ArrayList<Monster>();
 		
-		for(Monster m : currentRoom.getMonsters()){
-			int dx = Math.abs(position.getX() - m.getPosition().getX());
-			int dy = Math.abs(position.getY() - m.getPosition().getY());
-			
-			if(dx<20 && dy<20) monsterList.add(m);
-		}
+//		for(Monster m : currentRoom.getMonsters()){
+//			int dx = Math.abs(position.getX() - m.getPosition().getX());
+//			int dy = Math.abs(position.getY() - m.getPosition().getY());
+//			
+//			if(dx<20 && dy<20) monsterList.add(m);
+//		}
 		//TODO Create a parameter RANGE
 		//TODO Make a more accurate box ! (more height than width ?) [ ]<- and not []<-
 		if(monsterList.size()==0) return null;
@@ -149,13 +151,13 @@ public class Hero extends Thread{
 	}
 
 	private void attack(){
-
 		if(isAttacking()){
-			
-			if(previousState!=state){sprite.changeAnimation(state);}
-			for(Monster m : canAttack()) {m.getAttacked(power);}
-			sprite.next();
-			
+
+//			
+//			if(previousState!=state){sprite.changeAnimation(state);}
+//			for(Monster m : canAttack()) {m.getAttacked(power);}
+		currentSprite = sprite.next();
+//			
 		}
 		
 	}

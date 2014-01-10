@@ -31,6 +31,8 @@ public class Menu {
 				try {
 					Menu window = new Menu();
 					window.frame.setVisible(true);
+					window.frame.setLocationRelativeTo(null);
+					window.frame.setResizable(false);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

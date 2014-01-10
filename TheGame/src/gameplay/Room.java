@@ -9,7 +9,7 @@ public abstract class Room {
 	Background bg;
 	Hero player; 
 	SoundPlayer sound;
-	Room up, down, left, right;
+	int up, down, left, right;
 
 	public Room(Hero player, int difficulty){
 		this.player = player;
@@ -17,18 +17,22 @@ public abstract class Room {
 		sound = new SoundPlayer("room"+difficulty);
 	}
 
+	public abstract void updateGraphics(Graphics g); //draws the background
+	public abstract void stop();
+	public abstract void start();
+	
 	// TODO USELESS
 	//	public Background getBackground(){
 	//		return bg;
 	//	}
 
-	public void playSound(){
-		sound.playSound();
-	}
-
-public void stopSound(){
-		sound.stopSound();
-	}
+//	public void playSound(){
+//		sound.playSound();
+//	}
+//
+//	public void stopSound(){
+//		sound.stopSound();
+//	}
 
 	// TODO USELESS
 	/*
@@ -61,9 +65,9 @@ public void stopSound(){
 //	}
 
 
-	public void updateGraphics(Graphics g){
-		bg.updateGraphic(g);
-		player.updateGraphic(g);
-	}
+//	public void updateGraphics(Graphics g){
+//		bg.updateGraphic(g);
+//		player.updateGraphic(g);
+//	}
 
 }

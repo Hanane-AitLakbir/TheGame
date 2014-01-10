@@ -16,21 +16,34 @@ public class Monster extends Thread {
 	private final int deltaX = 40, deltaY = 40;
 	private AnimatedSprite sprite;
 	private Hero target;
-	private String name; 
+	private boolean display = false;
+	
+	//USELESS
+	//private String name; 
+	
 	private int power = 10; //Power of the monster (damage dealt when attacking a hero)
 	private StateActor state = StateActor.RIGHT, previousState = StateActor.NONE;
 
 	private AtomicInteger life, moveCounter, pauseCounter;
-	private int speed = 1; //a modifier selon difficulte
+	private int speed = 1; //a modifier selon difficulty => NECESSAIRE ?? 
 	private final int ANIMATIONSPEED = 2;
 
 	public Monster(AtomicInteger x, AtomicInteger y, String name,int difficulty){
 
 		position = new Position(x, y);
-		this.name = name;
+		//this.name = name;
 		this.target=GameManager.getPlayer();
 
-		life = new AtomicInteger(difficulty*10);
+		life = new AtomicInteger(50);
+		
+		//
+		if(difficulty==1){
+			power = 5;
+		}
+		else{
+			power = 10;
+		}
+		
 		moveCounter = new AtomicInteger(0);
 		pauseCounter = new AtomicInteger(0);
 
@@ -57,15 +70,20 @@ public class Monster extends Thread {
 			@Override
 			public void run() {
 				action();
+				if(display) GameManager.updateGraphics(sprite.getCurrentSprite(), position); //if the player is in its room.
 			}
 
 		};
 		timer.scheduleAtFixedRate(task,startTime,delay);
 	}
 
-
+	// true if the player is in its rooms, false otherwise. => used by MonsterRoom
+	public void setDisplay(boolean display){
+		this.display = display;
+	}
+	
 	//TODO change random by evade ? 
-	public void action(){
+	private void action(){
 
 		//target = closerHero();  //IF MORE THAN ONE PLAYER !
 
@@ -79,10 +97,10 @@ public class Monster extends Thread {
 				chase(); //He chases the target
 				moveCounter.getAndAdd(20);
 			}
-			
+
 			if(previousState!=state){sprite.changeAnimation(state);}
 			sprite.next();
-			
+
 			if(canAttack()){
 				switch (state){
 				case UP : setState(StateActor.ATTACKINGUP); break;
@@ -92,22 +110,22 @@ public class Monster extends Thread {
 				default: setState(StateActor.ATTACKINGRIGHT); break;
 				}
 			}
-			
+
 		}
 		else if(isAttacking()){
-			
+
 			target.getAttacked(power); //Deals damage
 			if(previousState!=state){sprite.changeAnimation(state);}
 			sprite.next();
 			setState(StateActor.NONE); //Wait a bit.
-		
+
 		}
 		else if(state == StateActor.NONE){
-			
+
 			sprite.next();
 			pauseCounter.getAndIncrement(); //Adjust !!!
 			if(pauseCounter.get() >= 7) {setState(StateActor.RIGHT); pauseCounter.set(0);} 
-			
+
 		}
 
 		//TODO ADD else if attacking blabla (I have it on a paper)
@@ -128,7 +146,7 @@ public class Monster extends Thread {
 		int x = position.getX();
 		int y = position.getY();
 
-		
+
 		if(random==0){
 			setState(StateActor.UP);
 			if( y-1>31*GameManager.SCALE*2 ){
@@ -156,11 +174,11 @@ public class Monster extends Thread {
 				position.setXY(x+speed, y);
 			}
 		}
-		
+
 	}
 
 	//TODO condense the moving parts into moveUp(), ...
-	public void chase(){
+	private void chase(){
 		int x = target.getPosition().getX();
 		int y = target.getPosition().getY();
 
@@ -198,7 +216,7 @@ public class Monster extends Thread {
 			}
 		}
 	}
-	
+
 	private boolean isAttacking(){
 
 		if(state == StateActor.ATTACKINGUP || state == StateActor.ATTACKINGDOWN || state == StateActor.ATTACKINGLEFT || state == StateActor.ATTACKINGRIGHT){
@@ -218,21 +236,21 @@ public class Monster extends Thread {
 		else return false;
 	}
 
-	public void updateGraphics(Graphics g){
-		/*
-		 * Changer les entiers avant Game.SCALE
-		 */
-		g.drawImage(sprite.getCurrentSprite(), position.getX(), position.getY(), deltaX*GameManager.SCALE, deltaY*GameManager.SCALE,null);
-	}	
+//	public void updateGraphics(Graphics g){
+//		/*
+//		 * Changer les entiers avant Game.SCALE
+//		 */
+//		g.drawImage(sprite.getCurrentSprite(), position.getX(), position.getY(), deltaX*GameManager.SCALE, deltaY*GameManager.SCALE,null);
+//	}	
 
-	public void setState(StateActor state){
+	private void setState(StateActor state){
 		this.state = state;
 	}
 
 	public void getAttacked(int power){
 		life.getAndAdd(-power);
 	}
-	
+
 	public boolean isDead(){
 		if(life.get()==0){
 			// TODO Faire apparaitre un item 
@@ -240,7 +258,7 @@ public class Monster extends Thread {
 		}
 		return false;
 	}
-	
+
 	public Position getPosition(){
 		return position;
 	}
