@@ -16,7 +16,7 @@ import display.Position;
 public class Hero extends Thread{
 
 	private Position position;
-	//private MonsterRoom currentRoom; //instancier o� ???
+	private Monster[] monsters;
 	private final int deltaX = 40, deltaY = 40;
 	private final int ANIMATIONSPEED = 2;
 	private int speed = 3; 
@@ -61,12 +61,12 @@ public class Hero extends Thread{
 
 	}
 
-	public StateActor action(){
+	public void action(){
 
 		move();
 		attack();
 
-		return state;
+		//return state;
 
 	}
 
@@ -139,12 +139,12 @@ public class Hero extends Thread{
 
 		ArrayList<Monster> monsterList = new ArrayList<Monster>();
 
-		//		for(Monster m : currentRoom.getMonsters()){
-		//			int dx = Math.abs(position.getX() - m.getPosition().getX());
-		//			int dy = Math.abs(position.getY() - m.getPosition().getY());
-		//			
-		//			if(dx<20 && dy<20) monsterList.add(m);
-		//		}
+		for(Monster m : monsters){
+			int dx = Math.abs(position.getX() - m.getPosition().getX());
+			int dy = Math.abs(position.getY() - m.getPosition().getY());
+
+			if(dx<20 && dy<20) monsterList.add(m);
+		}
 		//TODO Create a parameter RANGE
 		//TODO Make a more accurate box ! (more height than width ?) [ ]<- and not []<-
 		if(monsterList.size()==0) return null;
@@ -156,7 +156,9 @@ public class Hero extends Thread{
 			if(previousState!=state){sprite.changeAnimation(state);}
 
 			currentSprite = sprite.next();
-			setState(StateActor.NONE);}
+			setState(StateActor.NONE);
+			for(Monster m : canAttack()) {m.getAttacked(power);}
+		}
 
 		else if(state == StateActor.NONE){
 			currentSprite = sprite.next();
@@ -164,11 +166,7 @@ public class Hero extends Thread{
 			if(pauseCounter >= 7) {
 				setState(StateActor.PROTECTED);
 				pauseCounter=0;
-
-				//if(previousState!=state){sprite.changeAnimation(state);}
-				//for(Monster m : canAttack()) {m.getAttacked(power);}
-				//			
-			}
+			}			
 		}
 	}
 	/*
@@ -201,4 +199,7 @@ public class Hero extends Thread{
 		return position;
 	}
 
+	public void setMonsters(Monster[] monsters){
+		this.monsters = monsters;
+	}
 }

@@ -71,8 +71,10 @@ public class Monster extends Thread {
 
 			@Override
 			public void run() {
-				action();
-				if(display) GameManager.updateGraphics(sprite.getCurrentSprite(), position); //if the player is in its room.
+				if(display){
+					action();
+					GameManager.updateGraphics(sprite.getCurrentSprite(), position); //if the player is in its room.
+				}
 			}
 
 		};

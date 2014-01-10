@@ -50,6 +50,7 @@ public class MonsterRoom extends Room {
 		for(Monster m : monsters){
 			m.setDisplay(true);
 		}
+		player.setMonsters(monsters);
 		
 	}
 

@@ -84,7 +84,7 @@ public class RoomManager {
 	}
 
 	//rename changeRoom ??
-	public Room goingOut(){
+	public void goingOut(){
 
 		Position pos = player.getPosition();
 		int x = pos.getX();
@@ -97,7 +97,7 @@ public class RoomManager {
 			current.start();
 			//current.playSound();
 			player.getPosition().setXY(62*GameManager.SCALE*2, 123*2*GameManager.SCALE);
-			return current;
+			//return current;
 		} 
 		else if (x>64*GameManager.SCALE*2 && x<79*2*GameManager.SCALE && y>138*2*GameManager.SCALE){
 			//current.stopSound();
@@ -106,7 +106,7 @@ public class RoomManager {
 			current.start();
 			//current.playSound();
 			player.getPosition().setXY(82*GameManager.SCALE*2, 32*2*GameManager.SCALE);
-			return current;
+			//return current;
 		} 
 		else if (y>60*GameManager.SCALE*2 && y<75*2*GameManager.SCALE && x<16*2*GameManager.SCALE){
 			//current.stopSound();
@@ -115,7 +115,7 @@ public class RoomManager {
 			current.start();
 			//current.playSound();
 			player.getPosition().setXY(125*GameManager.SCALE*2, 87*2*GameManager.SCALE);
-			return current;
+			//return current;
 		} 
 		else if (y>80*GameManager.SCALE*2 && y<95*2*GameManager.SCALE && x>140*2*GameManager.SCALE){
 			//current.stopSound();
@@ -124,8 +124,9 @@ public class RoomManager {
 			current.start();
 			//current.playSound();
 			player.getPosition().setXY(27*GameManager.SCALE*2, 67*2*GameManager.SCALE);
-			return current;
-		}else return null;	
+			//return current;
+		}
+		//else return null;	
 	}
 
 	//main de test : outOfMemory
