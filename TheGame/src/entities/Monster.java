@@ -30,7 +30,7 @@ public class Monster extends Thread {
 	private int speed = 1; //a modifier selon difficulty => NECESSAIRE ?? 
 	private final int ANIMATIONSPEED = 2;
 
-	public Monster(AtomicInteger x, AtomicInteger y, String name,int difficulty){
+	public Monster(int x, int y, String name,int difficulty){
 
 		position = new Position(x, y);
 		//this.name = name;

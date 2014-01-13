@@ -32,7 +32,7 @@ public class GameManager extends Thread{
 	public static boolean multiplayer; // multiplayer or solo mode : instanced in Menu (choice gameMode listener)
 	public static int difficulty; // game difficulty : instanced in Menu (choice difficulty listener)
 	public static final int WIDTH = 340, HEIGHT = 340, SCALE = 2;
-
+	public static boolean turn = true;
 	private static Graphics graphics;
 
 
@@ -45,13 +45,13 @@ public class GameManager extends Thread{
 		window.add(canvas);
 		graphics = canvas.getGraphics();
 
-		player = new Hero(new AtomicInteger(75*4),new AtomicInteger(75*4),"Link");
+		player = new Hero(75*4,75*4,"Link");
 		player.start();
 
 		roomManager = new RoomManager(player, difficulty);
 
 		if(multiplayer){
-			otherPlayer = new Hero(new AtomicInteger(75*4), new AtomicInteger(75*4),"Link2");
+			otherPlayer = new Hero(75*4, 75*4,"Link2");
 			try {
 				communicator = new Server(3956);
 				new Thread(communicator).start();
@@ -71,9 +71,9 @@ public class GameManager extends Thread{
 		Window window = new Window();
 		window.add(canvas);
 
-		player = new Hero(new AtomicInteger(50*4),new AtomicInteger(50*4),"Link");
+		player = new Hero(75*4,75*4,"Link");
 		player.start();
-		otherPlayer = new Hero(new AtomicInteger(50*4), new AtomicInteger(50*4),"Link2");
+		otherPlayer = new Hero(75*4,75*4,"Link2");
 
 		roomManager = new RoomManager(player, difficulty);
 

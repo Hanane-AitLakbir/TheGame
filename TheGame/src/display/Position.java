@@ -1,27 +1,24 @@
 package display;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 public class Position {
 	
-	AtomicInteger x,y;
+	int x,y;
 	
-	public Position(AtomicInteger x, AtomicInteger y){
+	public Position(int x,int y){
+		this.x = x;
+		this.y = y;
+	}
+	public void setXY(int x, int y){
 		this.x = x;
 		this.y = y;
 	}
 	
-	public void setXY(int x, int y){
-		this.x = new AtomicInteger(x);
-		this.y = new AtomicInteger(y);
-	}
-	
 	public int getX(){
-		return x.get();
+		return x;
 	}
 	
 	public int getY(){
-		return y.get();
+		return y;
 	}
 
 }

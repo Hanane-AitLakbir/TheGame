@@ -11,6 +11,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import networking.TurnManager;
 import display.Position;
 
 public class Hero extends Thread{
@@ -30,7 +31,7 @@ public class Hero extends Thread{
 	//private String name;
 	private int pauseCounter;
 
-	public Hero(AtomicInteger x, AtomicInteger y, String name){
+	public Hero(int x, int y, String name){
 
 		position = new Position(x, y);
 		sprite = new AnimatedSprite(name, ANIMATIONSPEED);
@@ -50,9 +51,12 @@ public class Hero extends Thread{
 			@Override
 			public void run() {
 				//step();
-				action();
-				grabItem();
+				if(GameManager.turn){
+					action();
+					grabItem();
+				}
 				GameManager.updateGraphics(currentSprite, position);
+				System.out.println(state);
 			}
 
 		};
@@ -139,11 +143,13 @@ public class Hero extends Thread{
 
 		ArrayList<Monster> monsterList = new ArrayList<Monster>();
 
-		for(Monster m : monsters){
-			int dx = Math.abs(position.getX() - m.getPosition().getX());
-			int dy = Math.abs(position.getY() - m.getPosition().getY());
+		if(monsters!=null){
+			for(Monster m : monsters){
+				int dx = Math.abs(position.getX() - m.getPosition().getX());
+				int dy = Math.abs(position.getY() - m.getPosition().getY());
 
-			if(dx<20 && dy<20) monsterList.add(m);
+				if(dx<20 && dy<20) monsterList.add(m);
+			}
 		}
 		//TODO Create a parameter RANGE
 		//TODO Make a more accurate box ! (more height than width ?) [ ]<- and not []<-
@@ -154,10 +160,13 @@ public class Hero extends Thread{
 	private void attack(){
 		if(isAttacking()){
 			if(previousState!=state){sprite.changeAnimation(state);}
-
 			currentSprite = sprite.next();
 			setState(StateActor.NONE);
-			for(Monster m : canAttack()) {m.getAttacked(power);}
+			ArrayList<Monster> monstersList = canAttack();
+			if(monstersList!=null){
+				for(Monster m : canAttack()) {m.getAttacked(power);}
+			}
+
 		}
 
 		else if(state == StateActor.NONE){

@@ -14,7 +14,7 @@ public class MonsterRoom extends Room {
 		super(player, nbMonster);
 		monsters = new Monster[nbMonster];
 		for(int i = 0 ; i<monsters.length;i++){
-			monsters[i] = new Monster(new AtomicInteger(50*(i+1)*4),new AtomicInteger(50*(i+1)*4),"Monster1",difficulty);
+			monsters[i] = new Monster((50*(i+1)*4),(50*(i+1)*4),"Monster1",difficulty);
 			// ne pas placer tous les monstres au même endroit (normalement en diagonale mais les monstres se téléportent !!!)
 			monsters[i].start();
 		}

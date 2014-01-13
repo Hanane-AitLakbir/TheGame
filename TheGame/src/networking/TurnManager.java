@@ -1,25 +1,27 @@
 package networking;
 
+import gameplay.GameManager;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class TurnManager {
-	private boolean turn; 
+	static public boolean turn=true; 
 	private Timer timer;
 	private TimerTask task;
 	
 	public TurnManager(){
-		turn = true;
 		timer = new Timer();
 		task = new TimerTask() {
 			
 			@Override
 			public void run() {
 				turn = !turn;
+				GameManager.turn = turn;
 				
 			}
 		};
-		timer.scheduleAtFixedRate(task, 0, 10000);
+		timer.scheduleAtFixedRate(task, 0, 30000); //turn lasts 30 sec
 	}
 	
 	/**

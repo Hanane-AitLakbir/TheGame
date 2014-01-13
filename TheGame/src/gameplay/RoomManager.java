@@ -131,7 +131,7 @@ public class RoomManager {
 
 	//main de test : outOfMemory
 	public static void main(String[] args){
-		RoomManager manager = new RoomManager(new Hero(new AtomicInteger(0),new AtomicInteger(0),"Link"), 2);
+		RoomManager manager = new RoomManager(new Hero(0,0,"Link"), 2);
 	}
 
 	private int generateEndRoom(){

@@ -35,6 +35,7 @@ public class Controller implements KeyListener{
 				//action = 4;
 			}
 		}
+		
 		if(event.getKeyCode()== KeyEvent.VK_SPACE){
 
 			switch(GameManager.getPlayer().getHeroState()){

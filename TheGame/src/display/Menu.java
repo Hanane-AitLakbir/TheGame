@@ -226,9 +226,9 @@ public class Menu {
 		joinGame.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				new GameManager(serverName.getText(), Integer.parseInt(serverPort.getText())).start();
 				frame.setVisible(false); // close the menu window
 				sound.stopSound();
+				new GameManager(serverName.getText(), Integer.parseInt(serverPort.getText())).start();
 			}
 		});
 		layeredPane.setLayer(joinGame, 1);
