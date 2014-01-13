@@ -75,7 +75,7 @@ public class Monster extends Thread {
 					System.out.println(life.get());
 					GameManager.updateGraphics(sprite.getCurrentSprite(), position); //if the player is in its room.
 				}
-				if(isDead()){
+				if(display && isDead()){
 //					timer.cancel();
 //					timer.purge();
 				}
@@ -258,7 +258,9 @@ public class Monster extends Thread {
 	}
 
 	public void getAttacked(int power){
-		life.getAndAdd(-power);
+		if(life.get()>=power){
+			life.getAndAdd(-power);
+		}
 	}
 
 	public boolean isDead(){
@@ -272,9 +274,9 @@ public class Monster extends Thread {
 				new Item("sword",position).updateGraphics();
 				break;
 			}
-			
 			return true;
 		}
+
 		return false;
 	}
 
