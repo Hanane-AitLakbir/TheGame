@@ -89,13 +89,19 @@ public class GameManager extends Thread{
 
 		while(true){
 			try {
-				roomManager.goingOut();
+				if(turn){
+					roomManager.changeRoom(player);
+				}
+				else{
+					roomManager.changeRoom(otherPlayer);
+					otherPlayer.updateGraphic(canvas.getGraphics());
+				}
 				roomManager.updateGraphics(canvas.getGraphics());
-				if(otherPlayer!=null) otherPlayer.updateGraphic(canvas.getGraphics());
 				sleep(100);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+			
 		}
 	}
 
@@ -107,7 +113,6 @@ public class GameManager extends Thread{
 		StateActor state = StateActor.convertToState(action);
 		otherPlayer.setState(state);
 		otherPlayer.action();
-
 	}
 
 	/**
@@ -116,10 +121,8 @@ public class GameManager extends Thread{
 	 * @return an Integer corresponding with the player's moves 
 	 */
 	public static int playerAction(){
-
 		int action = StateActor.convertToInt(player.getHeroState());
 		return action;
-
 	}
 
 	//USELESS

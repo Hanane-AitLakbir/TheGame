@@ -1,9 +1,7 @@
 package entities;
 
 import gameplay.GameManager;
-import gameplay.MonsterRoom;
 import graphics.AnimatedSprite;
-
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -11,16 +9,17 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import networking.TurnManager;
 import display.Position;
 
 public class Hero extends Thread{
 
 	private Position position;
 	private Monster[] monsters;
+	ArrayList<Monster> deadMonsters = new ArrayList<>();
+	
 	private final int deltaX = 40, deltaY = 40;
 	private final int ANIMATIONSPEED = 2;
-	private int speed = 3; 
+	private int speed = 2; 
 
 	private StateActor state = StateActor.PROTECTED, previousState = StateActor.NONE;
 	private AnimatedSprite sprite;
@@ -56,7 +55,6 @@ public class Hero extends Thread{
 					grabItem();
 				}
 				GameManager.updateGraphics(currentSprite, position);
-				System.out.println(state);
 			}
 
 		};
@@ -82,7 +80,10 @@ public class Hero extends Thread{
 	public StateActor getHeroState(){
 		return state;
 	}
-
+	
+	public StateActor getPreviousState(){
+		return previousState;
+	}
 	private boolean isMoving(){
 
 		if(state == StateActor.UP || state == StateActor.DOWN || state == StateActor.LEFT || state == StateActor.RIGHT){
@@ -148,7 +149,7 @@ public class Hero extends Thread{
 				int dx = Math.abs(position.getX() - m.getPosition().getX());
 				int dy = Math.abs(position.getY() - m.getPosition().getY());
 
-				if(dx<20 && dy<20) monsterList.add(m);
+				if(dx<30 && dy<30) monsterList.add(m);
 			}
 		}
 		//TODO Create a parameter RANGE
@@ -182,11 +183,12 @@ public class Hero extends Thread{
 	 * Grabs an item from the floor (chest or monster)
 	 */
 	private void grabItem(){
-
+		
 	}
 
 	public void getAttacked(int power){
 		life.getAndAdd(-power);
+		//rajouter le recul du coup ???
 	}
 
 	private boolean isDead(){
@@ -211,4 +213,5 @@ public class Hero extends Thread{
 	public void setMonsters(Monster[] monsters){
 		this.monsters = monsters;
 	}
+	
 }

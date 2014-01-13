@@ -1,6 +1,5 @@
 package entities;
 
-import java.awt.Graphics;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -13,12 +12,12 @@ import graphics.AnimatedSprite;
 public class Monster extends Thread {
 
 	private Position position;
-	private final int deltaX = 40, deltaY = 40;
 	private final int STEP = 20;
 	private double random = 0, randomTime = 0;
 	private AnimatedSprite sprite;
 	private Hero target;
 	private boolean display = false;
+	private int itemNumber = generateRandomItem();
 
 	//USELESS
 	//private String name; 
@@ -66,15 +65,17 @@ public class Monster extends Thread {
 		long delay = 30; // en ms
 		long startTime = 0;
 
-		Timer timer = new Timer();
+		final Timer timer = new Timer();
 		TimerTask task = new TimerTask() {
 
 			@Override
 			public void run() {
-				if(display){
+				if(display && !isDead()){
 					action();
+					System.out.println(life.get());
 					GameManager.updateGraphics(sprite.getCurrentSprite(), position); //if the player is in its room.
 				}
+				
 			}
 
 		};
@@ -146,17 +147,17 @@ public class Monster extends Thread {
 	}
 
 	private void random(){
-		
+
 		int x = position.getX();
 		int y = position.getY();
 
 		if(randomTime<=STEP){
 			random = Math.floor(4*Math.random());
 		}
-		
+
 		if(randomTime<=STEP){randomTime = Math.floor(1000*Math.random()) + STEP+1;}
 
-		System.out.println(random + " + " + randomTime);
+		//System.out.println(random + " + " + randomTime);
 		if(random==0){
 			setState(StateActor.UP);
 			if( y-speed>31*GameManager.SCALE*2 ){
@@ -248,13 +249,6 @@ public class Monster extends Thread {
 		else return false;
 	}
 
-	//	public void updateGraphics(Graphics g){
-	//		/*
-	//		 * Changer les entiers avant Game.SCALE
-	//		 */
-	//		g.drawImage(sprite.getCurrentSprite(), position.getX(), position.getY(), deltaX*GameManager.SCALE, deltaY*GameManager.SCALE,null);
-	//	}	
-
 	private void setState(StateActor state){
 		this.state = state;
 	}
@@ -265,7 +259,16 @@ public class Monster extends Thread {
 
 	public boolean isDead(){
 		if(life.get()==0){
-			// TODO Faire apparaitre un item 
+			Thread.currentThread().interrupt();
+			switch(itemNumber){
+			case 0 : 
+				new Item("heart",position).updateGraphics();
+				break;
+			case 1 : 
+				new Item("sword",position).updateGraphics();
+				break;
+			}
+			
 			return true;
 		}
 		return false;
@@ -275,4 +278,7 @@ public class Monster extends Thread {
 		return position;
 	}
 
+	private int generateRandomItem(){
+		return (int) Math.floor(Math.random()*2);
+	}
 }

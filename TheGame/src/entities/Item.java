@@ -5,10 +5,9 @@ import graphics.ImageLoader;
 
 import java.awt.image.BufferedImage;
 
-import sound.SoundPlayer;
 import display.Position;
 
-public class Item {
+public class Item{
 	
 	private Position position; 
 	private BufferedImage image; 
@@ -22,7 +21,6 @@ public class Item {
 	
 	public void updateGraphics(){
 		GameManager.updateGraphics(image, position);
-		//g.drawImage(image, position.getX(), position.getY(), 40*GameManager.SCALE, 40*GameManager.SCALE,null);
 	}
 	
 	public void actionItem(){
