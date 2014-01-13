@@ -75,6 +75,10 @@ public class Monster extends Thread {
 					System.out.println(life.get());
 					GameManager.updateGraphics(sprite.getCurrentSprite(), position); //if the player is in its room.
 				}
+				if(isDead()){
+//					timer.cancel();
+//					timer.purge();
+				}
 				
 			}
 
@@ -259,7 +263,7 @@ public class Monster extends Thread {
 
 	public boolean isDead(){
 		if(life.get()==0){
-			Thread.currentThread().interrupt();
+			//Thread.currentThread().interrupt();
 			switch(itemNumber){
 			case 0 : 
 				new Item("heart",position).updateGraphics();
