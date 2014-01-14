@@ -37,33 +37,6 @@ public class Controller implements KeyListener{
 		}
 
 		if(event.getKeyCode()== KeyEvent.VK_SPACE){
-
-//			switch(GameManager.getPlayer().getPreviousState()){
-//
-//			case UP : 
-//				if(GameManager.getPlayer().getHeroState() != StateActor.ATTACKINGUP){
-//					GameManager.getPlayer().setState(StateActor.ATTACKINGUP);
-//				}
-//				break;
-//			case DOWN : 
-//				if(GameManager.getPlayer().getHeroState() != StateActor.ATTACKINGDOWN){
-//					GameManager.getPlayer().setState(StateActor.ATTACKINGDOWN);
-//				}
-//				break;
-//			case LEFT :
-//				if(GameManager.getPlayer().getHeroState() != StateActor.ATTACKINGLEFT){
-//					GameManager.getPlayer().setState(StateActor.ATTACKINGLEFT);
-//				}
-//				break;
-//			case RIGHT :
-//				if(GameManager.getPlayer().getHeroState() != StateActor.ATTACKINGRIGHT){
-//					GameManager.getPlayer().setState(StateActor.ATTACKINGRIGHT);
-//				}
-//				break;
-//			default:
-//				break;
-//
-//			}
 			switch(action){
 			case 8: 
 				GameManager.getPlayer().setState(StateActor.ATTACKINGUP);
@@ -95,9 +68,9 @@ public class Controller implements KeyListener{
 		if(event.getKeyCode()== KeyEvent.VK_LEFT){
 			GameManager.getPlayer().setState(StateActor.NONE);
 		}
-		if(event.getKeyCode()== KeyEvent.VK_SPACE){
-			GameManager.getPlayer().setState(StateActor.NONE);
-		}
+//		if(event.getKeyCode()== KeyEvent.VK_SPACE){
+//			GameManager.getPlayer().setState(StateActor.NONE);
+//		}
 	}
 
 	@Override

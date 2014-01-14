@@ -16,21 +16,21 @@ public class Hero extends Thread{
 	private Position position;
 	private Monster[] monsters;
 	ArrayList<Monster> deadMonsters = new ArrayList<>();
-	
+
 	private final int deltaX = 40, deltaY = 40;
 	private final int ANIMATIONSPEED = 2;
-	private int speed = 2; 
+	private int speed = 4; 
 
 	private StateActor state = StateActor.PROTECTED, previousState = StateActor.NONE;
 	private AnimatedSprite sprite;
 	private BufferedImage currentSprite;
-	
+
 	private final double lifeMax;
 	private static AtomicInteger life;
 	private int power = 10;
 	//private String name;
 	private int pauseCounter;
-	
+
 
 	public Hero(int x, int y, String name){
 
@@ -56,6 +56,9 @@ public class Hero extends Thread{
 				if(GameManager.turn){
 					action();
 					grabItem();
+				}
+				if(isMoving() || isAttacking()){
+					currentSprite = sprite.next();
 				}
 				GameManager.updateGraphics(currentSprite, position,life.get()/lifeMax);
 			}
@@ -84,7 +87,7 @@ public class Hero extends Thread{
 	public StateActor getHeroState(){
 		return state;
 	}
-	
+
 	public StateActor getPreviousState(){
 		return previousState;
 	}
@@ -122,7 +125,6 @@ public class Hero extends Thread{
 			default:
 				break;
 			}
-			currentSprite = sprite.next();
 
 		}
 
@@ -146,46 +148,71 @@ public class Hero extends Thread{
 		ArrayList<Monster> monsterList = new ArrayList<Monster>();
 
 		if(monsters!=null){
-			for(Monster m : monsters){
-				int dx = Math.abs(position.getX() - m.getPosition().getX());
-				int dy = Math.abs(position.getY() - m.getPosition().getY());
 
-				if(dx<30 && dy<30) monsterList.add(m);
+			for(Monster m : monsters){
+
+				int dx = position.getX() - m.getPosition().getX();
+				int dy = position.getY() - m.getPosition().getY();
+
+				switch (state)
+				{
+				case ATTACKINGUP : 
+					if(Math.abs(dx)<50 && dy>0 && dy<70) monsterList.add(m);
+					break;
+				case ATTACKINGDOWN :
+					if(Math.abs(dx)<50 && dy<0 && dy>-70) monsterList.add(m);
+					break;
+				case ATTACKINGLEFT :
+					if(dx>0 && dx<70 && Math.abs(dy)<50) monsterList.add(m);
+					break;
+				case ATTACKINGRIGHT :
+					if(dx<0 && dx>-70 && Math.abs(dy)<50) monsterList.add(m);
+					break;
+				default : 
+					break;
+				}
 			}
+			//TODO Create a parameter RANGE
+			//TODO Make a more accurate box ! (more height than width ?) [ ]<- and not []<-
+			if(monsterList.size()==0) return null;
 		}
-		//TODO Create a parameter RANGE
-		//TODO Make a more accurate box ! (more height than width ?) [ ]<- and not []<-
-		if(monsterList.size()==0) return null;
-		else return monsterList;
+		
+		return monsterList;
+
 	}
 
 	private void attack(){
-		
+
 		if(isAttacking()){
-			
-			currentSprite = sprite.next();
-			setState(StateActor.NONE);
+
 			ArrayList<Monster> monstersList = canAttack();
 			if(monstersList!=null){
 				for(Monster m : canAttack()) {m.getAttacked(power);}
 			}
 
+			while(pauseCounter<15){ //Can't launch another attack right away !
+				currentSprite = sprite.next();
+				GameManager.updateGraphics(currentSprite, position,life.get()/lifeMax);
+				try {
+					sleep(30);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				pauseCounter++;
+			}
+			setState(StateActor.NONE);
+			pauseCounter=0;
+
 		}
 
-		else if(state == StateActor.NONE){
-			currentSprite = sprite.next();
-			pauseCounter++; //Adjust !!!
-			if(pauseCounter >= 7) {
-				setState(StateActor.PROTECTED);
-				pauseCounter=0;
-			}			
-		}
 	}
+
 	/*
 	 * Grabs an item from the floor (chest or monster)
 	 */
 	private void grabItem(){
-		
+
 	}
 
 	public void getAttacked(int power){
@@ -215,5 +242,5 @@ public class Hero extends Thread{
 	public void setMonsters(Monster[] monsters){
 		this.monsters = monsters;
 	}
-	
+
 }

@@ -68,7 +68,7 @@ public class AnimatedSprite {
 	public BufferedImage next(){
 		if(counter==0){
 			counter=speed;
-			if(current<=nbSprites-1){
+			if(current<nbSprites-1){
 				current++;
 				return currentSprite[current];
 			}
@@ -85,27 +85,35 @@ public class AnimatedSprite {
 		switch (state){
 		
 		case UP : 
+			nbSprites=7;
 			currentSprite = up;
 			break;
 		case DOWN : 
+			nbSprites=7;
 			currentSprite = down;
 			break;
 		case LEFT : 
+			nbSprites=7;
 			currentSprite = left;
 			break;
 		case RIGHT : 
+			nbSprites=7;
 			currentSprite = right;
 			break;
-		case ATTACKINGUP : 
+		case ATTACKINGUP :
+			nbSprites=6;
 			currentSprite = attackingUp;
 			break;
-		case ATTACKINGDOWN : 
+		case ATTACKINGDOWN :
+			nbSprites=6;
 			currentSprite = attackingDown;
 			break;
-		case ATTACKINGLEFT : 
+		case ATTACKINGLEFT :
+			nbSprites=6;
 			currentSprite = attackingLeft;
 			break;
-		case ATTACKINGRIGHT : 
+		case ATTACKINGRIGHT :
+			nbSprites=6;
 			currentSprite = attackingRight;
 			break;
 		default:
