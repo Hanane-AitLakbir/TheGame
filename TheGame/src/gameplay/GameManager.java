@@ -1,5 +1,6 @@
 package gameplay;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -44,6 +45,7 @@ public class GameManager extends Thread{
 		Window window = new Window();
 		window.add(canvas);
 		graphics = canvas.getGraphics();
+		graphics.setColor(Color.RED);
 
 		player = new Hero(75*4,75*4,"Link");
 		player.start();
@@ -134,8 +136,11 @@ public class GameManager extends Thread{
 		return player;
 	}
 
-	public static synchronized void updateGraphics(BufferedImage image, Position position){
+	public static synchronized void updateGraphics(BufferedImage image, Position position, double rateLife){
 		graphics.drawImage(image, position.getX(), position.getY(), 40*GameManager.SCALE, 40*GameManager.SCALE,null);
+		if(rateLife!=0){
+		graphics.fillRect(position.getX(), position.getY(), (int) (50*rateLife), 3);
+		}
 	}
 
 	//main de test : affichage

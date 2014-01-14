@@ -13,6 +13,7 @@ public class Monster extends Thread {
 
 	private Position position;
 	private final int STEP = 20;
+	private final double lifeMax; // to have a "real" division (not euclidian)
 	private double random = 0, randomTime = 0;
 	private AnimatedSprite sprite;
 	private Hero target;
@@ -36,6 +37,7 @@ public class Monster extends Thread {
 		this.target=GameManager.getPlayer();
 
 		life = new AtomicInteger(50);
+		lifeMax = 50;
 
 		//
 		if(difficulty==1){
@@ -73,7 +75,7 @@ public class Monster extends Thread {
 				if(display && !isDead()){
 					action();
 					System.out.println(life.get());
-					GameManager.updateGraphics(sprite.getCurrentSprite(), position); //if the player is in its room.
+					GameManager.updateGraphics(sprite.getCurrentSprite(), position, life.get()/lifeMax); //if the player is in its room.
 				}
 				if(display && isDead()){
 //					timer.cancel();

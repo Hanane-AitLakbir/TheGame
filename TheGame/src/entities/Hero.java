@@ -24,11 +24,13 @@ public class Hero extends Thread{
 	private StateActor state = StateActor.PROTECTED, previousState = StateActor.NONE;
 	private AnimatedSprite sprite;
 	private BufferedImage currentSprite;
-
+	
+	private final double lifeMax;
 	private static AtomicInteger life;
 	private int power = 10;
 	//private String name;
 	private int pauseCounter;
+	
 
 	public Hero(int x, int y, String name){
 
@@ -36,6 +38,7 @@ public class Hero extends Thread{
 		sprite = new AnimatedSprite(name, ANIMATIONSPEED);
 		//currentSprite = sprite.next();
 		life = new AtomicInteger(100);
+		lifeMax = 100;
 
 	}
 
@@ -54,7 +57,7 @@ public class Hero extends Thread{
 					action();
 					grabItem();
 				}
-				GameManager.updateGraphics(currentSprite, position);
+				GameManager.updateGraphics(currentSprite, position,life.get()/lifeMax);
 			}
 
 		};

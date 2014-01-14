@@ -20,7 +20,7 @@ public class Item{
 	}
 	
 	public void updateGraphics(){
-		GameManager.updateGraphics(image, position);
+		GameManager.updateGraphics(image, position,0);
 	}
 	
 	public void actionItem(){
