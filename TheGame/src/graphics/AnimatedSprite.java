@@ -68,7 +68,7 @@ public class AnimatedSprite {
 	public BufferedImage next(){
 		if(counter==0){
 			counter=speed;
-			if(current<nbSprites-1){
+			if(current<=nbSprites-1){
 				current++;
 				return currentSprite[current];
 			}

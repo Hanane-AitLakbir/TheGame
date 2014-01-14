@@ -76,6 +76,7 @@ public class Hero extends Thread{
 	}
 
 	public void setState(StateActor state){
+		if(previousState != state){sprite.changeAnimation(state);}
 		previousState = this.state;
 		this.state = state;
 	}
@@ -100,9 +101,6 @@ public class Hero extends Thread{
 		if(isMoving()){
 			int x = position.getX();
 			int y = position.getY();
-
-			//METTRE LE RESET DANS LE CONTROLLER ?
-			if(previousState != state){sprite.changeAnimation(state);}
 
 			switch(state){
 			case UP :
@@ -162,8 +160,9 @@ public class Hero extends Thread{
 	}
 
 	private void attack(){
+		
 		if(isAttacking()){
-			if(previousState!=state){sprite.changeAnimation(state);}
+			
 			currentSprite = sprite.next();
 			setState(StateActor.NONE);
 			ArrayList<Monster> monstersList = canAttack();
