@@ -190,19 +190,19 @@ public class Hero extends Thread{
 				for(Monster m : canAttack()) {m.getAttacked(power);}
 			}
 
-			while(pauseCounter<15){ //Can't launch another attack right away !
+			while(pauseCounter<ANIMATIONSPEED*7+1){ //Can't launch another attack right away !
 				currentSprite = sprite.next();
 				GameManager.updateGraphics(currentSprite, position,life.get()/lifeMax);
 				try {
 					sleep(30);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				pauseCounter++;
 			}
 			setState(StateActor.NONE);
 			pauseCounter=0;
+			sprite.reset();
 
 		}
 
