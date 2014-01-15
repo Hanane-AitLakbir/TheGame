@@ -27,8 +27,8 @@ public class Monster extends Thread {
 	private StateActor state = StateActor.RIGHT, previousState = StateActor.NONE;
 
 	private AtomicInteger life, moveCounter, pauseCounter;
-	private int speed = 1; //a modifier selon difficulty => NECESSAIRE ?? 
-	private final int ANIMATIONSPEED = 2;
+	private int speed = 2; //a modifier selon difficulty 
+	private int ANIMATIONSPEED = 3;
 
 	public Monster(int x, int y, String name,int difficulty){
 
@@ -41,10 +41,10 @@ public class Monster extends Thread {
 
 		//
 		if(difficulty==1){
-			power = 5;
+			power = 10;
 		}
 		else{
-			power = 10;
+			power = 20;
 		}
 
 		moveCounter = new AtomicInteger(0);
@@ -74,14 +74,14 @@ public class Monster extends Thread {
 			public void run() {
 				if(display && !isDead()){
 					action();
-					System.out.println(life.get());
+					sprite.next();
 					GameManager.updateGraphics(sprite.getCurrentSprite(), position, life.get()/lifeMax); //if the player is in its room.
 				}
 				if(display && isDead()){
-//					timer.cancel();
-//					timer.purge();
+					//					timer.cancel();
+					//					timer.purge();
 				}
-				
+
 			}
 
 		};
@@ -101,47 +101,38 @@ public class Monster extends Thread {
 		if(isMoving()){ //If the monster must move (UP DOWN LEFT or RIGHT)
 			if(moveCounter.get()>=4000){moveCounter.set(0);}
 			if(moveCounter.get()<2000){ //for about 2s
+				if(ANIMATIONSPEED!=3){speed = 2; ANIMATIONSPEED = 3; sprite.setSpeed(ANIMATIONSPEED);}
 				random(); //He evades the target by walking randomly
 				moveCounter.getAndAdd(STEP);
 			}
 			if(moveCounter.get()>=2000 && moveCounter.get()<4000){ //for about 2s
+				if(ANIMATIONSPEED!=2){speed = 3; ANIMATIONSPEED = 2; sprite.setSpeed(ANIMATIONSPEED);}
 				chase(); //He chases the target
 				moveCounter.getAndAdd(STEP);
 			}
+		}
 
-			if(previousState!=state){sprite.changeAnimation(state);}
-			sprite.next();
-
-			if(canAttack()){
-				switch (state){
-				case UP : setState(StateActor.ATTACKINGUP); break;
-				case DOWN : setState(StateActor.ATTACKINGDOWN); break;
-				case LEFT : setState(StateActor.ATTACKINGLEFT); break;
-				case RIGHT : setState(StateActor.ATTACKINGRIGHT); break;
-				default: setState(StateActor.ATTACKINGRIGHT); break;
-				}
+		if(canAttack()){
+			switch (state){
+			case UP : setState(StateActor.ATTACKINGUP); break;
+			case DOWN : setState(StateActor.ATTACKINGDOWN); break;
+			case LEFT : setState(StateActor.ATTACKINGLEFT); break;
+			case RIGHT : setState(StateActor.ATTACKINGRIGHT); break;
+			default: setState(StateActor.ATTACKINGRIGHT); break;
 			}
-
 		}
 		else if(isAttacking()){
 
 			target.getAttacked(power); //Deals damage
-			if(previousState!=state){sprite.changeAnimation(state);}
-			sprite.next();
 			setState(StateActor.NONE); //Wait a bit.
 
 		}
 		else if(state == StateActor.NONE){
 
-			sprite.next();
 			pauseCounter.getAndIncrement(); //Adjust !!!
-			if(pauseCounter.get() >= 7) {setState(StateActor.RIGHT); pauseCounter.set(0);} 
+			if(pauseCounter.get() >= ANIMATIONSPEED*7+1) {setState(StateActor.RIGHT); pauseCounter.set(0);} 
 
 		}
-
-		//TODO ADD else if attacking blabla (I have it on a paper)
-		// + SPRITE + verify else if or if !!! (can attack on the same call of action() or not)
-
 	}
 
 	private boolean isMoving(){
@@ -246,27 +237,41 @@ public class Monster extends Thread {
 
 	private boolean canAttack(){
 
-		int dx = Math.abs(position.getX() - target.getPosition().getX());
-		int dy = Math.abs(position.getY() - target.getPosition().getY());
+		int dx = position.getX() - target.getPosition().getX();
+		int dy = position.getY() - target.getPosition().getY();
 
-		//TODO Create a parameter RANGE
-		//TODO Make a more accurate box ! (more height than width ?) [ ]<- and not []<-
-		if(dx<5 && dy<5) return true; //change to set the attacking range !
-		else return false;
+		switch (state)
+		{
+		case UP : 
+			if(Math.abs(dx)<25 && dy>0 && dy<40) return true;
+			break;
+		case DOWN :
+			if(Math.abs(dx)<25 && dy<0 && dy>-40) return true;
+			break;
+		case LEFT :
+			if(dx>0 && dx<40 && Math.abs(dy)<25) return true;
+			break;
+		case RIGHT :
+			if(dx<0 && dx>-40 && Math.abs(dy)<25) return true;
+			break;
+		default : 
+			return false;
+		}
+		return false;
 	}
 
-	private void setState(StateActor state){
+	public void setState(StateActor state){
+		if(previousState != state){sprite.changeAnimation(state);}
+		previousState = this.state;
 		this.state = state;
 	}
 
 	public void getAttacked(int power){
-		if(life.get()>=power){
-			life.getAndAdd(-power);
-		}
+		life.getAndAdd(-power);
 	}
 
 	public boolean isDead(){
-		if(life.get()==0){
+		if(life.get()<=0){
 			//Thread.currentThread().interrupt();
 			switch(itemNumber){
 			case 0 : 

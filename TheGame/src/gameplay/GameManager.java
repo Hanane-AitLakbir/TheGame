@@ -103,7 +103,7 @@ public class GameManager extends Thread{
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			
+
 		}
 	}
 
@@ -139,7 +139,7 @@ public class GameManager extends Thread{
 	public static synchronized void updateGraphics(BufferedImage image, Position position, double rateLife){
 		graphics.drawImage(image, position.getX(), position.getY(), 40*GameManager.SCALE, 40*GameManager.SCALE,null);
 		if(rateLife!=0){
-		graphics.fillRect(position.getX(), position.getY(), (int) (50*rateLife), 3);
+			graphics.fillRect(position.getX()+15, position.getY(), (int) (50*rateLife), 3);
 		}
 	}
 

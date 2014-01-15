@@ -99,6 +99,7 @@ public class Hero extends Thread{
 		else return false;
 	}
 
+	//TODO Gerer collisions monstres ! ! !
 	private void move(){
 
 		if(isMoving()){
@@ -107,7 +108,7 @@ public class Hero extends Thread{
 
 			switch(state){
 			case UP :
-				if(y-speed>31*2*GameManager.SCALE || (x>80*GameManager.SCALE*2 && x<95*2*GameManager.SCALE))
+				if(y-speed>24*2*GameManager.SCALE || (x>80*GameManager.SCALE*2 && x<95*2*GameManager.SCALE))
 					position.setXY(x, y-speed);
 				break;
 			case DOWN :
@@ -115,11 +116,11 @@ public class Hero extends Thread{
 					position.setXY(x, y+speed);
 				break;
 			case LEFT :
-				if(x-speed>32*2*GameManager.SCALE || (y>60*GameManager.SCALE*2 && y<75*2*GameManager.SCALE) )
+				if(x-speed>26*2*GameManager.SCALE || (y>60*GameManager.SCALE*2 && y<75*2*GameManager.SCALE) )
 					position.setXY(x-speed, y);
 				break;
 			case RIGHT :
-				if(x+speed<128*2*GameManager.SCALE || (y>80*GameManager.SCALE*2 && y<95*2*GameManager.SCALE) )
+				if(x+speed<122*2*GameManager.SCALE || (y>80*GameManager.SCALE*2 && y<95*2*GameManager.SCALE) )
 					position.setXY(x+speed, y);
 				break;
 			default:
@@ -157,16 +158,16 @@ public class Hero extends Thread{
 				switch (state)
 				{
 				case ATTACKINGUP : 
-					if(Math.abs(dx)<50 && dy>0 && dy<70) monsterList.add(m);
+					if(Math.abs(dx)<40 && dy>0 && dy<60) monsterList.add(m);
 					break;
 				case ATTACKINGDOWN :
-					if(Math.abs(dx)<50 && dy<0 && dy>-70) monsterList.add(m);
+					if(Math.abs(dx)<40 && dy<0 && dy>-60) monsterList.add(m);
 					break;
 				case ATTACKINGLEFT :
-					if(dx>0 && dx<70 && Math.abs(dy)<50) monsterList.add(m);
+					if(dx>0 && dx<60 && Math.abs(dy)<40) monsterList.add(m);
 					break;
 				case ATTACKINGRIGHT :
-					if(dx<0 && dx>-70 && Math.abs(dy)<50) monsterList.add(m);
+					if(dx<0 && dx>-60 && Math.abs(dy)<40) monsterList.add(m);
 					break;
 				default : 
 					break;
@@ -187,7 +188,7 @@ public class Hero extends Thread{
 
 			ArrayList<Monster> monstersList = canAttack();
 			if(monstersList!=null){
-				for(Monster m : canAttack()) {m.getAttacked(power);}
+				for(Monster m : canAttack()) {m.setState(StateActor.NONE); m.getAttacked(power);}
 			}
 
 			while(pauseCounter<ANIMATIONSPEED*7+1){ //Can't launch another attack right away !
@@ -221,7 +222,7 @@ public class Hero extends Thread{
 	}
 
 	private boolean isDead(){
-		if(life.get()==0){ 
+		if(life.get()<=0){ 
 			return true;
 		}
 		else return false;

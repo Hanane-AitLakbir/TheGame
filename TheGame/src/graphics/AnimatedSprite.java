@@ -130,6 +130,7 @@ public class AnimatedSprite {
 	}
 
 	public void setSpeed(int speed){
+		this.reset();
 		this.speed = speed;
 	}
 
