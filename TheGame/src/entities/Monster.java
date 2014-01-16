@@ -233,7 +233,7 @@ public class Monster extends Thread {
 			if(Math.abs(dx)<20 && dy<0 && dy>-35) return true;
 			break;
 		case LEFT :
-			if(dx>0 && dx<435 && Math.abs(dy)<20) return true;
+			if(dx>0 && dx<35 && Math.abs(dy)<20) return true;
 			break;
 		case RIGHT :
 			if(dx<0 && dx>-35 && Math.abs(dy)<20) return true;
