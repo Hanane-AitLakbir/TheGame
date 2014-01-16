@@ -14,7 +14,13 @@ public abstract class Room {
 	public Room(Hero player, int difficulty){
 		this.player = player;
 		bg = new Background(difficulty);
+		if(difficulty<=3){
 		sound = new SoundPlayer("room"+difficulty);
+		}
+		else{
+			int diff = 3-difficulty%3;
+			sound = new SoundPlayer("room"+diff);
+		}
 	}
 
 	public abstract void updateGraphics(Graphics g); //draws the background

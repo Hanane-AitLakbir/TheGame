@@ -8,9 +8,7 @@ import display.Position;
 import entities.Hero;
 
 /**
- * La classe RoomManager gere les salles (ie leur creation et les changements de salle au cours du jeu).
- * @author hanane
- *
+ * RoomManager manages the rooms (number, order, difficulty, ...)
  */
 public class RoomManager {
 
@@ -37,9 +35,9 @@ public class RoomManager {
 				rooms.add(new FinalRoom(player));
 			}
 			else{
-				rooms.add(new MonsterRoom(player,((i+2)%3)+1,difficulty)); // changes the number of monsters => more fun
+				rooms.add(new MonsterRoom(player,randomMonstersNumber(difficulty),difficulty)); // changes the number of monsters => more fun
 			}
-		}
+		} //(i+2)%3)+1 use this to have a maximum of 3 monsters.
 
 		//creation of the neighbours
 		int r,q;
@@ -122,6 +120,19 @@ public class RoomManager {
 		}else{
 			return (random+1<size*size) ? random+1 : random-1;
 		}
+	}
+	
+	/**
+	 * Creates a maximum of 4, 5, or 6 monsters depending on the difficulty of the game.
+	 * @param difficulty
+	 * @return a random number of monsters
+	 */
+	private int randomMonstersNumber(int difficulty){
+		
+		int random = (int) Math.floor(Math.random()*(3+difficulty)+1);
+		if(random == 7) return 6;
+		else return random;
+	
 	}
 
 }

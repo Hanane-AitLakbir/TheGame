@@ -37,10 +37,13 @@ public class Monster extends Thread {
 
 		//
 		if(difficulty==1){
+			power = 5;
+		}
+		else if(difficulty==2){
 			power = 10;
 		}
 		else{
-			power = 20;
+			power = 15;
 		}
 
 		moveCounter = new AtomicInteger(0);

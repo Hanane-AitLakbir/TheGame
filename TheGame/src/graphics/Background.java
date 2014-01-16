@@ -25,7 +25,13 @@ public class Background {
 	 */
 	public Background(int roomType){
 		try {
+			if(roomType<=3){
 			bg = ImageIO.read(getClass().getResource("/background/background"+roomType+".png"));
+			}
+			else{
+				int roomT = 3-roomType%3;
+				bg = ImageIO.read(getClass().getResource("/background/background"+roomT+".png"));
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
