@@ -18,11 +18,11 @@ public class RoomManager {
 	private Room current;
 	private int end;
 	private int size;
-	//private Hero player;
+
 	private ArrayList<Room> rooms;
 
 	public RoomManager(Hero player, int difficulty){
-		//this.player = player;
+
 		size = 5; //default size
 		end = generateEndRoom();
 		System.out.println(end);
@@ -73,18 +73,16 @@ public class RoomManager {
 
 		}
 
-		start = rooms.get(12); // commence au milieu de la grille
+		start = rooms.get(12); // starts in the middle room
 		current = start;
-		//current.playSound();
 		current.start();
 	}
 
-	
+
 	public void updateGraphics(Graphics g){
 		current.updateGraphics(g);
 	}
 
-	//rename changeRoom ??
 	public void changeRoom(Hero player){
 
 		Position pos = player.getPosition();
@@ -93,25 +91,25 @@ public class RoomManager {
 
 		if (x>80*GameManager.SCALE*2 && x<95*2*GameManager.SCALE && y<16*2*GameManager.SCALE){
 			current.stop();
-			current=rooms.get(current.up); //porte nord
+			current=rooms.get(current.up); //north door
 			current.start();
 			player.getPosition().setXY(62*GameManager.SCALE*2, 123*2*GameManager.SCALE);
 		} 
 		else if (x>64*GameManager.SCALE*2 && x<79*2*GameManager.SCALE && y>138*2*GameManager.SCALE){
 			current.stop();
-			current=rooms.get(current.down); //porte sud
+			current=rooms.get(current.down); //south door
 			current.start();
 			player.getPosition().setXY(82*GameManager.SCALE*2, 32*2*GameManager.SCALE);
 		} 
 		else if (y>60*GameManager.SCALE*2 && y<75*2*GameManager.SCALE && x<16*2*GameManager.SCALE){
 			current.stop();
-			current=rooms.get(current.left); //porte ouest
+			current=rooms.get(current.left); //west door
 			current.start();
 			player.getPosition().setXY(125*GameManager.SCALE*2, 87*2*GameManager.SCALE);
 		} 
 		else if (y>80*GameManager.SCALE*2 && y<95*2*GameManager.SCALE && x>140*2*GameManager.SCALE){
 			current.stop();
-			current=rooms.get(current.right); // porte est
+			current=rooms.get(current.right); // east door
 			current.start();
 			player.getPosition().setXY(27*GameManager.SCALE*2, 67*2*GameManager.SCALE);
 		}
@@ -130,5 +128,5 @@ public class RoomManager {
 			return (random+1<size*size) ? random+1 : random-1;
 		}
 	}
-	
+
 }

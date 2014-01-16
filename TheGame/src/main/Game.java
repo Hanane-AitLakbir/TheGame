@@ -9,35 +9,15 @@ import networking.Server;
 import gameplay.GameManager;
 import display.CanvasGame;
 
-/*
- * Ne sert à plus rien maintenant
- */
 public class Game {
 	private static CanvasGame canvas;
 	private static GameManager manager;
-	//private Thread communicator; 
 
-//	public Game(boolean multiplayerMode) throws IOException{
-//		canvas = new CanvasGame();
-//		manager = new GameManager(canvas);
-//		if(multiplayerMode){
-//			if(server){
-//				communicator = new Thread(new Server(2879));
-//			}
-//			else{
-//				//communicator = new Thread(new Client(,2879));
-//			}
-//		}
-
-		//manager.go();
-//		communicator.start();
-//	}
-	
 	public static void main(String[] args){
-		
+
 		manager = new GameManager();
 		manager.start();
-		
+
 	}
 
 }

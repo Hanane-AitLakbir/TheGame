@@ -127,11 +127,6 @@ public class GameManager extends Thread{
 		return action;
 	}
 
-	//USELESS
-	//	public static void setOtherPlayer(Hero otherPlayer){
-	//		otherPlayer = new Hero(new AtomicInteger(50*4),new AtomicInteger(50*4),"");
-	//	}
-
 	public static Hero getPlayer(){
 		return player;
 	}

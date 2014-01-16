@@ -20,25 +20,25 @@ public class ClientMock implements Communicator {
 		DataOutputStream output;
 		DataInputStream input;
 
-			try {
-				output = new DataOutputStream(socket.getOutputStream());
-				input = new DataInputStream(socket.getInputStream());
-				
-				while(true){
-					
-					 if(input.readInt()!=28792){
-						GameManagerMock.updateOtherPlayers(input.readInt());
-						System.out.println("client says :  I don't play");
-					}
-					else {
-						output.writeInt(GameManagerMock.playerAction()); //sends the performed action by the player
-						System.out.println("client says : My turn !!");
-					}
+		try {
+			output = new DataOutputStream(socket.getOutputStream());
+			input = new DataInputStream(socket.getInputStream());
+
+			while(true){
+
+				if(input.readInt()!=28792){
+					GameManagerMock.updateOtherPlayers(input.readInt());
+					System.out.println("client says :  I don't play");
 				}
-				
-			} catch (IOException e) {
-				e.printStackTrace();
+				else {
+					output.writeInt(GameManagerMock.playerAction()); //sends the performed action by the player
+					System.out.println("client says : My turn !!");
+				}
 			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 	}
 

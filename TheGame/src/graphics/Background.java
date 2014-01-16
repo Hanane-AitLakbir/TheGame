@@ -9,7 +9,7 @@ import display.CanvasGame;
 
 
 /**
- * La classe Background gère le décor de la salle. (ajout des trésors ??)
+ * La classe Background gere le decor de la salle.
  * 
  * @author hanane
  *
@@ -18,10 +18,10 @@ public class Background {
 
 	BufferedImage bg;
 	int scale = CanvasGame.SCALE, width = CanvasGame.WIDTH, height = CanvasGame.HEIGHT;
-	
+
 	/**
 	 * Constructeur de Background
-	 * @param roomType l'entier représentant le type de salle (0 -> monster room difficulty 0, 1-> ... , 4 -> riddle room, ...)
+	 * @param roomType l'entier representant le type de salle (0 -> monster room difficulty 0, 1-> ... , 4
 	 */
 	public Background(int roomType){
 		try {
@@ -31,9 +31,9 @@ public class Background {
 		}
 
 	}
-	
+
 	/**
-	 * Affiche l'arrière-plan sur le Graphics g
+	 * Affiche l'arriere-plan sur le Graphics g
 	 * 
 	 * @param g 
 	 */

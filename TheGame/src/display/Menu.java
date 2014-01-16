@@ -7,7 +7,6 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
 
-
 /**
  * This class displays a menu to choice the game mode (solo or multiplayer) and the game difficulty,
  * and creates the appropriate GameManager object. 
@@ -142,15 +141,15 @@ public class Menu {
 				switch(difficulty.getSelectedItem()){
 				case "Novice" :
 					GameManager.difficulty = 1;
-//					System.out.println("Difficulty : Novice"); // Ligne de test
+					//					System.out.println("Difficulty : Novice"); // Ligne de test
 					break;
 				case "Normal" : 
 					GameManager.difficulty = 2;
-//					System.out.println("Difficulty : Normal"); // Ligne de test
+					//					System.out.println("Difficulty : Normal"); // Ligne de test
 					break;
 				case "Expert" : 
 					GameManager.difficulty = 3;
-//					System.out.println("Difficulty : Expert"); // Ligne de test
+					//					System.out.println("Difficulty : Expert"); // Ligne de test
 					break;
 				}
 				System.out.println("difficulty " + GameManager.difficulty);
@@ -215,7 +214,7 @@ public class Menu {
 				frame.setVisible(false); // close the menu window
 				sound.stopSound();
 				new GameManager().start();
-				
+
 			}
 		});
 		layeredPane.setLayer(startGame, 1);

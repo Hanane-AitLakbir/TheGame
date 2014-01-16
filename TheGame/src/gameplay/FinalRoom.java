@@ -13,7 +13,7 @@ public class FinalRoom extends Room{
 	private Position center;
 	private Item chest;
 	private boolean chestOpened = false;
-	
+
 	public FinalRoom(Hero player) {
 		super(player, 0);
 		center = new Position(75*4,75*4);

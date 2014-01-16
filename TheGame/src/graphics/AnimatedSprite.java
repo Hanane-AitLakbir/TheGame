@@ -81,9 +81,9 @@ public class AnimatedSprite {
 
 	public void changeAnimation(StateActor state){
 
-		this.reset(); //METTRE LE RESET DANS LE CONTROLLER ?
+		this.reset();
 		switch (state){
-		
+
 		case UP : 
 			nbSprites=7;
 			currentSprite = up;
@@ -124,7 +124,7 @@ public class AnimatedSprite {
 	public void reset(){
 		current = 0;
 	}
-	
+
 	public BufferedImage getCurrentSprite(){
 		return currentSprite[current];
 	}

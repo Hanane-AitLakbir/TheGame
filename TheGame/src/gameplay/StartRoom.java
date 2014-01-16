@@ -9,18 +9,15 @@ public class StartRoom extends Room{
 	public StartRoom(Hero player){
 		super(player,0);
 	}
-	
 
 	@Override
 	public void updateGraphics(Graphics g) {
 		bg.updateGraphic(g);
-		
 	}
 
 	@Override
 	public void stop() {
 		sound.stopSound();
-		
 	}
 
 	@Override

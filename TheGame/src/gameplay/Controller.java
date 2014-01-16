@@ -68,9 +68,9 @@ public class Controller implements KeyListener{
 		if(event.getKeyCode()== KeyEvent.VK_LEFT){
 			GameManager.getPlayer().setState(StateActor.NONE);
 		}
-//		if(event.getKeyCode()== KeyEvent.VK_SPACE){
-//			GameManager.getPlayer().setState(StateActor.NONE);
-//		}
+		//		if(event.getKeyCode()== KeyEvent.VK_SPACE){
+		//			GameManager.getPlayer().setState(StateActor.NONE);
+		//		}
 	}
 
 	@Override

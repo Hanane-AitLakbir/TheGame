@@ -24,35 +24,27 @@ public class ServerMock implements Communicator {
 	}
 
 	public void run(){
-//		try {
-//			while(true){
-//				new TaskThread(serverSocket.accept(),turnManager).start();
-//			}
-//
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
 
-						try {
-							connexion = serverSocket.accept();
-							System.out.println("server accepted a connexion");
-							output = new DataOutputStream(connexion.getOutputStream());
-							input = new DataInputStream(connexion.getInputStream());
-				
-							while(true){
-								if(turnManager.getTurn()){
-									output.writeInt(GameManagerMock.playerAction()); // sends performed action by the player
-									System.out.println("\t\t\t server says : My turn !!");
-								} 			
-								else{
-									output.writeInt(28792);
-									GameManagerMock.updateOtherPlayers(input.readInt());
-									System.out.println("\t\t\t server says : I don't play");
-								}
-							}
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
+		try {
+			connexion = serverSocket.accept();
+			System.out.println("server accepted a connexion");
+			output = new DataOutputStream(connexion.getOutputStream());
+			input = new DataInputStream(connexion.getInputStream());
+
+			while(true){
+				if(turnManager.getTurn()){
+					output.writeInt(GameManagerMock.playerAction()); // sends performed action by the player
+					System.out.println("\t\t\t server says : My turn !!");
+				} 			
+				else{
+					output.writeInt(28792);
+					GameManagerMock.updateOtherPlayers(input.readInt());
+					System.out.println("\t\t\t server says : I don't play");
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }
 
@@ -74,7 +66,7 @@ class TaskThread extends Thread{
 				if(turnManager.getTurn()){
 
 					output.writeInt(GameManagerMock.playerAction());
-					// sends performed action by the player
+					// sends the action performed by the player
 					System.out.println("\t\t\t server says : My turn !!");
 				} 			
 				else{
@@ -83,7 +75,6 @@ class TaskThread extends Thread{
 					System.out.println("\t\t\t server says : I don't play");
 				}
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

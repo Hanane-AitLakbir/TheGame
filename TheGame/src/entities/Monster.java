@@ -20,20 +20,16 @@ public class Monster extends Thread {
 	private boolean display = false;
 	private int itemNumber = generateRandomItem();
 
-	//USELESS
-	//private String name; 
-
 	private int power = 10; //Power of the monster (damage dealt when attacking a hero)
 	private StateActor state = StateActor.RIGHT, previousState = StateActor.NONE;
 
 	private AtomicInteger life, moveCounter, pauseCounter;
-	private int speed = 2; //a modifier selon difficulty 
-	private int ANIMATIONSPEED = 3;
+	private int speed = 1; //modify according to difficulty
+	private int ANIMATIONSPEED = 4;
 
 	public Monster(int x, int y, String name,int difficulty){
 
 		position = new Position(x, y);
-		//this.name = name;
 		this.target=GameManager.getPlayer();
 
 		life = new AtomicInteger(50);
@@ -54,16 +50,7 @@ public class Monster extends Thread {
 	}
 
 	public void run(){
-		/* TODO
-		 * -> a mettre dans le run du timer ??
-		 * Tant qu'on est dans sa salle
-		 *                 si distance entre target et this < rayon (peut-etre dimension d'un sprite)
-		 *                         attack()
-		 *                         updateGraphics()
-		 *                 sinon
-		 *                         move() -> le monstre erre en fait
-		 *                         updateGraphics();
-		 */
+
 		long delay = 30; // en ms
 		long startTime = 0;
 
@@ -93,20 +80,19 @@ public class Monster extends Thread {
 		this.display = display;
 	}
 
-	//TODO change random by evade ? 
 	private void action(){
 
 		//target = closerHero();  //IF MORE THAN ONE PLAYER !
 
 		if(isMoving()){ //If the monster must move (UP DOWN LEFT or RIGHT)
 			if(moveCounter.get()>=4000){moveCounter.set(0);}
-			if(moveCounter.get()<2000){ //for about 2s
-				if(ANIMATIONSPEED!=3){speed = 2; ANIMATIONSPEED = 3; sprite.setSpeed(ANIMATIONSPEED);}
+			if(moveCounter.get()<1500){ //for about 2s
+				if(ANIMATIONSPEED!=4){speed = 1; ANIMATIONSPEED = 4; sprite.setSpeed(ANIMATIONSPEED);}
 				random(); //He evades the target by walking randomly
 				moveCounter.getAndAdd(STEP);
 			}
-			if(moveCounter.get()>=2000 && moveCounter.get()<4000){ //for about 2s
-				if(ANIMATIONSPEED!=2){speed = 3; ANIMATIONSPEED = 2; sprite.setSpeed(ANIMATIONSPEED);}
+			if(moveCounter.get()>=1500 && moveCounter.get()<4000){ //for about 2s
+				if(ANIMATIONSPEED!=3){speed = 2; ANIMATIONSPEED = 3; sprite.setSpeed(ANIMATIONSPEED);}
 				chase(); //He chases the target
 				moveCounter.getAndAdd(STEP);
 			}
@@ -154,7 +140,6 @@ public class Monster extends Thread {
 
 		if(randomTime<=STEP){randomTime = Math.floor(1000*Math.random()) + STEP+1;}
 
-		//System.out.println(random + " + " + randomTime);
 		if(random==0){
 			setState(StateActor.UP);
 			if( y-speed>31*GameManager.SCALE*2 ){
@@ -187,7 +172,6 @@ public class Monster extends Thread {
 
 	}
 
-	//TODO condense the moving parts into moveUp(), ...
 	private void chase(){
 		int x = position.getX();
 		int y = position.getY();
@@ -243,16 +227,16 @@ public class Monster extends Thread {
 		switch (state)
 		{
 		case UP : 
-			if(Math.abs(dx)<25 && dy>0 && dy<40) return true;
+			if(Math.abs(dx)<20 && dy>0 && dy<35) return true;
 			break;
 		case DOWN :
-			if(Math.abs(dx)<25 && dy<0 && dy>-40) return true;
+			if(Math.abs(dx)<20 && dy<0 && dy>-35) return true;
 			break;
 		case LEFT :
-			if(dx>0 && dx<40 && Math.abs(dy)<25) return true;
+			if(dx>0 && dx<435 && Math.abs(dy)<20) return true;
 			break;
 		case RIGHT :
-			if(dx<0 && dx>-40 && Math.abs(dy)<25) return true;
+			if(dx<0 && dx>-35 && Math.abs(dy)<20) return true;
 			break;
 		default : 
 			return false;
@@ -272,7 +256,7 @@ public class Monster extends Thread {
 
 	public boolean isDead(){
 		if(life.get()<=0){
-			//Thread.currentThread().interrupt();
+
 			switch(itemNumber){
 			case 0 : 
 				new Item("heart",position).updateGraphics();

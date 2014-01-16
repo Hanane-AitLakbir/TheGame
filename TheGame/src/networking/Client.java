@@ -29,7 +29,7 @@ public class Client implements Communicator {
 					GameManager.updateOtherPlayers(input.readInt());
 				}
 				else {
-					output.writeInt(GameManager.playerAction()); //sends the performed action by the player
+					output.writeInt(GameManager.playerAction()); //sends the action performed by the player
 				}
 			}
 
@@ -37,7 +37,6 @@ public class Client implements Communicator {
 			try {
 				socket.close();
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			e.printStackTrace();

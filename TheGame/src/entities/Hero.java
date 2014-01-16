@@ -28,15 +28,16 @@ public class Hero extends Thread{
 	private final double lifeMax;
 	private static AtomicInteger life;
 	private int power = 10;
-	//private String name;
+
 	private int pauseCounter;
+	private long delay = 30; // en ms
 
 
 	public Hero(int x, int y, String name){
 
 		position = new Position(x, y);
 		sprite = new AnimatedSprite(name, ANIMATIONSPEED);
-		//currentSprite = sprite.next();
+		currentSprite = sprite.next();
 		life = new AtomicInteger(100);
 		lifeMax = 100;
 
@@ -44,7 +45,6 @@ public class Hero extends Thread{
 
 	public void run(){
 
-		long delay = 30; // en ms
 		long startTime = 0;
 
 		Timer timer = new Timer();
@@ -52,13 +52,13 @@ public class Hero extends Thread{
 
 			@Override
 			public void run() {
-				//step();
+
 				if(GameManager.turn){
 					action();
 					grabItem();
-				}
-				if(isMoving() || isAttacking()){
-					currentSprite = sprite.next();
+					if(isMoving() || isAttacking()){
+						currentSprite = sprite.next();
+					}
 				}
 				GameManager.updateGraphics(currentSprite, position,life.get()/lifeMax);
 			}
@@ -73,8 +73,6 @@ public class Hero extends Thread{
 
 		move();
 		attack();
-
-		//return state;
 
 	}
 
@@ -173,11 +171,10 @@ public class Hero extends Thread{
 					break;
 				}
 			}
-			//TODO Create a parameter RANGE
-			//TODO Make a more accurate box ! (more height than width ?) [ ]<- and not []<-
+
 			if(monsterList.size()==0) return null;
 		}
-		
+
 		return monsterList;
 
 	}
@@ -188,14 +185,14 @@ public class Hero extends Thread{
 
 			ArrayList<Monster> monstersList = canAttack();
 			if(monstersList!=null){
-				for(Monster m : canAttack()) {m.setState(StateActor.NONE); m.getAttacked(power);}
+				for(Monster m : canAttack()) {m.setState(StateActor.NONE); m.getAttacked(power);} //Stops the monster and attacks it.
 			}
 
-			while(pauseCounter<ANIMATIONSPEED*7+1){ //Can't launch another attack right away !
+			while(pauseCounter<ANIMATIONSPEED*7+1){ //Can't launch another attack right away ! But displays the animation.
 				currentSprite = sprite.next();
 				GameManager.updateGraphics(currentSprite, position,life.get()/lifeMax);
 				try {
-					sleep(30);
+					sleep(delay);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -218,7 +215,6 @@ public class Hero extends Thread{
 
 	public void getAttacked(int power){
 		life.getAndAdd(-power);
-		//rajouter le recul du coup ???
 	}
 
 	private boolean isDead(){
@@ -230,7 +226,6 @@ public class Hero extends Thread{
 
 	/*
 	 * Update the Hero's graphics.
-	 * Use sprite.next() here ? or in move ?
 	 */
 	public void updateGraphic(Graphics g){
 		g.drawImage(sprite.getCurrentSprite(), position.getX(), position.getY(), deltaX*GameManager.SCALE, deltaY*GameManager.SCALE,null);

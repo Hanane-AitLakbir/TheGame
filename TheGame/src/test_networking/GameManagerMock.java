@@ -7,11 +7,11 @@ public class GameManagerMock {
 	public static int playerAction(){
 		return Integer.parseInt(Thread.currentThread().getName());
 	}
-	
+
 	public static void updateOtherPlayers(int action){
 		System.out.println("\t\t\t\t\t\t player action updated " + action);
 	}
-	
+
 	public static void main(String[] args){
 		try {
 			// TODO Change hostname and port !!!
