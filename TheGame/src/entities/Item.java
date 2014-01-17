@@ -12,8 +12,10 @@ public class Item{
 	private Position position; 
 	private BufferedImage image; 
 	private String name;
+	private Monster monster;
 
-	public Item(String name, Position position){
+	public Item(String name, Position position, Monster monster){
+		this.monster = monster;
 		this.name = name; 
 		this.position = position; 
 		image = new ImageLoader().load("/item/"+name+".png");
@@ -27,6 +29,15 @@ public class Item{
 		if(name=="chest"){
 			image=new ImageLoader().load("/item/"+name+"Open.png");
 		}
+	}
+
+	public Position getPosition(){
+		return position;
+	}
+
+	public String lootItem(){
+		monster.hideMonster();
+		return name;
 	}
 
 }

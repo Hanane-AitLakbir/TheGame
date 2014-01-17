@@ -18,8 +18,8 @@ public class Hero extends Thread{
 	ArrayList<Monster> deadMonsters = new ArrayList<>();
 
 	private final int deltaX = 40, deltaY = 40;
-	private final int ANIMATIONSPEED = 2;
-	private int speed = 4; 
+	private int ANIMATIONSPEED = 2;
+	private AtomicInteger speed = new AtomicInteger(3); 
 
 	private StateActor state = StateActor.PROTECTED, previousState = StateActor.NONE;
 	private AnimatedSprite sprite;
@@ -27,10 +27,10 @@ public class Hero extends Thread{
 
 	private final double lifeMax;
 	private static AtomicInteger life;
-	private int power = 10;
+	private AtomicInteger power = new AtomicInteger(10);
 
 	private int pauseCounter;
-	private long delay = 30; // en ms
+	private final long delay = 30; // en ms
 
 
 	public Hero(int x, int y, String name){
@@ -53,14 +53,19 @@ public class Hero extends Thread{
 			@Override
 			public void run() {
 
-				if(GameManager.turn){
-					action();
-					grabItem();
-					if(isMoving() || isAttacking()){
-						currentSprite = sprite.next();
+				if(!isDead()){
+					if(GameManager.turn){
+						action();
+						grabItem();
+						if(isMoving() || isAttacking()){
+							currentSprite = sprite.next();
+						}
 					}
+					GameManager.updateGraphics(currentSprite, position,life.get()/lifeMax);
 				}
-				GameManager.updateGraphics(currentSprite, position,life.get()/lifeMax);
+				else if(isDead()){
+					interrupt();  //Comment for testing purpose...
+				}
 			}
 
 		};
@@ -106,20 +111,20 @@ public class Hero extends Thread{
 
 			switch(state){
 			case UP :
-				if(y-speed>24*2*GameManager.SCALE || (x>80*GameManager.SCALE*2 && x<90*2*GameManager.SCALE))
-					position.setXY(x, y-speed);
+				if(y-speed.get()>24*2*GameManager.SCALE || (x>80*GameManager.SCALE*2 && x<90*2*GameManager.SCALE))
+					position.setXY(x, y-speed.get());
 				break;
 			case DOWN :
-				if(y+speed<122*2*GameManager.SCALE || (x>60*GameManager.SCALE*2 && x<73*2*GameManager.SCALE))
-					position.setXY(x, y+speed);
+				if(y+speed.get()<122*2*GameManager.SCALE || (x>60*GameManager.SCALE*2 && x<73*2*GameManager.SCALE))
+					position.setXY(x, y+speed.get());
 				break;
 			case LEFT :
-				if(x-speed>26*2*GameManager.SCALE || (y>56*GameManager.SCALE*2 && y<71*2*GameManager.SCALE) )
-					position.setXY(x-speed, y);
+				if(x-speed.get()>26*2*GameManager.SCALE || (y>56*GameManager.SCALE*2 && y<71*2*GameManager.SCALE) )
+					position.setXY(x-speed.get(), y);
 				break;
 			case RIGHT :
-				if(x+speed<122*2*GameManager.SCALE || (y>73*GameManager.SCALE*2 && y<87*2*GameManager.SCALE) )
-					position.setXY(x+speed, y);
+				if(x+speed.get()<122*2*GameManager.SCALE || (y>73*GameManager.SCALE*2 && y<87*2*GameManager.SCALE) )
+					position.setXY(x+speed.get(), y);
 				break;
 			default:
 				break;
@@ -207,14 +212,65 @@ public class Hero extends Thread{
 	}
 
 	/*
-	 * Grabs an item from the floor (chest or monster)
+	 * Grabs an item from the floor
 	 */
 	private void grabItem(){
 
+		if(monsters!=null){
+
+			String action = "";
+			Item[] items = new Item[monsters.length];
+			for(int i=0; i<monsters.length; i++){
+				items[i] = monsters[i].getItem();
+
+				if(items[i]!=null){
+					int dx = position.getX() - items[i].getPosition().getX();
+					int dy = position.getY()+10 - items[i].getPosition().getY();
+
+					if(Math.abs(dx)<15 && Math.abs(dy)<15){
+						action = items[i].lootItem();
+					}
+
+					switch (action){
+					case "heart" : 
+						if(life.get()>=lifeMax-10){life.set((int) lifeMax);} 
+						else {life.getAndAdd(10);}
+						break;
+					case "sword" : 
+						power.getAndAdd(5);
+						break;
+					case "boots" :
+						if(speed.get()<=6){speed.getAndIncrement();}
+						if(speed.get()>=5){ANIMATIONSPEED = 1; sprite.setSpeed(ANIMATIONSPEED);}
+						break;
+					default :
+						break;
+					}
+
+				}
+
+			}
+		}
 	}
 
-	public void getAttacked(int power){
-		life.getAndAdd(-power);
+	public synchronized void getAttacked(AtomicInteger power, StateActor state){
+		life.getAndAdd(-power.get());
+		switch(state){
+		case ATTACKINGUP :
+			position.setXY(position.getX(), position.getY()-10);
+			break;
+		case ATTACKINGDOWN :
+			position.setXY(position.getX(), position.getY()+10);
+			break;
+		case ATTACKINGLEFT :
+			position.setXY(position.getX()-10, position.getY());
+			break;
+		case ATTACKINGRIGHT :
+			position.setXY(position.getX()+10, position.getY());
+			break;
+		default :
+			break;
+		}
 	}
 
 	private boolean isDead(){

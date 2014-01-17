@@ -17,7 +17,7 @@ public class FinalRoom extends Room{
 	public FinalRoom(Hero player) {
 		super(player, 0);
 		center = new Position(75*4,75*4);
-		chest = new Item("chest", center);
+		chest = new Item("chest", center, null);
 	}
 
 	@Override
