@@ -291,7 +291,7 @@ public class Monster extends Thread {
 		case 2 : {random = (int) Math.floor(Math.random()*2); //To lower the chance of having boots, 
 				if(random==0){return "boots";} 	//and increasing the chance to get a heart.
 				else return "heart";}
-		case 3 : return "boots";
+		case 3 : return "heart";
 		default : return null;
 		}
 	}
