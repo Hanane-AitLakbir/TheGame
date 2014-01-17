@@ -25,14 +25,27 @@ public class Server implements Communicator {
 			System.out.println("server accepted a connexion");
 			DataOutputStream output = new DataOutputStream(connexion.getOutputStream());
 			DataInputStream input = new DataInputStream(connexion.getInputStream());
+			int[] message = new int[2];
 
 			while(true){
 				if(turnManager.getTurn()){
-					output.writeInt(GameManager.playerAction()); // sends performed action by the player
+					try {
+						message = GameManager.buffer.consume();
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+					}
+					output.writeInt(message[0]);
+					output.writeInt(message[1]);
+					
+					//output.writeInt(GameManager.playerAction()); // sends performed action by the player
 				} 			
 				else{
 					output.writeInt(28792);
-					GameManager.updateOtherPlayers(input.readInt());
+					output.writeInt(28792);
+					message[0] = input.readInt();
+					message[1] = input.readInt();
+					//GameManager.updateOtherPlayers(message[1]);
+					GameManager.updateActor(message);
 				}
 				try {
 					Thread.sleep(20);

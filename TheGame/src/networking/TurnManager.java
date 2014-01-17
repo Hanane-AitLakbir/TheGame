@@ -6,22 +6,21 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class TurnManager {
-	static public boolean turn=true; 
+	public static boolean turn; 
 	private Timer timer;
 	private TimerTask task;
 
 	public TurnManager(){
+		turn = true;
 		timer = new Timer();
 		task = new TimerTask() {
 
 			@Override
 			public void run() {
 				turn = !turn;
-				GameManager.turn = turn;
-
 			}
 		};
-		timer.scheduleAtFixedRate(task, 0, 15000); //turn lasts 15 sec
+		timer.scheduleAtFixedRate(task, 0, 20000); // TODO turn lasts 15 sec
 	}
 
 	/**

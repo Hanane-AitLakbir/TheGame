@@ -10,12 +10,13 @@ public abstract class Room {
 	Hero player; 
 	SoundPlayer sound;
 	int up, down, left, right;
+	int roomId;
 
 	public Room(Hero player, int difficulty){
 		this.player = player;
 		bg = new Background(difficulty);
 		if(difficulty<=3){
-		sound = new SoundPlayer("room"+difficulty);
+			sound = new SoundPlayer("room"+difficulty);
 		}
 		else{
 			int diff = 3-difficulty%3;
@@ -23,6 +24,9 @@ public abstract class Room {
 		}
 	}
 
+	public void setId(int id){
+		roomId = id;
+	}
 	public abstract void updateGraphics(Graphics g); //draws the background
 	public abstract void stop();
 	public abstract void start();

@@ -2,13 +2,16 @@ package entities;
 
 import gameplay.GameManager;
 import graphics.AnimatedSprite;
+
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import networking.TurnManager;
 import display.Position;
 
 public class Hero extends Thread{
@@ -30,17 +33,18 @@ public class Hero extends Thread{
 	private AtomicInteger power = new AtomicInteger(10);
 
 	private int pauseCounter;
-	private final long delay = 30; // en ms
+	private long delay = 30; // en ms
+	private int[] message = new int[2];
 
 
 	public Hero(int x, int y, String name){
 
 		position = new Position(x, y);
 		sprite = new AnimatedSprite(name, ANIMATIONSPEED);
-		currentSprite = sprite.next();
+		//currentSprite = sprite.next();
 		life = new AtomicInteger(100);
 		lifeMax = 100;
-
+		message[0] = -1;
 	}
 
 	public void run(){
@@ -54,13 +58,23 @@ public class Hero extends Thread{
 			public void run() {
 
 				if(!isDead()){
-					if(GameManager.turn){
+					if((TurnManager.turn && GameManager.multiplayer) || !GameManager.multiplayer){
 						action();
 						grabItem();
 						if(isMoving() || isAttacking()){
 							currentSprite = sprite.next();
 						}
+						if(GameManager.multiplayer){
+							message[1] = StateActor.convertToInt(state);
+							try {
+								GameManager.buffer.produce(message);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+						}
+
 					}
+					System.out.println("\t\t\t\t Hero updates graphics");
 					GameManager.updateGraphics(currentSprite, position,life.get()/lifeMax);
 				}
 				else if(isDead()){

@@ -5,6 +5,8 @@ import gameplay.GameManager;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 public class Client implements Communicator {
@@ -19,26 +21,39 @@ public class Client implements Communicator {
 	public void run(){
 		DataOutputStream output;
 		DataInputStream input;
-
+		
+		//int message;
+		int[] message = new int[2]; 
+		int[] action = new int[2];
+		
 		try {
 			output = new DataOutputStream(socket.getOutputStream());
 			input = new DataInputStream(socket.getInputStream());
-
+			
 			while(true){
-				if(input.readInt()!=28792){
-					GameManager.updateOtherPlayers(input.readInt());
+				//message = input.readInt();
+				message[0]= input.readInt();
+				message[1] = input.readInt();
+//				if(message!=28792){
+//					TurnManager.turn = false;
+//					GameManager.updateActor(message);
+//					//GameManager.updateOtherPlayers(message);
+//				}
+				if(message[0]!=28792){
+					TurnManager.turn = false;
+					//GameManager.updateOtherPlayers(message[1]);
+					GameManager.updateActor(message);
 				}
 				else {
-					output.writeInt(GameManager.playerAction()); //sends the action performed by the player
+					TurnManager.turn = true;
+					action = GameManager.buffer.consume();
+					output.writeInt(action[0]);
+					output.writeInt(action[1]);
+					//output.writeInt(GameManager.playerAction()); //sends the action performed by the player
 				}
 			}
 
-		} catch (IOException e) {
-			try {
-				socket.close();
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
+		} catch (IOException | InterruptedException e) {
 			e.printStackTrace();
 		}
 

@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import networking.*;
 import display.CanvasGame;
@@ -23,7 +22,7 @@ import entities.StateActor;
  */
 public class GameManager extends Thread{
 
-	private RoomManager roomManager;
+	private static RoomManager roomManager;
 	private CanvasGame canvas;
 	private Communicator communicator;
 
@@ -33,8 +32,9 @@ public class GameManager extends Thread{
 	public static boolean multiplayer; // multiplayer or solo mode : instanced in Menu (choice gameMode listener)
 	public static int difficulty; // game difficulty : instanced in Menu (choice difficulty listener)
 	public static final int WIDTH = 340, HEIGHT = 340, SCALE = 2;
-	public static boolean turn = true;
+	//public static boolean turn = true;
 	private static Graphics graphics;
+	public static BufferMessage buffer;
 
 
 	/**
@@ -44,6 +44,7 @@ public class GameManager extends Thread{
 		canvas = new CanvasGame();
 		Window window = new Window();
 		window.add(canvas);
+		
 		graphics = canvas.getGraphics();
 		graphics.setColor(Color.RED);
 
@@ -55,11 +56,14 @@ public class GameManager extends Thread{
 		if(multiplayer){
 			otherPlayer = new Hero(75*4, 75*4,"Link2");
 			try {
+				buffer = new BufferMessage();
 				communicator = new Server(3956);
 				new Thread(communicator).start();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+		}else{
+			TurnManager.turn = true;
 		}
 	}
 
@@ -72,7 +76,8 @@ public class GameManager extends Thread{
 		this.canvas = new CanvasGame();
 		Window window = new Window();
 		window.add(canvas);
-
+		
+		graphics = canvas.getGraphics();
 		player = new Hero(75*4,75*4,"Link");
 		player.start();
 		otherPlayer = new Hero(75*4,75*4,"Link2");
@@ -80,6 +85,7 @@ public class GameManager extends Thread{
 		roomManager = new RoomManager(player, difficulty);
 
 		try {
+			buffer = new BufferMessage();
 			communicator = new Client(nameServer,serverPort);
 			new Thread(communicator).start();
 		} catch (IOException e) {
@@ -91,14 +97,21 @@ public class GameManager extends Thread{
 
 		while(true){
 			try {
-				if(turn){
-					roomManager.changeRoom(player);
+				roomManager.changeRoom(player);
+				if(multiplayer) roomManager.changeRoom(otherPlayer);
+				
+				//if(turn){
+				//else{
+					//roomManager.changeRoom(otherPlayer);
+					//}
+					
+				roomManager.updateGraphics(graphics);
+			
+				if(otherPlayer!=null){
+					otherPlayer.updateGraphic(graphics);
+					System.out.println("update graphic other player");
 				}
-				else{
-					roomManager.changeRoom(otherPlayer);
-					otherPlayer.updateGraphic(canvas.getGraphics());
-				}
-				roomManager.updateGraphics(canvas.getGraphics());
+				System.out.println(TurnManager.turn);
 				sleep(100);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
@@ -113,10 +126,28 @@ public class GameManager extends Thread{
 	 */
 	public static void updateOtherPlayers(int action){
 		StateActor state = StateActor.convertToState(action);
+		//System.out.println(action);
 		otherPlayer.setState(state);
 		otherPlayer.action();
+		System.out.println("update de other player + action = "+ action);
+		System.out.println("other player position : " + otherPlayer.getPosition().getX() + " " + otherPlayer.getPosition().getY());
 	}
-
+	
+	public static void updateActor(int[] message){
+		System.out.println("message reçu " + message[0] + " " + message[1]);
+		if(message[0]==-1){
+			otherPlayer.setState(StateActor.convertToState(message[1]));
+			otherPlayer.action();
+		}
+		else{
+			roomManager.controlMonster(message[0], message[1]);
+		}
+		
+			otherPlayer.updateGraphic(graphics);
+			System.out.println("update graphic other player");
+	
+	}
+	
 	/**
 	 * Gives the player's moves. 
 	 * ~used by the communicator to send them.
@@ -144,4 +175,5 @@ public class GameManager extends Thread{
 		difficulty = 1;
 		new GameManager().start();
 	}
+	
 }

@@ -10,11 +10,13 @@ public class MonsterRoom extends Room {
 
 	Monster[] monsters;
 
-	public MonsterRoom(Hero player, int nbMonster,int difficulty) {
+	public MonsterRoom(Hero player, int nbMonster,int difficulty,int id) {
 		super(player, nbMonster);
+		roomId = id;
 		monsters = new Monster[nbMonster];
 		for(int i = 0 ; i<monsters.length;i++){
 			monsters[i] = new Monster((50*4 + i*20),(50*4 + i*20),"Monster1",difficulty);
+			monsters[i].setId(((roomId*10) + i));
 			monsters[i].start();
 		}
 	}
@@ -45,6 +47,10 @@ public class MonsterRoom extends Room {
 		}
 		player.setMonsters(monsters);
 
+	}
+
+	public Monster getMonster(int i) {
+		return monsters[i];
 	}
 
 }

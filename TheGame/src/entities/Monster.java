@@ -2,8 +2,10 @@ package entities;
 
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import networking.TurnManager;
 import display.Position;
 import gameplay.GameManager;
 import graphics.AnimatedSprite;
@@ -26,6 +28,7 @@ public class Monster extends Thread {
 	private AtomicInteger life, moveCounter, pauseCounter;
 	private AtomicInteger speed = new AtomicInteger(1); //modify according to difficulty
 	private int ANIMATIONSPEED = 4;
+	private int[] message = new int[2]; // 0 = id + 1 = action when multiplayer&& turn
 
 	public Monster(int x, int y, String name,int difficulty){
 
@@ -56,6 +59,10 @@ public class Monster extends Thread {
 		sprite = new AnimatedSprite(name, ANIMATIONSPEED);
 	}
 
+	public void setId(int id){
+		message[0] = id;
+	}
+
 	public void run(){
 
 		long delay = 30; // en ms
@@ -68,9 +75,23 @@ public class Monster extends Thread {
 			@Override
 			public void run() {
 				if(display && !isDead()){
-					action();
+
+					if((TurnManager.turn && GameManager.multiplayer) || !GameManager.multiplayer){
+						//						actionMultiplayer();
+						//					}else{
+						action();
+					}
+
 					sprite.next();
 					GameManager.updateGraphics(sprite.getCurrentSprite(), position, life.get()/lifeMax); //if the player is in its room.
+					if(GameManager.multiplayer && TurnManager.turn){
+						message[1] = StateActor.convertToInt(state);
+						try {
+							GameManager.buffer.produce(message);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+					}
 				}
 				if(display && isDead() && loot==null){
 					String itemName = randomItemName();
@@ -289,17 +310,45 @@ public class Monster extends Thread {
 		case 0 : return "heart";
 		case 1 : return "sword";
 		case 2 : {random = (int) Math.floor(Math.random()*2); //To lower the chance of having boots, 
-				if(random==0){return "boots";} 	//and increasing the chance to get a heart.
-				else return "heart";}
+		if(random==0){return "boots";} 	//and increasing the chance to get a heart.
+		else return "heart";}
 		case 3 : return "heart";
 		default : return null;
+		}
+	}
+
+	public void actionMultiplayer() {
+		if(isMoving()){
+			int x = position.getX();
+			int y = position.getY();
+
+			switch(state){
+			case UP :
+				if(y-speed.get()>31*2*GameManager.SCALE || (x>80*GameManager.SCALE*2 && x<95*2*GameManager.SCALE))
+					position.setXY(x, y-speed.get());
+				break;
+			case DOWN :
+				if(y+speed.get()<122*2*GameManager.SCALE || (x>64*GameManager.SCALE*2 && x<79*2*GameManager.SCALE))
+					position.setXY(x, y+speed.get());
+				break;
+			case LEFT :
+				if(x-speed.get()>32*2*GameManager.SCALE || (y>60*GameManager.SCALE*2 && y<75*2*GameManager.SCALE) )
+					position.setXY(x-speed.get(), y);
+				break;
+			case RIGHT :
+				if(x+speed.get()<128*2*GameManager.SCALE || (y>80*GameManager.SCALE*2 && y<95*2*GameManager.SCALE) )
+					position.setXY(x+speed.get(), y);
+				break;
+			default:
+				break;
+			}
 		}
 	}
 
 	public Item getItem(){
 		return loot;
 	}
-	
+
 	public void hideMonster(){
 		display = false;
 	}

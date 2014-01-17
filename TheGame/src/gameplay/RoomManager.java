@@ -6,6 +6,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import display.Position;
 import entities.Hero;
+import entities.Monster;
+import entities.StateActor;
 
 /**
  * RoomManager manages the rooms (number, order, difficulty, ...)
@@ -30,12 +32,18 @@ public class RoomManager {
 		for(int i = 0;i<size*size;i++){
 			if(i==12){
 				rooms.add(new StartRoom(player));
+				
 			}
 			else if(i==end){
 				rooms.add(new FinalRoom(player));
 			}
 			else{
-				rooms.add(new MonsterRoom(player,randomMonstersNumber(difficulty),difficulty)); // changes the number of monsters => more fun
+				if(!GameManager.multiplayer){
+				rooms.add(new MonsterRoom(player,randomMonstersNumber(difficulty),difficulty,i)); // changes the number of monsters => more fun
+				}
+				else{
+					rooms.add(new MonsterRoom(player,(i+2)%3+1,difficulty,i));
+				}
 			}
 		} //(i+2)%3)+1 use this to have a maximum of 3 monsters.
 
@@ -44,7 +52,6 @@ public class RoomManager {
 		for(int k = 0; k<rooms.size();k++){
 			r = k % size;
 			q = k/size; // attention division d'entier = quotient de la division euclidienne
-
 			if(k-size>=0){
 				rooms.get(k).up = (k-size);
 			}else{
@@ -75,7 +82,6 @@ public class RoomManager {
 		current = start;
 		current.start();
 	}
-
 
 	public void updateGraphics(Graphics g){
 		current.updateGraphics(g);
@@ -135,4 +141,10 @@ public class RoomManager {
 	
 	}
 
+	public void controlMonster(int id,int action){
+		Monster monster =((MonsterRoom) rooms.get(id/10)).getMonster(id%10); 
+		monster.setState(StateActor.convertToState(action));
+		monster.actionMultiplayer();
+		//((MonsterRoom) rooms.get(id/10)).getMonster(id%10).setState(StateActor.convertToState(action));
+	}
 }
