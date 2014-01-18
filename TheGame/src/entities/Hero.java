@@ -41,7 +41,7 @@ public class Hero extends Thread{
 
 		position = new Position(x, y);
 		sprite = new AnimatedSprite(name, ANIMATIONSPEED);
-		//currentSprite = sprite.next();
+		currentSprite = sprite.next();
 		life = new AtomicInteger(100);
 		lifeMax = 100;
 		message[0] = -1;
@@ -116,7 +116,6 @@ public class Hero extends Thread{
 		else return false;
 	}
 
-	//TODO Gerer collisions monstres ! ! !
 	private void move(){
 
 		if(isMoving()){
@@ -156,7 +155,7 @@ public class Hero extends Thread{
 		else return false;
 	}
 
-	/*
+	/**
 	 * Returns the list of all the monsters a Hero can attack from its position.
 	 * Null if none,
 	 * a list otherwise.
@@ -225,7 +224,7 @@ public class Hero extends Thread{
 
 	}
 
-	/*
+	/**
 	 * Grabs an item from the floor
 	 */
 	private void grabItem(){
@@ -245,6 +244,7 @@ public class Hero extends Thread{
 						action = items[i].lootItem();
 					}
 
+					
 					switch (action){
 					case "heart" : 
 						if(life.get()>=lifeMax-10){life.set((int) lifeMax);} 

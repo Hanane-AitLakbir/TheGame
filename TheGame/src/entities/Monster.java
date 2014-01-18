@@ -101,8 +101,9 @@ public class Monster extends Thread {
 					loot.updateGraphics();
 				}
 				if(!display && isDead()){
-					//timer.cancel();
-					//timer.purge();
+					loot = null;
+					timer.cancel();
+					timer.purge();
 					interrupt();
 				}
 
