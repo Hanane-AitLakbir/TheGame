@@ -1,9 +1,11 @@
 package gameplay;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import networking.*;
 import display.CanvasGame;
@@ -28,13 +30,17 @@ public class GameManager extends Thread{
 
 	private static Hero player = null; 
 	private static Hero otherPlayer = null;
+	private static ArrayList<Hero> players = new ArrayList<Hero>();
+	private static Graphics graphics;
 
 	public static boolean multiplayer; // multiplayer or solo mode : instanced in Menu (choice gameMode listener)
 	public static int difficulty; // game difficulty : instanced in Menu (choice difficulty listener)
 	public static final int WIDTH = 340, HEIGHT = 340, SCALE = 2;
 	//public static boolean turn = true;
-	private static Graphics graphics;
+
 	public static BufferMessage buffer;
+	public static boolean clientMode=false; 
+	public static int endRoom;
 
 
 	/**
@@ -46,15 +52,21 @@ public class GameManager extends Thread{
 		window.add(canvas);
 		
 		graphics = canvas.getGraphics();
+		Font font = new Font("Courier", Font.BOLD, 20);
+		graphics.setFont(font);
 		graphics.setColor(Color.RED);
 
 		player = new Hero(75*4,75*4,"Link");
-		player.start();
-
-		roomManager = new RoomManager(player, difficulty);
-
+		players.add(player);
+		
 		if(multiplayer){
 			otherPlayer = new Hero(75*4, 75*4,"Link2");
+			players.add(otherPlayer);
+		}
+
+		roomManager = new RoomManager(player, difficulty); //0 = null
+
+		if(multiplayer){
 			try {
 				buffer = new BufferMessage();
 				communicator = new Server(3956);
@@ -65,6 +77,7 @@ public class GameManager extends Thread{
 		}else{
 			TurnManager.turn = true;
 		}
+		player.start();
 	}
 
 	/**
@@ -73,17 +86,16 @@ public class GameManager extends Thread{
 	 * @param serverPort
 	 */
 	public GameManager(String nameServer, int serverPort){
+		clientMode = true;
 		this.canvas = new CanvasGame();
 		Window window = new Window();
 		window.add(canvas);
 		
 		graphics = canvas.getGraphics();
-		player = new Hero(75*4,75*4,"Link");
-		player.start();
+		Font font = new Font("Courier", Font.BOLD, 20);
+		graphics.setFont(font);
 		otherPlayer = new Hero(75*4,75*4,"Link2");
-
-		roomManager = new RoomManager(player, difficulty);
-
+		player = new Hero(75*4,75*4,"Link");
 		try {
 			buffer = new BufferMessage();
 			communicator = new Client(nameServer,serverPort);
@@ -91,6 +103,19 @@ public class GameManager extends Thread{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
+		players.add(player);
+		players.add(otherPlayer);
+
+		roomManager = new RoomManager(player, difficulty);
+		player.start();
+		//		try {
+		//			buffer = new BufferMessage();
+		//			communicator = new Client(nameServer,serverPort);
+		//			new Thread(communicator).start();
+		//		} catch (IOException e) {
+		//			e.printStackTrace();
+		//		}
 	}
 
 	public void run(){
@@ -112,6 +137,13 @@ public class GameManager extends Thread{
 					System.out.println("update graphic other player");
 				}
 				System.out.println(TurnManager.turn);
+
+				if(TurnManager.turn){
+					graphics.drawString("Your turn...", 10, 20);
+				}else{
+					graphics.drawString("The other is playing ...", 10, 20);
+				}
+
 				sleep(100);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
@@ -136,11 +168,19 @@ public class GameManager extends Thread{
 	public static void updateActor(int[] message){
 		System.out.println("message reçu " + message[0] + " " + message[1]);
 		if(message[0]==-1){
-			otherPlayer.setState(StateActor.convertToState(message[1]));
+			int action = Integer.parseInt(String.valueOf(message[1]%100));
+			int y = Integer.parseInt(String.valueOf(message[1]/(1000*1000)));
+			int x = Integer.parseInt(String.valueOf((message[1]/1000)%1000));
+
+			//otherPlayer.setState(StateActor.convertToState(message[1]));
+			otherPlayer.setState(StateActor.convertToState(action));
+			otherPlayer.getPosition().setXY(x, y);
 			otherPlayer.action();
 		}
 		else{
-			roomManager.controlMonster(message[0], message[1]);
+			if(clientMode){
+				roomManager.controlMonster(message[0], message[1], graphics);
+			}
 		}
 		
 			otherPlayer.updateGraphic(graphics);
@@ -158,8 +198,12 @@ public class GameManager extends Thread{
 		return action;
 	}
 
-	public static Hero getPlayer(){
-		return player;
+	//	public static Hero getPlayer(){
+	//		return player;
+	//	}
+
+	public static ArrayList<Hero> getPlayer(){
+		return players;
 	}
 
 	public static synchronized void updateGraphics(BufferedImage image, Position position, double rateLife){
