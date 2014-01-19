@@ -9,7 +9,7 @@ public class TurnManager {
 	private TimerTask task;
 
 	public TurnManager(){
-		turn = true;
+		turn = false;
 		timer = new Timer();
 		task = new TimerTask() {
 

@@ -44,6 +44,7 @@ public class Client implements Communicator {
 				if(message[0]!=28792){
 					TurnManager.turn = false;
 					//GameManager.updateOtherPlayers(message[1]);
+					GameManager.buffer.consume();
 					GameManager.updateActor(message);
 				}else{
 					TurnManager.turn = true;

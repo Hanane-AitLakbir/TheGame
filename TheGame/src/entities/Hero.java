@@ -152,14 +152,6 @@ public class Hero extends Thread{
 	private boolean isAttacking(){
 
 		if(state == StateActor.ATTACKINGUP || state == StateActor.ATTACKINGDOWN || state == StateActor.ATTACKINGLEFT || state == StateActor.ATTACKINGRIGHT){
-//			if(GameManager.multiplayer){
-//				message[1] = StateActor.convertToInt(state) +1000*position.getX()+1000*1000*position.getY();
-//				try {
-//					GameManager.buffer.produce(message);
-//				} catch (InterruptedException e) {
-//					e.printStackTrace();
-//				}
-//			}
 			return true;
 		}
 		else return false;
@@ -210,7 +202,14 @@ public class Hero extends Thread{
 	private void attack(){
 
 		if(isAttacking()){
-			
+			if(GameManager.multiplayer){
+				message[1] = StateActor.convertToInt(state) +1000*position.getX()+1000*1000*position.getY();
+				try {
+					GameManager.buffer.produce(message);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
 			ArrayList<Monster> monstersList = canAttack();
 			if(monstersList!=null){
 				for(Monster m : canAttack()) {m.setState(StateActor.NONE); m.getAttacked(power);} //Stops the monster and attacks it.
