@@ -15,7 +15,7 @@ public class MonsterRoom extends Room {
 		roomId = id;
 		monsters = new Monster[nbMonster];
 		for(int i = 0 ; i<monsters.length;i++){
-			monsters[i] = new Monster((50*4 + i*20),(50*4 + i*20),"Monster1",difficulty);
+			monsters[i] = new Monster((50*4 + i*30),(50*4 + i*30),"Monster1",difficulty);
 			monsters[i].setId(((roomId*10) + i));
 			monsters[i].start();
 		}

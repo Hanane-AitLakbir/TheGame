@@ -74,7 +74,7 @@ public class Hero extends Thread{
 						}
 
 					}
-					System.out.println("\t\t\t\t Hero updates graphics");
+					//System.out.println("\t\t\t\t Hero updates graphics");
 					GameManager.updateGraphics(currentSprite, position,life.get()/lifeMax);
 				}
 				else if(isDead()){

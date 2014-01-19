@@ -13,12 +13,12 @@ import graphics.AnimatedSprite;
 
 public class Monster extends Thread {
 
-	private Position position;
+	protected Position position;
 	private final int STEP = 20;
 	private final double lifeMax; // to have a "real" division (not euclidian)
 	private double random = 0, randomTime = 0;
 	private AnimatedSprite sprite;
-	private Hero target;
+	protected Hero target;
 	private boolean display = false;
 	private Item loot = null;
 
@@ -310,7 +310,7 @@ public class Monster extends Thread {
 		switch (random){
 		case 0 : return "heart";
 		case 1 : return "sword";
-		case 2 : {random = (int) Math.floor(Math.random()*2); //To lower the chance of having boots, 
+		case 2 : {random = (int) Math.floor(Math.random()*6); //To lower the chance of having boots, 
 		if(random==0){return "boots";} 	//and increasing the chance to get a heart.
 		else return "heart";}
 		case 3 : return "heart";
