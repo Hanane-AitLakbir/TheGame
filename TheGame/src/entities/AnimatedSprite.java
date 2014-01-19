@@ -1,8 +1,9 @@
-package graphics;
+package entities;
 
 import java.awt.image.BufferedImage;
 
-import entities.StateActor;
+import utilities.ImageLoader;
+
 
 public class AnimatedSprite {
 

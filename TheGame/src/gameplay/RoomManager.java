@@ -4,9 +4,9 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import display.Position;
 import entities.Hero;
 import entities.Monster;
+import entities.Position;
 import entities.StateActor;
 
 /**

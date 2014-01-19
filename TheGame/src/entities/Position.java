@@ -1,4 +1,4 @@
-package display;
+package entities;
 
 public class Position {
 

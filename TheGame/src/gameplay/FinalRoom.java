@@ -3,11 +3,11 @@ package gameplay;
 import java.awt.Graphics;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import sound.SoundPlayer;
-import display.Position;
+import utilities.SoundPlayer;
 import entities.Hero;
 import entities.Item;
 import entities.Monster;
+import entities.Position;
 
 public class FinalRoom extends Room{
 
@@ -37,12 +37,12 @@ public class FinalRoom extends Room{
 	public void updateGraphics(Graphics g) {
 		bg.updateGraphic(g);
 		chest.updateGraphics();
-		if(player.getPosition().getX()<80*4 
-				&& player.getPosition().getX()>70*4 
-				&& player.getPosition().getY()<90*4 
-				&& player.getPosition().getY()>80*4
-				&& chestOpened ==false
-				&& monster==null){
+		if(monster[0].isDead() && !chestOpened)
+			//player.getPosition().getX()<80*4 
+			//	&& player.getPosition().getX()>70*4 
+			//	&& player.getPosition().getY()<90*4 
+			//	&& player.getPosition().getY()>80*4
+			{
 			chestOpened = true;
 			sound.stopSound();
 			chest.actionItem();

@@ -1,9 +1,10 @@
 package gameplay;
 import java.awt.Graphics;
 
-import sound.SoundPlayer;
+import display.Background;
+
+import utilities.SoundPlayer;
 import entities.*;
-import graphics.Background;
 
 public abstract class Room {
 	Background bg;

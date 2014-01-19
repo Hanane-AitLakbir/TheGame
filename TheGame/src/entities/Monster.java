@@ -7,9 +7,7 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import networking.TurnManager;
-import display.Position;
 import gameplay.GameManager;
-import graphics.AnimatedSprite;
 
 
 public class Monster extends Thread {

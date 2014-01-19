@@ -1,7 +1,7 @@
 package display;
 
 import gameplay.GameManager;
-import sound.SoundPlayer;
+import utilities.SoundPlayer;
 
 import java.awt.*;
 import javax.swing.*;

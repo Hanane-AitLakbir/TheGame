@@ -1,11 +1,11 @@
 package entities;
 
 import gameplay.GameManager;
-import graphics.ImageLoader;
 
 import java.awt.image.BufferedImage;
 
-import display.Position;
+import utilities.ImageLoader;
+
 
 public class Item{
 

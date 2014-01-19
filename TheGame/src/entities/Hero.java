@@ -1,7 +1,6 @@
 package entities;
 
 import gameplay.GameManager;
-import graphics.AnimatedSprite;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
@@ -11,7 +10,6 @@ import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import networking.TurnManager;
-import display.Position;
 
 public class Hero extends Thread{
 

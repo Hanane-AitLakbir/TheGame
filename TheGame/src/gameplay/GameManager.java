@@ -9,9 +9,9 @@ import java.util.ArrayList;
 
 import networking.*;
 import display.CanvasGame;
-import display.Position;
 import display.Window;
 import entities.Hero;
+import entities.Position;
 import entities.StateActor;
 
 /**
@@ -169,7 +169,7 @@ public class GameManager extends Thread{
 	}
 
 	public static void updateActor(int[] message){
-		System.out.println("message reçu " + message[0] + " " + message[1]);
+		System.out.println("message reï¿½u " + message[0] + " " + message[1]);
 		if(message[0]==-1){
 			int action = Integer.parseInt(String.valueOf(message[1]%100));
 			int y = Integer.parseInt(String.valueOf(message[1]/(1000*1000)));
