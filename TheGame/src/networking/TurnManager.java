@@ -1,7 +1,5 @@
 package networking;
 
-import gameplay.GameManager;
-
 import java.util.Timer;
 import java.util.TimerTask;
 

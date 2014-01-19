@@ -64,8 +64,8 @@ public class Hero extends Thread{
 						if(isMoving() || isAttacking()){
 							currentSprite = sprite.next();
 						}
-						if(GameManager.multiplayer){
-							message[1] = StateActor.convertToInt(state);
+						if(GameManager.multiplayer && TurnManager.turn){
+							message[1] = StateActor.convertToInt(state)+1000*position.getX()+1000*1000*position.getY();
 							try {
 								GameManager.buffer.produce(message);
 							} catch (InterruptedException e) {
@@ -105,9 +105,10 @@ public class Hero extends Thread{
 		return state;
 	}
 
-	public StateActor getPreviousState(){
-		return previousState;
-	}
+	//USELESS
+	//	public StateActor getPreviousState(){
+	//		return previousState;
+	//	}
 	private boolean isMoving(){
 
 		if(state == StateActor.UP || state == StateActor.DOWN || state == StateActor.LEFT || state == StateActor.RIGHT){

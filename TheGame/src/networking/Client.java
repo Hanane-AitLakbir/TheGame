@@ -29,6 +29,7 @@ public class Client implements Communicator {
 		try {
 			output = new DataOutputStream(socket.getOutputStream());
 			input = new DataInputStream(socket.getInputStream());
+			GameManager.endRoom = input.readInt(); //reads the endRoom
 			
 			while(true){
 				//message = input.readInt();
@@ -46,6 +47,11 @@ public class Client implements Communicator {
 				}
 				else {
 					TurnManager.turn = true;
+					//receives monsters moves
+					message[0]= input.readInt();
+					message[1] = input.readInt();
+					GameManager.updateActor(message);
+					//sends hero's moves
 					action = GameManager.buffer.consume();
 					output.writeInt(action[0]);
 					output.writeInt(action[1]);

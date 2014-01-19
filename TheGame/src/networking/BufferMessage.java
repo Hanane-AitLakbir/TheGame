@@ -4,7 +4,7 @@ import java.util.concurrent.Semaphore;
 
 public class BufferMessage {
 	int[] buffer;
-	int n=50;
+	int n=2000;
 	Semaphore nbMess = new Semaphore(0),nbCases = new Semaphore(n);
 	Semaphore mutexProd = new Semaphore(1), mutexCon=new Semaphore(0);
 	int cursorIn = 0, cursorOut = 0;
@@ -19,6 +19,7 @@ public class BufferMessage {
 		message[1] = buffer[cursorOut+1];
 		cursorOut = (cursorOut +2)%n;
 		nbCases.release(2);
+		System.out.println("\t\t\t consume " + nbMess.availablePermits());
 		return message;
 	}
 	
@@ -30,6 +31,7 @@ public class BufferMessage {
 		cursorIn = (cursorIn +2)%n;
 		mutexProd.release();
 		nbMess.release(2);
+		System.out.println("\t\t\t produce " + nbMess.availablePermits());
 	}
 
 }
