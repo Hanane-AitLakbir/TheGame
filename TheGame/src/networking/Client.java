@@ -5,8 +5,6 @@ import gameplay.GameManager;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 public class Client implements Communicator {
@@ -40,6 +38,7 @@ public class Client implements Communicator {
 //					GameManager.updateActor(message);
 //					//GameManager.updateOtherPlayers(message);
 //				}
+				System.out.println("client : " + message[0]);
 				if(message[0]!=28792){
 					TurnManager.turn = false;
 					//GameManager.updateOtherPlayers(message[1]);
@@ -47,14 +46,18 @@ public class Client implements Communicator {
 				}
 				else {
 					TurnManager.turn = true;
+					
 					//receives monsters moves
 					message[0]= input.readInt();
 					message[1] = input.readInt();
 					GameManager.updateActor(message);
+					
 					//sends hero's moves
 					action = GameManager.buffer.consume();
 					output.writeInt(action[0]);
 					output.writeInt(action[1]);
+					
+					//USELESS
 					//output.writeInt(GameManager.playerAction()); //sends the action performed by the player
 				}
 			}

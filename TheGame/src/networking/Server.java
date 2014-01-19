@@ -26,6 +26,7 @@ public class Server implements Communicator {
 			DataOutputStream output = new DataOutputStream(connexion.getOutputStream());
 			DataInputStream input = new DataInputStream(connexion.getInputStream());
 			int[] message = new int[2];
+			
 			output.writeInt(GameManager.endRoom); //sends endRoom
 
 			while(true){
@@ -41,6 +42,7 @@ public class Server implements Communicator {
 					//output.writeInt(GameManager.playerAction()); // sends performed action by the player
 				} 			
 				else{
+					//
 					output.writeInt(28792);
 					output.writeInt(28792);
 					try {

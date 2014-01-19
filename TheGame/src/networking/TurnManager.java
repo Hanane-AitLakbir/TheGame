@@ -18,7 +18,7 @@ public class TurnManager {
 				turn = !turn;
 			}
 		};
-		timer.scheduleAtFixedRate(task, 0, 20000); // TODO turn lasts 15 sec
+		timer.scheduleAtFixedRate(task, 0, 20000); // TODO turn lasts 15 sec 
 	}
 
 	/**

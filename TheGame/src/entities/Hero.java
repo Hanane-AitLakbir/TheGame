@@ -61,20 +61,22 @@ public class Hero extends Thread{
 					if((TurnManager.turn && GameManager.multiplayer) || !GameManager.multiplayer){
 						action();
 						grabItem();
-						if(isMoving() || isAttacking()){
-							currentSprite = sprite.next();
+					
+					if(isMoving() || isAttacking()){
+						currentSprite = sprite.next();
+					}
+					//}
+					if(GameManager.multiplayer){ //&& TurnManager.turn){
+						message[1] = StateActor.convertToInt(state)+1000*position.getX()+1000*1000*position.getY();
+						try {
+							GameManager.buffer.produce(message);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
 						}
-						if(GameManager.multiplayer && TurnManager.turn){
-							message[1] = StateActor.convertToInt(state)+1000*position.getX()+1000*1000*position.getY();
-							try {
-								GameManager.buffer.produce(message);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}
-						}
+					}
 
 					}
-					//System.out.println("\t\t\t\t Hero updates graphics");
+				//System.out.println("\t\t\t\t Hero updates graphics");
 					GameManager.updateGraphics(currentSprite, position,life.get()/lifeMax);
 				}
 				else if(isDead()){
@@ -245,7 +247,7 @@ public class Hero extends Thread{
 						action = items[i].lootItem();
 					}
 
-					
+
 					switch (action){
 					case "heart" : 
 						if(life.get()>=lifeMax-10){life.set((int) lifeMax);} 
