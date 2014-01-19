@@ -19,7 +19,7 @@ public class Client implements Communicator {
 	public void run(){
 		DataOutputStream output;
 		DataInputStream input;
-		
+		GameManager.gameIsRunning = true;
 		//int message;
 		int[] message = new int[2]; 
 		int[] action = new int[2];

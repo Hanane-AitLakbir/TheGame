@@ -15,7 +15,7 @@ import entities.Hero;
 import entities.StateActor;
 
 /**
- * GameManager creates the display objects (a JPanel object and a CanvasGame), the Heroes, a RoomManager and
+ * GameManager creates the display objects (a Jframe object and a CanvasGame), the Heroes, a RoomManager and
  * a communicator (server or client) if multiplayer mode. 
  * This class contains the game loop (??) 
  * 
@@ -41,6 +41,7 @@ public class GameManager extends Thread{
 	public static BufferMessage buffer;
 	public static boolean clientMode=false; 
 	public static int endRoom;
+	public static boolean gameIsRunning = false;
 
 
 	/**
@@ -94,6 +95,7 @@ public class GameManager extends Thread{
 		graphics = canvas.getGraphics();
 		Font font = new Font("Courier", Font.BOLD, 20);
 		graphics.setFont(font);
+		graphics.setColor(Color.GREEN);
 		otherPlayer = new Hero(75*4,75*4,"Link2");
 		player = new Hero(75*4,75*4,"Link");
 		try {
@@ -119,7 +121,6 @@ public class GameManager extends Thread{
 	}
 
 	public void run(){
-
 		while(true){
 			try {
 				roomManager.changeRoom(player);
@@ -136,10 +137,10 @@ public class GameManager extends Thread{
 					otherPlayer.updateGraphic(graphics);
 					System.out.println("update graphic other player");
 				}
-				System.out.println("GM turn : " + TurnManager.turn);
+				System.out.println("\t\t\t\t\t GM turn : " + TurnManager.turn);
 
 				if (multiplayer) {
-					System.out.println("GM nb mess buffer" + buffer.getMess());
+					System.out.println("GM nb mess buffer " + buffer.getMess());
 					if (TurnManager.turn) {
 						graphics.drawString("Your turn...", 10, 20);
 					} else {
@@ -175,8 +176,9 @@ public class GameManager extends Thread{
 			int x = Integer.parseInt(String.valueOf((message[1]/1000)%1000));
 
 			//otherPlayer.setState(StateActor.convertToState(message[1]));
-			otherPlayer.setState(StateActor.convertToState(action));
 			otherPlayer.getPosition().setXY(x, y);
+			otherPlayer.setState(StateActor.convertToState(action));
+			//otherPlayer.getPosition().setXY(x, y);
 			otherPlayer.action();
 		}
 		else{

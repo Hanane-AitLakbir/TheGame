@@ -8,7 +8,6 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import networking.TurnManager;
@@ -66,7 +65,7 @@ public class Hero extends Thread{
 						currentSprite = sprite.next();
 					}
 					//}
-					if(GameManager.multiplayer){ //&& TurnManager.turn){
+					if(GameManager.multiplayer && GameManager.gameIsRunning){ //&& TurnManager.turn){
 						message[1] = StateActor.convertToInt(state)+1000*position.getX()+1000*1000*position.getY();
 						try {
 							GameManager.buffer.produce(message);
@@ -153,14 +152,14 @@ public class Hero extends Thread{
 	private boolean isAttacking(){
 
 		if(state == StateActor.ATTACKINGUP || state == StateActor.ATTACKINGDOWN || state == StateActor.ATTACKINGLEFT || state == StateActor.ATTACKINGRIGHT){
-			if(GameManager.multiplayer){
-				message[1] = StateActor.convertToInt(state) +1000*position.getX()+1000*1000*position.getY();
-				try {
-					GameManager.buffer.produce(message);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
+//			if(GameManager.multiplayer){
+//				message[1] = StateActor.convertToInt(state) +1000*position.getX()+1000*1000*position.getY();
+//				try {
+//					GameManager.buffer.produce(message);
+//				} catch (InterruptedException e) {
+//					e.printStackTrace();
+//				}
+//			}
 			return true;
 		}
 		else return false;

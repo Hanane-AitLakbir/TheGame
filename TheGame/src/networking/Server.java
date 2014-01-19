@@ -23,6 +23,7 @@ public class Server implements Communicator {
 		try {
 			Socket connexion = serverSocket.accept();
 			System.out.println("server accepted a connexion");
+			GameManager.gameIsRunning = true;
 			DataOutputStream output = new DataOutputStream(connexion.getOutputStream());
 			DataInputStream input = new DataInputStream(connexion.getInputStream());
 			int[] message = new int[2];
@@ -41,7 +42,9 @@ public class Server implements Communicator {
 					output.writeInt(message[1]);
 
 					//output.writeInt(GameManager.playerAction()); // sends performed action by the player
-				}else{
+				}
+				//else
+				if(!TurnManager.turn){
 					output.writeInt(28792);
 					output.writeInt(28792);
 					try {
@@ -51,7 +54,7 @@ public class Server implements Communicator {
 					}
 					output.writeInt(message[0]);
 					output.writeInt(message[1]);
-					
+
 					message[0] = input.readInt();
 					message[1] = input.readInt();
 					//GameManager.updateOtherPlayers(message[1]);
