@@ -8,8 +8,6 @@ import javax.imageio.ImageIO;
 
 /**
  * Background manages the layout of the room (how it looks, ...)
- * 
- * @author hanane
  */
 public class Background {
 
@@ -39,7 +37,7 @@ public class Background {
 	/**
 	 * Displays the background on the Graphic g
 	 * 
-	 * @param Graphics g
+	 * @param g The Graphics object to paint on.
 	 */
 	public void updateGraphic(Graphics g){
 		g.drawImage(bg, 0, 0, (width*scale), (height*scale), null);

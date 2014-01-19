@@ -8,12 +8,9 @@ import javax.swing.*;
 import java.awt.event.*;
 
 /**
- * This class displays a menu to choice the game mode (solo or multiplayer) and the game difficulty,
+ * This class displays a menu to choose the game mode (solo or multiplayer) and the game difficulty,
  * and creates the appropriate GameManager object. 
- * There is a background sound which is played. 
- * 
- * @author hanane
- *
+ * A background Sound is played. 
  */
 public class Menu {
 
@@ -21,8 +18,9 @@ public class Menu {
 	private JTextField serverName;
 	private JTextField serverPort;
 	private SoundPlayer sound;
+	
 	/**
-	 * Launch the application.
+	 * Launches the menu, so that the player can choose what to do from there.
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -40,37 +38,38 @@ public class Menu {
 	}
 
 	/**
-	 * Create the application.
+	 * Creates the application.
 	 */
 	public Menu() {
 		initialize();
 	}
 
 	/**
-	 * Initialize the contents of the frame.
+	 * Initializes the contents of the frame.
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setTitle("The Game");
+		frame.setTitle("The Dungeon of Zelda");
 		frame.setIconImage(Toolkit.getDefaultToolkit().getImage(Menu.class.getResource("/background/icon.jpg")));
 		frame.setBounds(100, 100, 600, 400);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		//Add the layout : a layered layout to display the background (layer 0) and the components (layer 1)
+		//Adds the layout : a layered layout to display the background (layer 0) and the components (layer 1)
 		JLayeredPane layeredPane = new JLayeredPane();
 		frame.getContentPane().add(layeredPane, BorderLayout.CENTER);
 
+		//Plays the background music.
 		sound = new SoundPlayer("Adventure_Title");
 		sound.playSound();
-		//Display the background 
+		
+		//Displays the background 
 		JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setIcon(new ImageIcon(Menu.class.getResource("/background/Menu.jpg")));
 		lblNewLabel.setBounds(0, 0, 638, 415);
 		layeredPane.add(lblNewLabel);
 
-
-		//Display "Game Mode" 
+		//Displays "Game Mode" 
 		JTextPane txtpnGameMode = new JTextPane();
 		txtpnGameMode.setForeground(Color.WHITE);
 		txtpnGameMode.setFont(new Font("Dialog", Font.BOLD, 14));
@@ -83,8 +82,7 @@ public class Menu {
 		txtpnGameMode.setBounds(12, 135, 100, 22);
 		layeredPane.add(txtpnGameMode);
 
-
-		//choice of game mode : solo mode or multiplayer
+		//choice of game mode : solo or multiplayer
 		final Choice gameMode = new Choice();
 		gameMode.setForeground(Color.BLACK);
 		gameMode.addItemListener(new ItemListener() {
@@ -93,11 +91,11 @@ public class Menu {
 				switch(gameMode.getSelectedItem()){
 				case "Solo" : 
 					GameManager.multiplayer = false; 
-					System.out.println("mode solo choisi"); // Ligne de test
+					//	System.out.println("Mode solo choisi"); // Test Line, to print what you chose.
 					break;
 				case "Multiplayer":
 					GameManager.multiplayer = true;
-					System.out.println("mode multijoueur choisi"); // Ligne de test
+					//	System.out.println("Mode multijoueur choisi"); // Test Line, to print what you chose.
 					break;
 				}
 			}
@@ -110,7 +108,6 @@ public class Menu {
 		layeredPane.setLayer(gameMode, 1);
 		gameMode.setBounds(119, 135, 111, 21);
 		layeredPane.add(gameMode);
-
 
 		//Display "Difficulty"
 		JTextPane txtDifficulty = new JTextPane();
@@ -141,18 +138,18 @@ public class Menu {
 				switch(difficulty.getSelectedItem()){
 				case "Novice" :
 					GameManager.difficulty = 1;
-					//					System.out.println("Difficulty : Novice"); // Ligne de test
+					//	System.out.println("Difficulty : Novice"); // Test Line, to print what you chose.
 					break;
 				case "Normal" : 
 					GameManager.difficulty = 2;
-					//					System.out.println("Difficulty : Normal"); // Ligne de test
+					//	System.out.println("Difficulty : Normal"); // Test Line, to print what you chose.
 					break;
 				case "Expert" : 
 					GameManager.difficulty = 3;
-					//					System.out.println("Difficulty : Expert"); // Ligne de test
+					//	System.out.println("Difficulty : Expert"); // Test Line, to print what you chose.
 					break;
 				}
-				System.out.println("difficulty " + GameManager.difficulty);
+				//System.out.println("difficulty " + GameManager.difficulty);
 			}
 		});
 		difficulty.add("");
@@ -206,13 +203,14 @@ public class Menu {
 		serverPort.setColumns(10);
 
 		//Button for starting the game
+		//For Solo mode / multiplayer server
 		Button startGame = new Button("Start game");
 		startGame.addActionListener( new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				frame.setVisible(false); // close the menu window
-				sound.stopSound();
+				frame.setVisible(false); // Closes the menu window
+				sound.stopSound(); // Stops the sound
 				new GameManager().start();
 
 			}
@@ -221,12 +219,13 @@ public class Menu {
 		startGame.setBounds(73, 290, 76, 23);
 		layeredPane.add(startGame);
 
+		//For multiplayer client
 		Button joinGame = new Button("Join a game");
 		joinGame.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				frame.setVisible(false); // close the menu window
-				sound.stopSound();
+				frame.setVisible(false); // Closes the menu window
+				sound.stopSound(); // Stops the sound
 				new GameManager(serverName.getText(), Integer.parseInt(serverPort.getText())).start();
 			}
 		});
