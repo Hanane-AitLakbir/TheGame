@@ -26,10 +26,11 @@ public class Server implements Communicator {
 			DataOutputStream output = new DataOutputStream(connexion.getOutputStream());
 			DataInputStream input = new DataInputStream(connexion.getInputStream());
 			int[] message = new int[2];
-			
+
 			output.writeInt(GameManager.endRoom); //sends endRoom
 
 			while(true){
+
 				if(turnManager.getTurn()){
 					try {
 						message = GameManager.buffer.consume();
@@ -38,11 +39,9 @@ public class Server implements Communicator {
 					}
 					output.writeInt(message[0]);
 					output.writeInt(message[1]);
-					
+
 					//output.writeInt(GameManager.playerAction()); // sends performed action by the player
-				} 			
-				else{
-					//
+				}else{
 					output.writeInt(28792);
 					output.writeInt(28792);
 					try {
@@ -70,9 +69,6 @@ public class Server implements Communicator {
 			e.printStackTrace();
 		}
 	}
-
-
-
 }
 
 class TaskThread extends Thread{

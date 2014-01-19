@@ -50,7 +50,7 @@ public class GameManager extends Thread{
 		canvas = new CanvasGame();
 		Window window = new Window();
 		window.add(canvas);
-		
+
 		graphics = canvas.getGraphics();
 		Font font = new Font("Courier", Font.BOLD, 20);
 		graphics.setFont(font);
@@ -58,7 +58,7 @@ public class GameManager extends Thread{
 
 		player = new Hero(75*4,75*4,"Link");
 		players.add(player);
-		
+
 		if(multiplayer){
 			otherPlayer = new Hero(75*4, 75*4,"Link2");
 			players.add(otherPlayer);
@@ -90,7 +90,7 @@ public class GameManager extends Thread{
 		this.canvas = new CanvasGame();
 		Window window = new Window();
 		window.add(canvas);
-		
+
 		graphics = canvas.getGraphics();
 		Font font = new Font("Courier", Font.BOLD, 20);
 		graphics.setFont(font);
@@ -124,26 +124,28 @@ public class GameManager extends Thread{
 			try {
 				roomManager.changeRoom(player);
 				if(multiplayer) roomManager.changeRoom(otherPlayer);
-				
+
 				//if(turn){
 				//else{
-					//roomManager.changeRoom(otherPlayer);
-					//}
-					
+				//roomManager.changeRoom(otherPlayer);
+				//}
+
 				roomManager.updateGraphics(graphics);
-			
+
 				if(otherPlayer!=null){
 					otherPlayer.updateGraphic(graphics);
 					System.out.println("update graphic other player");
 				}
-				System.out.println(TurnManager.turn);
+				System.out.println("GM turn : " + TurnManager.turn);
 
-				if(TurnManager.turn){
-					graphics.drawString("Your turn...", 10, 20);
-				}else{
-					graphics.drawString("The other is playing ...", 10, 20);
+				if (multiplayer) {
+					System.out.println("GM nb mess buffer" + buffer.getMess());
+					if (TurnManager.turn) {
+						graphics.drawString("Your turn...", 10, 20);
+					} else {
+						graphics.drawString("The other is playing ...", 10, 20);
+					}
 				}
-
 				sleep(100);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
@@ -164,7 +166,7 @@ public class GameManager extends Thread{
 		System.out.println("update de other player + action = "+ action);
 		System.out.println("other player position : " + otherPlayer.getPosition().getX() + " " + otherPlayer.getPosition().getY());
 	}
-	
+
 	public static void updateActor(int[] message){
 		System.out.println("message reçu " + message[0] + " " + message[1]);
 		if(message[0]==-1){
@@ -182,12 +184,12 @@ public class GameManager extends Thread{
 				roomManager.controlMonster(message[0], message[1], graphics);
 			}
 		}
-		
-			otherPlayer.updateGraphic(graphics);
-			System.out.println("update graphic other player");
-	
+
+		otherPlayer.updateGraphic(graphics);
+		System.out.println("update graphic other player");
+
 	}
-	
+
 	/**
 	 * Gives the player's moves. 
 	 * ~used by the communicator to send them.
@@ -219,5 +221,5 @@ public class GameManager extends Thread{
 		difficulty = 1;
 		new GameManager().start();
 	}
-	
+
 }

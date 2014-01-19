@@ -33,6 +33,8 @@ public class Client implements Communicator {
 				//message = input.readInt();
 				message[0]= input.readInt();
 				message[1] = input.readInt();
+				
+				//USELESS
 //				if(message!=28792){
 //					TurnManager.turn = false;
 //					GameManager.updateActor(message);
@@ -43,10 +45,8 @@ public class Client implements Communicator {
 					TurnManager.turn = false;
 					//GameManager.updateOtherPlayers(message[1]);
 					GameManager.updateActor(message);
-				}
-				else {
+				}else{
 					TurnManager.turn = true;
-					
 					//receives monsters moves
 					message[0]= input.readInt();
 					message[1] = input.readInt();

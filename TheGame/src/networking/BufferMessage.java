@@ -33,5 +33,9 @@ public class BufferMessage {
 		nbMess.release(2);
 		System.out.println("\t\t\t produce " + nbMess.availablePermits());
 	}
+	
+	public int getMess(){
+		return nbMess.availablePermits();
+	}
 
 }
