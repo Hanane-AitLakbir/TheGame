@@ -24,8 +24,15 @@ public class RoomManager {
 	public RoomManager(Hero player, int difficulty){
 
 		size = 5; //default size
+		if(GameManager.clientMode) {
+			end = GameManager.endRoom;
+			System.out.println(end);
+		}
+		else{
 		end = generateEndRoom();
+			GameManager.endRoom = end;
 		System.out.println(end);
+		}
 		rooms = new ArrayList<Room>();
 
 		//creation of rooms
@@ -141,10 +148,15 @@ public class RoomManager {
 	
 	}
 
-	public void controlMonster(int id,int action){
+	public synchronized void controlMonster(int id, int message, Graphics g){
 		Monster monster =((MonsterRoom) rooms.get(id/10)).getMonster(id%10); 
+		int action = Integer.parseInt(String.valueOf(message%100));
+		int y = Integer.parseInt(String.valueOf(message/(1000*1000)));
+		int x = Integer.parseInt(String.valueOf((message/1000)%1000));
 		monster.setState(StateActor.convertToState(action));
+		monster.getPosition().setXY(x, y);
 		monster.actionMultiplayer();
+		monster.updateGraphic(g);
 		//((MonsterRoom) rooms.get(id/10)).getMonster(id%10).setState(StateActor.convertToState(action));
 	}
 }

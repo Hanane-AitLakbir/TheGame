@@ -1,5 +1,6 @@
 package entities;
 
+import java.awt.Graphics;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
@@ -33,7 +34,7 @@ public class Monster extends Thread {
 	public Monster(int x, int y, String name,int difficulty){
 
 		position = new Position(x, y);
-		this.target=GameManager.getPlayer();
+		this.target = GameManager.getPlayer().get(0);
 
 		//
 		if(difficulty==1){
@@ -74,18 +75,27 @@ public class Monster extends Thread {
 
 			@Override
 			public void run() {
+				if ((TurnManager.turn && GameManager.multiplayer)
+						|| !GameManager.multiplayer) {
+					target = GameManager.getPlayer().get(0);
+				}else{
+					target=GameManager.getPlayer().get(1);
+				}
+
 				if(display && !isDead()){
 
-					if((TurnManager.turn && GameManager.multiplayer) || !GameManager.multiplayer){
+					// if((TurnManager.turn && GameManager.multiplayer) ||
+					// !GameManager.multiplayer){
 						//						actionMultiplayer();
 						//					}else{
 						action();
-					}
+					//}
 
 					sprite.next();
-					GameManager.updateGraphics(sprite.getCurrentSprite(), position, life.get()/lifeMax); //if the player is in its room.
-					if(GameManager.multiplayer && TurnManager.turn){
-						message[1] = StateActor.convertToInt(state);
+					GameManager.updateGraphics(sprite.getCurrentSprite(),
+							position, life.get() / lifeMax); // if the player is in its room.
+					if (GameManager.multiplayer) {// && TurnManager.turn){
+						message[1] = StateActor.convertToInt(state)+1000*position.getX()+1000*1000*position.getY();
 						try {
 							GameManager.buffer.produce(message);
 						} catch (InterruptedException e) {
@@ -354,4 +364,11 @@ public class Monster extends Thread {
 		display = false;
 	}
 	
+	public void updateGraphic(Graphics g) {
+		sprite.next();
+		g.drawImage(sprite.getCurrentSprite(), position.getX(),
+				position.getY(), 40 * GameManager.SCALE,
+				40 * GameManager.SCALE, null);
+	}
+
 }

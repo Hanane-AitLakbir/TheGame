@@ -26,6 +26,7 @@ public class Server implements Communicator {
 			DataOutputStream output = new DataOutputStream(connexion.getOutputStream());
 			DataInputStream input = new DataInputStream(connexion.getInputStream());
 			int[] message = new int[2];
+			output.writeInt(GameManager.endRoom); //sends endRoom
 
 			while(true){
 				if(turnManager.getTurn()){
@@ -42,6 +43,14 @@ public class Server implements Communicator {
 				else{
 					output.writeInt(28792);
 					output.writeInt(28792);
+					try {
+						message = GameManager.buffer.consume();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					output.writeInt(message[0]);
+					output.writeInt(message[1]);
+					
 					message[0] = input.readInt();
 					message[1] = input.readInt();
 					//GameManager.updateOtherPlayers(message[1]);
