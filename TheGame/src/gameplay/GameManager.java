@@ -41,7 +41,7 @@ public class GameManager extends Thread{
 
 
 	/**
-	 * Constructor for the GameManager in solo mode. It creates the graphical objects needed to display the game (canvas, window, ...)
+	 * Constructor for the GameManager in solo mode and for the server. It creates the graphical objects needed to display the game (canvas, window, ...)
 	 */
 	public GameManager(){
 		canvas = new CanvasGame();
