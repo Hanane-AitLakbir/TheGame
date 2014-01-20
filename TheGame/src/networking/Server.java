@@ -8,6 +8,11 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+/**
+ * The server of the game, creates the true GameManager that manages the monsters and everything in the game.<p>
+ * Sends the monsters' position to the client<p>
+ * Receive the other hero's position.
+ */
 public class Server implements Communicator {
 
 	private ServerSocket serverSocket;
@@ -21,31 +26,30 @@ public class Server implements Communicator {
 	public void run(){
 
 		try {
-			Socket connexion = serverSocket.accept();
-			System.out.println("server accepted a connexion");
+			Socket connexion = serverSocket.accept(); //Creates the connection.
+			//System.out.println("server accepted a connexion");
 			GameManager.gameIsRunning = true;
 			DataOutputStream output = new DataOutputStream(connexion.getOutputStream());
 			DataInputStream input = new DataInputStream(connexion.getInputStream());
 			int[] message = new int[2];
 
-			output.writeInt(GameManager.endRoom); //sends endRoom
+			output.writeInt(GameManager.endRoom); //sends the position of the endRoom
 
 			while(true){
 
 				if(turnManager.getTurn()){
 					try {
-						message = GameManager.buffer.consume();
+						message = GameManager.buffer.consume(); //Reads the messages available.
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
 					output.writeInt(message[0]);
-					output.writeInt(message[1]);
+					output.writeInt(message[1]); //Writes the messages to send.
 
-					//output.writeInt(GameManager.playerAction()); // sends performed action by the player
 				}
-				//else
+				
 				if(!TurnManager.turn){
-					output.writeInt(28792);
+					output.writeInt(28792); //It's the turn of the "server Hero"
 					output.writeInt(28792);
 					try {
 						message = GameManager.buffer.consume();
@@ -57,7 +61,6 @@ public class Server implements Communicator {
 
 					message[0] = input.readInt();
 					message[1] = input.readInt();
-					//GameManager.updateOtherPlayers(message[1]);
 					GameManager.updateActor(message);
 				}
 				try {
@@ -74,33 +77,3 @@ public class Server implements Communicator {
 	}
 }
 
-class TaskThread extends Thread{
-	DataOutputStream output;
-	DataInputStream input; 
-	TurnManager turnManager;
-
-	TaskThread(Socket connexion, TurnManager turnManager) throws IOException{
-		output = new DataOutputStream(connexion.getOutputStream());
-		input = new DataInputStream(connexion.getInputStream());
-		this.turnManager = turnManager;
-	}
-
-	public void run(){
-		while(true){
-			try {
-				if(turnManager.getTurn()){
-					output.writeInt(GameManager.playerAction()); // sends the action performed by the player
-					System.out.println("\t\t\t server says : My turn !!");
-				}
-				else{
-					output.writeInt(28792);
-					GameManager.updateOtherPlayers(input.readInt());
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
-
-}
