@@ -13,7 +13,7 @@ import gameplay.GameManager;
  * He has a random movement for a moment, where he can't even attack (he is vulnerable), 
  * then a chase pattern where he will try to chase down and kill the Hero.<p>
  * <p>
- * He has a maximum of {@value LIFE_MAX}, a starting attack of 10 and a starting speed of 3 (here, the higher the faster).
+ * He has a maximum of (50/75/100), a starting attack of (5/10/15) and a starting speed of (1/2/3) (here, the higher the faster).
  */
 public class Monster extends Thread {
 
@@ -52,14 +52,14 @@ public class Monster extends Thread {
 		//Normal
 		else if(difficulty==2){
 			power = new AtomicInteger(10);
-			speed = new AtomicInteger(1);
+			speed = new AtomicInteger(2);
 			LIFE_MAX = 75;
 			life = new AtomicInteger(75);
 		}
 		//Expert
 		else{
 			power = new AtomicInteger(15);
-			speed = new AtomicInteger(2);
+			speed = new AtomicInteger(3);
 			LIFE_MAX = 100;
 			life = new AtomicInteger(100);
 		}

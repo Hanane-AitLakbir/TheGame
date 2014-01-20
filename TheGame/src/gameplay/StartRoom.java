@@ -4,6 +4,9 @@ import java.awt.Graphics;
 
 import entities.Hero;
 
+/**
+ * The starting room, with no monsters and it's own music.
+ */
 public class StartRoom extends Room{
 
 	public StartRoom(Hero player){
