@@ -17,7 +17,7 @@ public class FinalRoom extends Room{
 
 	private Position center;
 	private Item chest;
-	private boolean chestOpened = false;
+	private static boolean chestOpened = false;
 	private Monster[] monster = new Monster[1];
 
 	/**
@@ -85,7 +85,7 @@ public class FinalRoom extends Room{
 	 * When the chest is opened, the game is won !!!!
 	 * @return true if the game is won, false otherwise.
 	 */
-	public boolean winGame(){
+	public static boolean winGame(){
 		return chestOpened;
 	}
 

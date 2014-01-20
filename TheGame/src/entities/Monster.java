@@ -51,7 +51,7 @@ public class Monster extends Thread {
 		}
 		//Normal
 		else if(difficulty==2){
-			power = new AtomicInteger(10);
+			power = new AtomicInteger(5);
 			speed = new AtomicInteger(2);
 			LIFE_MAX = 75;
 			life = new AtomicInteger(75);
@@ -151,15 +151,13 @@ public class Monster extends Thread {
 
 		if(isMoving()){ //If the monster can move (UP DOWN LEFT or RIGHT)
 			if(moveCounter.get()>=4000){moveCounter.set(0);}
-			if(moveCounter.get()<1500){ 
+			if(moveCounter.get()<2000){ 
 				if(ANIMATIONSPEED!=4){speed.getAndDecrement(); ANIMATIONSPEED = 4; sprite.setSpeed(ANIMATIONSPEED);} //He goes slower
 				random(); //He evades the target by walking randomly
-				moveCounter.getAndAdd(STEP);
 			}
-			if(moveCounter.get()>=1500 && moveCounter.get()<4000){ 
+			if(moveCounter.get()>=2000 && moveCounter.get()<4000){ 
 				if(ANIMATIONSPEED!=3){speed.getAndIncrement(); ANIMATIONSPEED = 3; sprite.setSpeed(ANIMATIONSPEED);} //He goes faster !
 				chase(); //He chases the target
-				moveCounter.getAndAdd(STEP);
 			}
 		}
 
@@ -184,6 +182,7 @@ public class Monster extends Thread {
 			if(pauseCounter.get() >= ANIMATIONSPEED*7+1) {setState(StateActor.RIGHT); pauseCounter.set(0);} 
 
 		}
+		moveCounter.getAndAdd(STEP);
 	}
 
 	/**

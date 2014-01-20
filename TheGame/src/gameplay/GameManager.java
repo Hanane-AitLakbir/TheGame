@@ -116,7 +116,7 @@ public class GameManager extends Thread{
 
 	public void run(){
 		
-		while(!player.isDead()){
+		while(!player.isDead() && !FinalRoom.winGame()){
 			
 			try {
 				roomManager.changeRoom(player);
@@ -146,8 +146,26 @@ public class GameManager extends Thread{
 			}
 		}
 		
-		window.setVisible(false);
-		JOptionPane.showMessageDialog(null, "You have LOST ! Mouahahahahah !");
+		
+		try{
+			
+		if(player.isDead()){
+			window.setVisible(false);
+			JOptionPane.showMessageDialog(null, "You have LOST ! Mouahahahahah !");
+		}
+		else if(FinalRoom.winGame() && difficulty<3){
+			sleep(3000);
+			window.setVisible(false);
+			JOptionPane.showMessageDialog(null, "You have found the treasure, Congratulations !\nTry on a harder difficulty ;)");
+		}
+		else if(FinalRoom.winGame() && difficulty==3){
+			sleep(3000);
+			window.setVisible(false);
+			JOptionPane.showMessageDialog(null, "You have found the treasure, Congratulations !\nYou're a master ! ;)");
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 		
 		System.exit(0);
 		
