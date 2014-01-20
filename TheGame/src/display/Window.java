@@ -8,10 +8,11 @@ import javax.swing.JOptionPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-@SuppressWarnings("serial")
+
 /**
  * This class creates the game window, where the player will play and may find the treasure.
  */
+@SuppressWarnings("serial")
 public class Window extends JFrame{
 
 	/**

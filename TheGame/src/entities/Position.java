@@ -1,5 +1,8 @@
 package entities;
 
+/**
+ * An object to represent the spatial position of the actors in the pixel grid.
+ */
 public class Position {
 
 	int x,y;

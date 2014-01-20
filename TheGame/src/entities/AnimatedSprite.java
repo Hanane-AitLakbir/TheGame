@@ -4,17 +4,31 @@ import java.awt.image.BufferedImage;
 
 import utilities.ImageLoader;
 
-
+/**
+ * A class that manages the different animations in the game. For example the attacks of the player, how the monsters move, ...<p>
+ * 
+ * The movement animations must include a 281pixels*40pixels file, with 7 sprites.<p>
+ * The attack animations must include a 281pixels*40pixels file, with 6 sprites. (it won't read the others) <p>
+ * 
+ * Each sprite in the animation must be drawn within 40 pixels. So 0->39 : first sprite, 40->79 : second sprite, ...<p>
+ * 
+ * You can also chose the speed of the animation, the higher the slower.
+ */
 public class AnimatedSprite {
 
 	private BufferedImage[] up,down,left,right,attackingUp,attackingDown,attackingLeft,attackingRight;
 	private BufferedImage[] currentSprite;
 	private final int WIDTH = 40, HEIGHT = 35;
-	private int current = 0;
-	private int counter = 0;
+	private int current = 0; //The current sprite in the corresponding animation.
+	private int counter = 0; //To count the speed.
 	private int speed = 1;
 	private int nbSprites;
 
+	/**
+	 * Creates the animated sprite from the files in the "res" folder.
+	 * @param name the name of the animation, refering to who it represents : "Monster1", "Monster2", "Link" or "Link2"
+	 * @param speed the "speed" of the animation, the higher the slower. It represents the number of times a sprite is repeated.
+	 */
 	public AnimatedSprite(String name, int speed){
 
 		this.speed = speed;
@@ -63,23 +77,31 @@ public class AnimatedSprite {
 			attackingRight[i] = new ImageLoader().load("/"+name+"_right_attack.png").getSubimage(i*WIDTH,0,WIDTH,HEIGHT);
 		}
 
-		currentSprite = right;
+		currentSprite = right; //Starting state.
 	}
 
+	/**
+	 * Returns the next animation of the current BufferedImage[].
+	 * @return the next sprite.
+	 */
 	public BufferedImage next(){
 		if(counter==0){
-			counter=speed;
-			if(current<nbSprites-1){
+			counter=speed; //resets the counter
+			if(current<nbSprites-1){ //If it is not the end of the animation, it keeps changing.
 				current++;
 				return currentSprite[current];
 			}
-			current = 0;
+			current = 0; //Or it goes back to the beginning.
 			return currentSprite[0];
 		}
-		counter--;
+		counter--; //Counts down the speed.
 		return currentSprite[current];
 	}
 
+	/**
+	 * Change the animation and resets the counters.
+	 * @param state the state of the actor, to chose the correct animation.
+	 */
 	public void changeAnimation(StateActor state){
 
 		this.reset();
@@ -122,14 +144,24 @@ public class AnimatedSprite {
 		}
 	}
 
+	/**
+	 * Resets the current sprite to the beginning of the animation.
+	 */
 	public void reset(){
 		current = 0;
 	}
 
+	/**
+	 * @return the current Sprite of the animation.
+	 */
 	public BufferedImage getCurrentSprite(){
 		return currentSprite[current];
 	}
 
+	/**
+	 * Sets the speed of the animation.
+	 * @param speed the chose "speed" (the higher, the slower).
+	 */
 	public void setSpeed(int speed){
 		this.reset();
 		this.speed = speed;

@@ -9,8 +9,8 @@ import java.awt.event.*;
 
 /**
  * This class displays a menu to choose the game mode (solo or multiplayer) and the game difficulty,
- * and creates the appropriate GameManager object. 
- * A background Sound is played. 
+ * and creates the appropriate GameManager object. <p>
+ * A background Sound is played. <p>
  */
 public class Menu {
 

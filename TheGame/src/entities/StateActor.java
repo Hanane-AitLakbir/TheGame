@@ -1,8 +1,19 @@
 package entities;
 
+/**
+ * Represents the different stats an actor can be in.<p>
+ * UP, DOWN, LEFT and RIGHT are for the movements<p>
+ * ATTACKINGUP, ATTACKINGDOWN, ATTACKINGLEFT and ATTACKINGRIGHT are for the attacks<p>
+ * NONE is for when they do nothing.
+ */
 public enum StateActor {
-	UP,DOWN,LEFT,RIGHT,ATTACKINGUP,ATTACKINGDOWN,ATTACKINGLEFT,ATTACKINGRIGHT,PROTECTED,NONE;
+	UP,DOWN,LEFT,RIGHT,ATTACKINGUP,ATTACKINGDOWN,ATTACKINGLEFT,ATTACKINGRIGHT,NONE;
 
+	/**
+	 * Converts the action code received through the network into a state.
+	 * @param action the action code
+	 * @return the state
+	 */
 	public static StateActor convertToState(int action){
 
 		switch (action){
@@ -15,13 +26,17 @@ public enum StateActor {
 		case 22 : return ATTACKINGDOWN;
 		case 44 : return ATTACKINGLEFT;
 		case 66 : return ATTACKINGRIGHT;
-
+		default : return NONE;
+		
 		}
-
-		return NONE;
-
+		
 	}
 
+	/**
+	 * Converts a state into an action code to send through the network
+	 * @param state the state of the actor
+	 * @return the action integer code
+	 */
 	public static int convertToInt(StateActor state){
 
 		switch (state){
@@ -34,11 +49,10 @@ public enum StateActor {
 		case ATTACKINGDOWN : return 22;
 		case ATTACKINGLEFT : return 44;
 		case ATTACKINGRIGHT : return 66;
-
+		default : return 5;
+		
 		}
-
-		return 5;
+		
 	}
+	
 }
-
-
