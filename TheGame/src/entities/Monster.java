@@ -57,11 +57,17 @@ public class Monster extends Thread {
 			life = new AtomicInteger(75);
 		}
 		//Expert
-		else{
+		else if(difficulty==3){
 			power = new AtomicInteger(15);
 			speed = new AtomicInteger(3);
 			LIFE_MAX = 100;
 			life = new AtomicInteger(100);
+		}
+		else{
+			power = new AtomicInteger(25);
+			speed = new AtomicInteger(3);
+			LIFE_MAX = 200;
+			life = new AtomicInteger(200);
 		}
 
 		moveCounter = new AtomicInteger(0);

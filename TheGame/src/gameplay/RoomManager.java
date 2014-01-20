@@ -62,7 +62,7 @@ public class RoomManager {
 
 		//Creates the first room of the dungeon, may it be the final room, 
 		for(int i = 0;i<size*size;i++){
-			if(i==Math.floor(size*size/2.)){
+			if(i==size*size/2){
 				rooms.add(new StartRoom(player));
 			}
 			else if(i==end){
@@ -110,7 +110,7 @@ public class RoomManager {
 
 		}
 
-		start = rooms.get((int) Math.floor(size*size/2.)); // starts in the middle room
+		start = rooms.get(size*size/2); // starts in the middle room
 		current = start;
 		current.start();
 	}
@@ -181,6 +181,12 @@ public class RoomManager {
 
 	}
 
+	/**
+	 * Controls the monster identified by the ID, with the message given.
+	 * @param id
+	 * @param message
+	 * @param g
+	 */
 	public synchronized void controlMonster(int id, int message, Graphics g){
 		
 		Monster monster =((MonsterRoom) rooms.get(id/10)).getMonster(id%10);  //Looks at a monster
@@ -189,8 +195,8 @@ public class RoomManager {
 		int y = Integer.parseInt(String.valueOf(message/(1000*1000))); //Turns the action into a movement.
 		int x = Integer.parseInt(String.valueOf((message/1000)%1000));
 		
-		monster.setState(StateActor.convertToState(action)); //Tells him which way to face
 		monster.getPosition().setXY(x, y); //Tells him his new position.
+		monster.setState(StateActor.convertToState(action)); //Tells him which way to face
 		monster.actionMultiplayer(); //Acts.
 		
 		monster.updateGraphic(g); //Change the graphics.

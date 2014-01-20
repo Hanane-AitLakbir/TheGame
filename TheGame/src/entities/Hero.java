@@ -29,7 +29,7 @@ public class Hero extends Thread{
 	private int ANIMATIONSPEED = 2; //The higher the slower.
 	private AnimatedSprite sprite;
 	private BufferedImage currentSprite;
-	
+
 	private Monster[] monsters; //The monsters in the same room.
 
 	private int pauseCounter; //To prevent the Hero from attacking too fast.
@@ -63,15 +63,15 @@ public class Hero extends Thread{
 			public void run() {
 
 				if(!isDead()){ //While he is not dead.
-					
+
 					if((TurnManager.turn && GameManager.multiplayer) || !GameManager.multiplayer){
 						action(); //Move + Attack + grab items
 					}
-					
+
 					if(isMoving() || isAttacking()){
 						currentSprite = sprite.next(); //Changes the current sprite of the Hero.
 					}
-					
+
 					if(GameManager.multiplayer && GameManager.gameIsRunning){ //for the multiplayer sends the messages.
 						message[1] = StateActor.convertToInt(state)+1000*position.getX()+1000*1000*position.getY();
 						try {
@@ -81,7 +81,7 @@ public class Hero extends Thread{
 						}
 					}
 
-				//System.out.println("\t\t\t\t Hero updates graphics");
+					//System.out.println("\t\t\t\t Hero updates graphics");
 					GameManager.updateGraphics(currentSprite, position, life.get()/LIFE_MAX);
 				}
 				else if(isDead()){
@@ -226,9 +226,9 @@ public class Hero extends Thread{
 					e.printStackTrace();
 				}
 			}
-			
+
 			ArrayList<Monster> monstersList = canAttack(); //Creates the list of monsters he can attack.
-			
+
 			if(monstersList!=null){
 				for(Monster m : canAttack()) {m.setState(StateActor.NONE); m.getAttacked(power);} //Stops the monster and attacks it. (to make it easier to win the game)
 			}
@@ -260,7 +260,7 @@ public class Hero extends Thread{
 
 			String action = "";
 			Item[] items = new Item[monsters.length];
-			
+
 			for(int i=0; i<monsters.length; i++){
 				items[i] = monsters[i].getItem(); //List the items dropped from the monsters in the room.
 
@@ -301,21 +301,29 @@ public class Hero extends Thread{
 	 * @param state the current state of the monster, to push the hero in that direction
 	 */
 	public synchronized void getAttacked(AtomicInteger power, StateActor state){
-		
+
 		life.getAndAdd(-power.get()); //Deals the damage.
-		
-		switch(state){
+
+		switch(state){ //Knockback effect.
 		case ATTACKINGUP :
-			position.setXY(position.getX(), position.getY()-15);
+			if(getPosition().getY()-15>24*2*GameManager.SCALE){
+				position.setXY(position.getX(), position.getY()-15);
+			}
 			break;
 		case ATTACKINGDOWN :
-			position.setXY(position.getX(), position.getY()+15);
+			if(getPosition().getY()+15<122*2*GameManager.SCALE){
+				position.setXY(position.getX(), position.getY()+15);
+			}
 			break;
 		case ATTACKINGLEFT :
-			position.setXY(position.getX()-15, position.getY());
+			if(getPosition().getX()-15>22*2*GameManager.SCALE){
+				position.setXY(position.getX()-15, position.getY());
+			}
 			break;
 		case ATTACKINGRIGHT :
-			position.setXY(position.getX()+15, position.getY());
+			if(getPosition().getX()+15<122*2*GameManager.SCALE){
+				position.setXY(position.getX()+15, position.getY());
+			}
 			break;
 		default :
 			break;
@@ -357,7 +365,7 @@ public class Hero extends Thread{
 	public StateActor getHeroState(){
 		return state;
 	}
-	
+
 	/**
 	 * @return the object Position which represents the position of the Hero in the pixel grid.
 	 */

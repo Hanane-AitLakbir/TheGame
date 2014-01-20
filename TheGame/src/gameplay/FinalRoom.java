@@ -28,7 +28,7 @@ public class FinalRoom extends Room{
 		super(player, 0);
 		center = new Position(75*4,75*4);
 		chest = new Item("chest", center, null);
-		monster[0] = new Monster(280, 280, "Monster2", 3){
+		monster[0] = new Monster(280, 280, "Monster2", 4){
 			@SuppressWarnings("unused")
 			private boolean canAttack(){
 
