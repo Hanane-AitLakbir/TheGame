@@ -7,6 +7,8 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import networking.*;
 import display.CanvasGame;
 import display.Window;
@@ -24,6 +26,7 @@ public class GameManager extends Thread{
 	private static RoomManager roomManager;
 	private CanvasGame canvas;
 	private Communicator communicator;
+	private Window window;
 
 	private static Hero player = null; 
 	private static Hero otherPlayer = null;
@@ -45,7 +48,7 @@ public class GameManager extends Thread{
 	 */
 	public GameManager(){
 		canvas = new CanvasGame();
-		Window window = new Window(); //The window of the game.
+		window = new Window(); //The window of the game.
 		window.add(canvas);
 
 		graphics = canvas.getGraphics();
@@ -113,7 +116,7 @@ public class GameManager extends Thread{
 
 	public void run(){
 		
-		while(true){
+		while(!player.isDead()){
 			
 			try {
 				roomManager.changeRoom(player);
@@ -142,6 +145,12 @@ public class GameManager extends Thread{
 				e.printStackTrace();
 			}
 		}
+		
+		window.setVisible(false);
+		JOptionPane.showMessageDialog(null, "You have LOST ! Mouahahahahah !");
+		
+		System.exit(0);
+		
 	}
 
 	/**

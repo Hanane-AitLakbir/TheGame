@@ -19,7 +19,7 @@ public class RoomManager {
 	private int end;
 	private int size;
 
-	private ArrayList<Room> rooms;
+	private static ArrayList<Room> rooms;
 
 	/**
 	 * Creates the labyrinth with a random layout in solo mode, and a known one in multiplayer.
@@ -202,4 +202,5 @@ public class RoomManager {
 		monster.updateGraphic(g); //Change the graphics.
 		
 	}
+	
 }

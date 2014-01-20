@@ -87,7 +87,7 @@ public class Hero extends Thread{
 				else if(isDead()){
 					timer.cancel();
 					timer.purge();
-					interrupt();  //Comment for testing purpose, kills the Hero thread.
+					
 				}
 			}
 
@@ -334,7 +334,7 @@ public class Hero extends Thread{
 	 * Tells if the hero is dead.
 	 * @return true if he is dead, false otherwise.
 	 */
-	private boolean isDead(){
+	public boolean isDead(){
 		if(life.get()<=0){ 
 			return true;
 		}
